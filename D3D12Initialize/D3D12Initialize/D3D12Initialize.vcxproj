@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,10 +142,19 @@
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="GamerTimer.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="UploadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GamerTimer.cpp" />
+    <ClCompile Include="D3DApp.cpp" />
+    <ClCompile Include="D3DUtil.cpp" />
+    <ClCompile Include="DDSTextureLoader.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

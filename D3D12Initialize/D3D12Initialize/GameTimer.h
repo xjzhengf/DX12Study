@@ -2,9 +2,9 @@
 #ifndef GAMETIMER_H
 #define GAMETIMER_H
 
-class GamerTimer {
+class GameTimer {
 public:
-	GamerTimer();
+	GameTimer();
 
 	float TotalTime() const;
 	float DeltaTime() const;
