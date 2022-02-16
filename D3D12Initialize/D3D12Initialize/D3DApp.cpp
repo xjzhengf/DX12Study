@@ -443,7 +443,7 @@ void D3DApp::FlushCommandQueue()
 
 ID3D12Resource* D3DApp::CurrentBackBuffer() const
 {
-	return mSwapChainBuffer[SwapChainBufferCount].Get();
+	return mSwapChainBuffer[mCurrBackBuffer].Get();
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE D3DApp::CurrentBackBufferView() const

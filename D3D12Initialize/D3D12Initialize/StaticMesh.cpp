@@ -17,8 +17,8 @@ bool StaticMesh::Initialize()
 	if(!D3DApp::Initialize())
 	return false;
 
-	char* str = "D:\\UEWorkSpace\\GameTest\\StaticMeshInfo\\MaterialSphere.dat";
-	ReadBinaryFileToStaticMeshStruct(str);
+	//char* str = "D:\\UEWorkSpace\\GameTest\\StaticMeshInfo\\MaterialSphere.dat";
+	//ReadBinaryFileToStaticMeshStruct(str);
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(),nullptr));
 	BulidDescriptorHeaps();
 	BulidConstantBuffers();
@@ -260,7 +260,7 @@ void StaticMesh::BulidShadersAndInputLayout()
 
 void StaticMesh::BuildStaticMeshGeometry()
 {
-	/*std::array<Vertex, 24> vertices = {
+	std::array<Vertex, 24> vertices = {
 		Vertex({XMFLOAT3(50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Blue)}),
 		Vertex({XMFLOAT3(-50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Red)}),
 		Vertex({XMFLOAT3(50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::Green)}),
@@ -285,15 +285,15 @@ void StaticMesh::BuildStaticMeshGeometry()
 		Vertex({XMFLOAT3(-50.0f,-50.0f,50.0f),XMFLOAT4(Colors::Bisque)}),
 		Vertex({XMFLOAT3(-50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::SandyBrown)}),
 		Vertex({XMFLOAT3(-50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Sienna)})
-	};*/
+	};
 
 
-	//std::array<std::uint16_t, 36> indices = { 0, 1, 2, 1, 3, 2, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23 };
-	std::vector<uint32_t> indices = myStruct.Indices;
-	indices.resize(myStruct.Indices.size());
-	int VerticesLen = myStruct.Vertices.size();
+	std::array<std::uint32_t, 36> indices = { 0, 1, 2, 1, 3, 2, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23 };
+	//std::vector<uint32_t> indices = myStruct.Indices;
+	//indices.resize(myStruct.Indices.size());
+	//int VerticesLen = myStruct.Vertices.size();
 
-	std::vector<Vertex> vertices;
+	/*std::vector<Vertex> vertices;
 	vertices.resize(VerticesLen);
 	for (int i = 0; i < VerticesLen; i++) {
 		vertices[i].Pos = myStruct.Vertices[i];
@@ -304,7 +304,7 @@ void StaticMesh::BuildStaticMeshGeometry()
 		{
 			vertices[i].Color = XMFLOAT4(Colors::Blue);
 		}
-	}
+	}*/
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(uint32_t);
 
