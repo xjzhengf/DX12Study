@@ -36,7 +36,7 @@ void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 5000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -46,9 +46,9 @@ void AppDraw::Update(const GameTimer& gt)
 	float z = mRadius * sinf(mPhi) * sinf(mTheta);
 	float y = mRadius * cosf(mPhi);
 
-	XMVECTOR pos = XMVectorSet(x * 50, y * 50, z * 50, 1.0f);
+	XMVECTOR pos = XMVectorSet(x * 100, y * 100, z * 100, 1.0f);
 	XMVECTOR target = XMVectorZero();
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
 	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, view);
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);

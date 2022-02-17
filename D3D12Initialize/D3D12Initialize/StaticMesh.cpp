@@ -38,6 +38,12 @@ void StaticMesh::ReadBinaryFileToStaticMeshStruct(char* TextPath)
 		inFile.read((char*)&indicesLen, sizeof(int32_t));
 		myStruct.Indices.resize(indicesLen);
 		inFile.read((char*)myStruct.Indices.data(), indicesLen * sizeof(uint32_t));
+
+		
+		int ColorVerticesLen = 0;
+		inFile.read((char*)&ColorVerticesLen, sizeof(int32_t));
+		myStruct.ColorVertices.resize(ColorVerticesLen);
+		inFile.read((char*)myStruct.ColorVertices.data(), ColorVerticesLen * sizeof(FColor));
 	}
 	inFile.close();
 }

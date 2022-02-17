@@ -12,6 +12,7 @@ struct StaticMeshInfo
 	int32_t NumIndices;
 	std::vector<FVector> Vertices;
 	std::vector<uint32_t> Indices;
+	std::vector<FColor> ColorVertices;
 };
 
 
