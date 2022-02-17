@@ -367,7 +367,7 @@ bool D3DApp::InitDirect3D()
 		mCbvSrvUavDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 
-		//Ã»¿´¶®
+		
 		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
 		msQualityLevels.Format = mBackBufferFormat;
 		msQualityLevels.SampleCount = 4;

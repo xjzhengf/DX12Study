@@ -143,10 +143,12 @@
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader.h" />
+    <ClInclude Include="FTransForm.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="UploadBuffer.h" />
+    <ClInclude Include="AppDraw.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DApp.cpp" />
@@ -155,6 +157,8 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="AppDraw.cpp" />
+    <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
