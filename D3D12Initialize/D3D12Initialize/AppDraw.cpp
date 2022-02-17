@@ -46,7 +46,7 @@ void AppDraw::Update(const GameTimer& gt)
 	float z = mRadius * sinf(mPhi) * sinf(mTheta);
 	float y = mRadius * cosf(mPhi);
 
-	XMVECTOR pos = XMVectorSet(x * 100, y * 100, z * 100, 1.0f);
+	XMVECTOR pos = XMVectorSet(x * 500, y * 500, z * 500, 1.0f);
 	XMVECTOR target = XMVectorZero();
 	XMVECTOR up = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
 	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
