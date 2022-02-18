@@ -12,3 +12,8 @@ StaticMesh 类：图形数据导入以及存储
 drawApp类：绘制图形
 
 FTransform类： 自定义vector变量 
+
+
+
+注意：编译器需要在project的properties中修改C++那一栏的conformance mode，将值改为no修改掉“&”要求左值的错误。
+

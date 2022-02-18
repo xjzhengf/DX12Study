@@ -197,35 +197,6 @@ void AppDraw::BulidShadersAndInputLayout()
 
 void AppDraw::BuildStaticMeshGeometry()
 {
-	//std::array<Vertex, 24> vertices = {
-	//	Vertex({XMFLOAT3(50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Blue)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Red)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::Green)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::White)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,50.0f),XMFLOAT4(Colors::Yellow)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,50.0f),XMFLOAT4(Colors::White)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,50.0f),XMFLOAT4(Colors::Gray)}),
-	//	Vertex({XMFLOAT3(50.0f,50.0f,50.0f),XMFLOAT4(Colors::Navy)}),
-	//	Vertex({XMFLOAT3(50.0f,50.0f,50.0f),XMFLOAT4(Colors::Black)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,50.0f),XMFLOAT4(Colors::Aqua)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Salmon)}),
-	//	Vertex({XMFLOAT3(50.0f,50.0f,-50.0f),XMFLOAT4(Colors::DarkCyan)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,50.0f),XMFLOAT4(Colors::CadetBlue)}),
-	//	Vertex({XMFLOAT3(50.0f,50.0f,50.0f),XMFLOAT4(Colors::CadetBlue)}),
-	//	Vertex({XMFLOAT3(50.0f,50.0f,-50.0f),XMFLOAT4(Colors::CornflowerBlue)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::SandyBrown)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,50.0f),XMFLOAT4(Colors::Azure)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,50.0f),XMFLOAT4(Colors::Black)}),
-	//	Vertex({XMFLOAT3(50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::Beige)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::Brown)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,50.0f),XMFLOAT4(Colors::LightSkyBlue)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,50.0f),XMFLOAT4(Colors::Bisque)}),
-	//	Vertex({XMFLOAT3(-50.0f,-50.0f,-50.0f),XMFLOAT4(Colors::SandyBrown)}),
-	//	Vertex({XMFLOAT3(-50.0f,50.0f,-50.0f),XMFLOAT4(Colors::Sienna)})
-	//};
-
-
-	//std::array<std::uint32_t, 36> indices = { 0, 1, 2, 1, 3, 2, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23 };
 	std::vector<uint32_t> indices = myStruct->Indices;
 	indices.resize(myStruct->Indices.size());
 	int VerticesLen = myStruct->Vertices.size();
