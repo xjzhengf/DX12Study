@@ -1,13 +1,14 @@
+#include "stdafx.h"
 #include "D3DApp.h"
 #include <windowsx.h>
 using Microsoft::WRL::ComPtr;
 using namespace std;
 using namespace DirectX;
-LRESULT CALLBACK
-MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-	return D3DApp::GetApp()->MsgProc(hwnd, msg, wParam, lParam);
-}
-
+//LRESULT CALLBACK
+//MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+//	return D3DApp::GetApp()->MsgProc(hwnd, msg, wParam, lParam);
+//}
+//
 
 D3DApp* D3DApp::mApp = nullptr;
 D3DApp::D3DApp(HINSTANCE hInstance):mhAppInst(hInstance)
@@ -87,9 +88,9 @@ int D3DApp::Run()
 
 bool D3DApp::Initialize()
 {
-	if (!InitMainWindow()) {
-		return false;
-	}
+	//if (!InitMainWindow()) {
+	//	return false;
+	//}
 	if (!InitDirect3D()) {
 		return false;
 	}
@@ -310,34 +311,34 @@ void D3DApp::OnResize()
 
 bool D3DApp::InitMainWindow()
 {
-	WNDCLASS wc;
-	wc.hInstance = mhAppInst;
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = MainWndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-	wc.hCursor = LoadCursor(0, IDC_ARROW);
-	wc.hIcon = LoadIcon(0,IDI_APPLICATION);
-	wc.lpszClassName = L"MainWnd";
-	wc.lpszMenuName = 0;
+	//WNDCLASS wc;
+	//wc.hInstance = mhAppInst;
+	//wc.style = CS_HREDRAW | CS_VREDRAW;
+	//wc.lpfnWndProc = MainWndProc;
+	//wc.cbClsExtra = 0;
+	//wc.cbWndExtra = 0;
+	//wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+	//wc.hCursor = LoadCursor(0, IDC_ARROW);
+	//wc.hIcon = LoadIcon(0,IDI_APPLICATION);
+	//wc.lpszClassName = L"MainWnd";
+	//wc.lpszMenuName = 0;
 
-	if (!RegisterClass(&wc)) {
-		MessageBox(0, L"RegisterClass Failed.", 0, 0);
-		return false;
-	}
-	RECT R = { 0,0,mClientWidht , mClientHeight };
-	AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
+	//if (!RegisterClass(&wc)) {
+	//	MessageBox(0, L"RegisterClass Failed.", 0, 0);
+	//	return false;
+	//}
+	//RECT R = { 0,0,mClientWidht , mClientHeight };
+	//AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
 
-	int width = R.right - R.left;
-	int heigth = R.bottom - R.top;
-	mhMainWnd = CreateWindow(L"MainWnd", mMainWndCaption.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, heigth, 0, 0, mhAppInst, 0);
-	if(!mhMainWnd){
-		MessageBox(0, L"CreateWindow Failed.", 0, 0);
-		return false;
-	}
-	ShowWindow(mhMainWnd, SW_SHOW);
-	UpdateWindow(mhMainWnd);
+	//int width = R.right - R.left;
+	//int heigth = R.bottom - R.top;
+	//mhMainWnd = CreateWindow(L"MainWnd", mMainWndCaption.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, heigth, 0, 0, mhAppInst, 0);
+	//if(!mhMainWnd){
+	//	MessageBox(0, L"CreateWindow Failed.", 0, 0);
+	//	return false;
+	//}
+	//ShowWindow(mhMainWnd, SW_SHOW);
+	//UpdateWindow(mhMainWnd);
 	return true;
 }
 
@@ -366,8 +367,7 @@ bool D3DApp::InitDirect3D()
 		mDsvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 		mCbvSrvUavDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-
-		
+	
 		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
 		msQualityLevels.Format = mBackBufferFormat;
 		msQualityLevels.SampleCount = 4;
@@ -436,9 +436,9 @@ void D3DApp::FlushCommandQueue()
 
 		WaitForSingleObject(eventHandle, INFINITE);
 		CloseHandle(eventHandle);
-
+	
 	}
-
+    
 }
 
 ID3D12Resource* D3DApp::CurrentBackBuffer() const

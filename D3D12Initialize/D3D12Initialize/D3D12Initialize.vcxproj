@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,8 +148,10 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="AppDraw.h" />
+    <ClInclude Include="WinMain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DApp.cpp" />
@@ -157,7 +160,10 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
-    <ClCompile Include="AppDraw.cpp" />
+    <ClCompile Include="AppDraw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "StaticMesh.h"
 #include "fstream"
 #include <windows.h>  

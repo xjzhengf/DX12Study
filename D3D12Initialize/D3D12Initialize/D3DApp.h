@@ -4,8 +4,10 @@
 #include <crtdbg.h>
 #endif
 
-#include "GameTimer.h"
+#include "stdafx.h"
 #include "D3DUtil.h"
+#include "GameTimer.h"
+
 
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")

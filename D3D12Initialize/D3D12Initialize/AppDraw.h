@@ -1,5 +1,6 @@
 #pragma once
-#pragma once
+#include "stdafx.h"
+#include "D3DUtil.h"
 #include "D3DApp.h"
 #include "UploadBuffer.h"
 #include "MathHelper.h"

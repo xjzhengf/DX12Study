@@ -1,5 +1,6 @@
 
-#include "d3dUtil.h"
+#include "stdafx.h"
+#include "D3DUtil.h"
 #include <comdef.h>
 #include <fstream>
 

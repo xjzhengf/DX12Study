@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AppDraw.h"
 
 
@@ -45,7 +46,7 @@ void AppDraw::Update(const GameTimer& gt)
 	float x = mRadius * sinf(mPhi) * cosf(mTheta);
 	float z = mRadius * sinf(mPhi) * sinf(mTheta);
 	float y = mRadius * cosf(mPhi);
-
+	
 	XMVECTOR pos = XMVectorSet(x * 500, y * 500, z * 500, 1.0f);
 	XMVECTOR target = XMVectorZero();
 	XMVECTOR up = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
@@ -199,7 +200,7 @@ void AppDraw::BuildStaticMeshGeometry()
 {
 	std::vector<uint32_t> indices = myStruct->Indices;
 	indices.resize(myStruct->Indices.size());
-	int VerticesLen = myStruct->Vertices.size();
+	size_t VerticesLen = myStruct->Vertices.size();
 
 	std::vector<Vertex> vertices;
 	vertices.resize(VerticesLen);
@@ -243,7 +244,6 @@ void AppDraw::BuildPSO()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-
 
 	psoDesc.InputLayout = { mInputLayout.data(),(UINT)mInputLayout.size() };
 	psoDesc.pRootSignature = mRootSigmature.Get();
