@@ -5,7 +5,7 @@
 
 LRESULT CALLBACK
 MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-	return D3DApp::GetApp()->MsgProc(hwnd, msg, wParam, lParam);
+	return MyWindows::GetPcWindows()->MsgProc(hwnd, msg, wParam, lParam);
 }
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
@@ -21,7 +21,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//staticMesh->SelectFile();
 		staticMesh->ReadBinaryFileToStaticMeshStruct(Path);
 		AppDraw theApp(hInstance);
-		MyWindows myWindows;
+		MyWindows myWindows(&theApp);
 		if (!myWindows.InitWindows()) {
 			return 0;
 		}
@@ -30,7 +30,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			return 0;
 		}
 	
-		return theApp.Run();
+		return myWindows.Run();
 	}
 	catch (DxException& e)
 	{
@@ -38,10 +38,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return 0;
 	}
 }
-
-MyWindows::MyWindows()
+MyWindows* MyWindows::pcWindows = nullptr;
+MyWindows::MyWindows(D3DApp* theApp)
 {
-
+	this->theApp = theApp->GetApp();
+	assert(pcWindows == nullptr);
+	pcWindows = this;
 }
 
 bool MyWindows::InitWindows()
@@ -72,8 +74,178 @@ bool MyWindows::InitWindows()
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
 		return false;
 	}
+	theApp->SetWindow(mhMainWnd);
+	theApp->SetClientHeight(mClientHeight);
+	theApp->SetClientWidht(mClientWidht);
 	ShowWindow(mhMainWnd, SW_SHOW);
 	UpdateWindow(mhMainWnd);
 	return true;
+}
+
+MyWindows* MyWindows::GetPcWindows()
+{
+	return pcWindows;
+}
+
+LRESULT MyWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+	case WM_ACTIVATE:
+		if (LOWORD(wParam) == WA_INACTIVE) {
+			mAppPause = true;
+			mTimer.Stop();
+		}
+		else
+		{
+			mAppPause = false;
+			mTimer.Start();
+		}
+		return 0;
+	case WM_SIZE:
+		mClientWidht = LOWORD(lParam);
+		mClientHeight = HIWORD(lParam);
+		if (theApp->IsHaveDevice())
+		{
+			if (wParam == SIZE_MINIMIZED) {
+				mAppPause = true;
+				mMinimized = true;
+				mMaximized = false;
+			}
+			else if (wParam == SIZE_MAXIMIZED)
+			{
+				mAppPause = false;
+				mMinimized = false;
+				mMaximized = true;
+				theApp->OnResize();
+			}
+			else if (wParam == SIZE_RESTORED)
+			{
+				if (mMinimized)
+				{
+					mAppPause = false;
+					mMinimized = false;
+					theApp->OnResize();
+				}
+				else if (mMaximized) {
+					mAppPause = false;
+					mMaximized = false;
+					theApp->OnResize();
+				}
+				else if (mResizing)
+				{
+
+				}
+				else
+				{
+					theApp->OnResize();
+				}
+			}
+		}
+		return 0;
+	case WM_ENTERSIZEMOVE:
+		mAppPause = true;
+		mResizing = true;
+		mTimer.Stop();
+		return 0;
+	case WM_EXITSIZEMOVE:
+		mAppPause = false;
+		mResizing = false;
+		mTimer.Start();
+		theApp->OnResize();
+		return 0;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+
+	case WM_MENUCHAR:
+		// Don't beep when we alt-enter.
+		return MAKELRESULT(0, MNC_CLOSE);
+		//捕获消息，设置最小窗口大小
+	case WM_GETMINMAXINFO:
+		((MINMAXINFO*)lParam)->ptMinTrackSize.x = 200;
+		((MINMAXINFO*)lParam)->ptMinTrackSize.y = 200;
+		return 0;
+
+
+	case WM_LBUTTONDOWN:
+	case WM_MBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+		theApp->OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+	case WM_LBUTTONUP:
+	case WM_MBUTTONUP:
+	case WM_RBUTTONUP:
+		theApp->OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+	case WM_MOUSEMOVE:
+		theApp->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return 0;
+	case WM_KEYUP:
+		if (wParam == VK_ESCAPE)
+		{
+			PostQuitMessage(0);
+		}
+		else if ((int)wParam == VK_F2)
+			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
+
+		return 0;
+	}
+
+	return DefWindowProc(hwd, msg, wParam, lParam);
+}
+
+int MyWindows::Run()
+{
+	MSG msg = { 0 };
+	mTimer.Reset();
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			mTimer.Tick();
+			if (!mAppPause) {
+				CalculateFrameStats();
+				theApp->Update(mTimer);
+				theApp->Draw(mTimer);
+			}
+			else
+			{
+				Sleep(100);
+			}
+		}
+	}
+	return (int)msg.wParam;
+}
+
+void MyWindows::CalculateFrameStats()
+{
+	static int frameCnt = 0;
+	static float timeElapsed = 0.0f;
+
+	frameCnt++;
+	if ((mTimer.TotalTime() - timeElapsed) >= 1.0f)
+	{
+		float fps = (float)frameCnt; // fps = frameCnt / 1
+		float mspf = 1000.0f / fps;
+
+		wstring fpsStr = to_wstring(fps);
+		wstring mspfStr = to_wstring(mspf);
+
+		wstring windowText = mMainWndCaption +
+			L"    fps: " + fpsStr +
+			L"   mspf: " + mspfStr;
+
+		SetWindowText(mhMainWnd, windowText.c_str());
+
+		// Reset for next average.
+		frameCnt = 0;
+		timeElapsed += 1.0f;
+	}
 }
 

@@ -144,7 +144,7 @@
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader.h" />
-    <ClInclude Include="FTransForm.h" />
+    <ClInclude Include="MeshProperty.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="StaticMesh.h" />

@@ -18,6 +18,13 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <windowsx.h>
+#include <Windows.h>
+#include <DirectXMath.h>
+#include <cstdint>
 #include "d3dx12.h"
 #include "DDSTextureLoader.h"
 #include "MathHelper.h"
+#include"iostream"
+#include "vector"
+using namespace std;

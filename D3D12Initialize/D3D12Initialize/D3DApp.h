@@ -26,15 +26,19 @@ public:
 	HWND MainWnd() const;
 	float AspectRatio() const;
 	bool Get4xMsaaState() const;
+	bool IsHaveDevice() const;
 	void Set4xMsaaState(bool value);
+	void SetWindow(HWND mhMainWnd);
+	void SetClientWidht(int Width);
+	void SetClientHeight(int Height);
 
-	int Run();
 
 	virtual bool Initialize();
-	virtual LRESULT MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 
 protected:
 	virtual void CreateRtvAndDsvDescriptorHeaps();
+public:
 	virtual void OnResize();
 	virtual void Update(const GameTimer& gt) = 0;
 	virtual void Draw(const GameTimer& gt) = 0;
@@ -53,7 +57,6 @@ protected:
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
-	void CalculateFrameStats();
 
 	void LogAdapters();
 	void LogAdapterOutputs(IDXGIAdapter* adapter);

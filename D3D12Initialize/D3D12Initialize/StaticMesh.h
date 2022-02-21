@@ -1,7 +1,6 @@
 #pragma once
-#include"iostream"
-#include "vector"
-#include "FTransForm.h"
+
+#include "MeshProperty.h"
 
 struct StaticMeshInfo
 {

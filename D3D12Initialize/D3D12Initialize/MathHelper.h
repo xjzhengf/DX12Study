@@ -5,10 +5,8 @@
 //***************************************************************************************
 
 #pragma once
+#include "stdafx.h"
 
-#include <Windows.h>
-#include <DirectXMath.h>
-#include <cstdint>
 
 class MathHelper
 {

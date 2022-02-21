@@ -42,7 +42,7 @@
     <ClInclude Include="AppDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FTransForm.h">
+    <ClInclude Include="MeshProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WinMain.h">
