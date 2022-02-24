@@ -1,20 +1,23 @@
 #pragma once
-class MyWindows {
+#include "stdafx.h"
+#include "WindowBase.h"
+class PCWindows :public WindowBase{
 public:
-	MyWindows(D3DApp* theApp);
-	bool InitWindows();
+	PCWindows(D3DApp* theApp);
+	virtual bool InitWindows() override;
 
-	static MyWindows* GetPcWindows();
+
+	static PCWindows* GetPcWindows();
 
 	virtual LRESULT MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	int Run();
+	virtual int Run() override;
 
 	void CalculateFrameStats();
 protected:
 	GameTimer mTimer;
 
-	static MyWindows* pcWindows;
+	static PCWindows* pcWindows;
 private:	
 	   HINSTANCE mhAppInst = nullptr;
 	   HWND mhMainWnd = nullptr;

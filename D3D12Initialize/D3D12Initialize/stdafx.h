@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 #include <wrl.h>
 #include <dxgi1_4.h>
 #include <d3d12.h>
@@ -20,8 +19,13 @@
 #include <cassert>
 #include <windowsx.h>
 #include <Windows.h>
+#include <commdlg.h>  
 #include <DirectXMath.h>
 #include <cstdint>
+#include <assert.h>
+#include <algorithm>
+#include <memory>
+#include <wrl.h>
 #include "d3dx12.h"
 #include "DDSTextureLoader.h"
 #include "MathHelper.h"

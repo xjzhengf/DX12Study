@@ -151,6 +151,8 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="AppDraw.h" />
+    <ClInclude Include="WindowBase.h" />
+    <ClInclude Include="WindowsFactory.h" />
     <ClInclude Include="WinMain.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,12 +160,14 @@
     <ClCompile Include="D3DUtil.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="AppDraw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="WindowsFactory.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

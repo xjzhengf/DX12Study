@@ -47,7 +47,6 @@ public:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y){}
 	virtual void OnMouseMove(WPARAM btnState, int x, int y){}
 protected:
-	bool InitMainWindow();
 	bool InitDirect3D();
 	void CreateCommandObjects();
 	void CreateSpawChain();

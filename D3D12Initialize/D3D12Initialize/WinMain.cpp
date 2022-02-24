@@ -5,48 +5,18 @@
 
 LRESULT CALLBACK
 MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-	return MyWindows::GetPcWindows()->MsgProc(hwnd, msg, wParam, lParam);
+	return PCWindows::GetPcWindows()->MsgProc(hwnd, msg, wParam, lParam);
 }
 
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
-
-#if defined(Debug) | defined(_DEBUG)
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
-
-	try
-	{
-		char* Path = "StaticMeshInfo\\ZLStaticMesh.dat";
-		std::unique_ptr<StaticMesh> staticMesh = std::make_unique<StaticMesh>();
-		//staticMesh->SelectFile();
-		staticMesh->ReadBinaryFileToStaticMeshStruct(Path);
-		AppDraw theApp(hInstance);
-		MyWindows myWindows(&theApp);
-		if (!myWindows.InitWindows()) {
-			return 0;
-		}
-		theApp.BuildStaticMeshStruct(staticMesh->GetStruct());
-		if (!theApp.Initialize()) {
-			return 0;
-		}
-	
-		return myWindows.Run();
-	}
-	catch (DxException& e)
-	{
-		MessageBox(nullptr, e.ToString().c_str(), L"HR Failed", MB_OK);
-		return 0;
-	}
-}
-MyWindows* MyWindows::pcWindows = nullptr;
-MyWindows::MyWindows(D3DApp* theApp)
+PCWindows* PCWindows::pcWindows = nullptr;
+PCWindows::PCWindows(D3DApp* theApp)
 {
 	this->theApp = theApp->GetApp();
 	assert(pcWindows == nullptr);
 	pcWindows = this;
 }
 
-bool MyWindows::InitWindows()
+bool PCWindows::InitWindows()
 {
 	WNDCLASS wc;
 	wc.hInstance = mhAppInst;
@@ -82,12 +52,12 @@ bool MyWindows::InitWindows()
 	return true;
 }
 
-MyWindows* MyWindows::GetPcWindows()
+PCWindows* PCWindows::GetPcWindows()
 {
 	return pcWindows;
 }
 
-LRESULT MyWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
@@ -196,7 +166,7 @@ LRESULT MyWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwd, msg, wParam, lParam);
 }
 
-int MyWindows::Run()
+int PCWindows::Run()
 {
 	MSG msg = { 0 };
 	mTimer.Reset();
@@ -223,7 +193,7 @@ int MyWindows::Run()
 	return (int)msg.wParam;
 }
 
-void MyWindows::CalculateFrameStats()
+void PCWindows::CalculateFrameStats()
 {
 	static int frameCnt = 0;
 	static float timeElapsed = 0.0f;
