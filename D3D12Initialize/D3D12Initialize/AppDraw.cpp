@@ -43,19 +43,18 @@ void AppDraw::OnResize()
 
 void AppDraw::Update(const GameTimer& gt)
 {
-	float x = mRadius * sinf(mPhi) * cosf(mTheta);
-	float z = mRadius * sinf(mPhi) * sinf(mTheta);
-	float y = mRadius * cosf(mPhi);
-	
+	float x = mRadius * sinf(mPhi) * cosf(mTheta) + CameraPosX;
+	float z = mRadius * sinf(mPhi) * sinf(mTheta) + CameraPosZ;
+	float y = mRadius * cosf(mPhi) ;
+
 	XMVECTOR pos = XMVectorSet(x * 500, y * 500, z * 500, 1.0f);
-	XMVECTOR target = XMVectorZero();
+	XMVECTOR target = {0.0f ,0.0f + CameraPosY,0.0f  };
 	XMVECTOR up = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
 	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, view);
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
 	XMMATRIX proj = XMLoadFloat4x4(&mProj);
 	XMMATRIX worldViewProj = world * view * proj;
-
 	ObjectConstants objectConstants;
 	XMStoreFloat4x4(&objectConstants.WorldViewProj, XMMatrixTranspose(worldViewProj));
 	mObjectCB->CopyData(0, objectConstants);

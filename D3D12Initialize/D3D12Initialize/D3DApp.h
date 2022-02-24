@@ -109,5 +109,9 @@ protected:
 	int mClientWidht = 800;
 	int mClientHeight = 600;
 
+public:
 
+	float CameraPosX = 0.0f;
+	float CameraPosY = 0.0f;
+	float CameraPosZ = 0.0f;
 };

@@ -152,13 +152,36 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 		theApp->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
+	case WM_KEYDOWN:
+		 if ((int)wParam == VK_F2) {
+			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
+		}
+		else if (wParam == 'A') {
+			theApp->CameraPosX += 0.5f;
+		}
+		else if (wParam == 'S') {
+			theApp->CameraPosZ += 0.5f;
+		}
+		else if (wParam == 'D') {
+			theApp->CameraPosX -= 0.5f;
+		}
+		else if (wParam == 'W') {
+			 theApp->CameraPosZ -= 0.5f;
+		 }
+		else if (wParam == 'E') {
+			 theApp->CameraPosY -= 10.0f;
+		 }
+		else if (wParam == 'Q') {
+			 theApp->CameraPosY += 10.0f;
+		 }
+		return 0;
 	case WM_KEYUP:
 		if (wParam == VK_ESCAPE)
 		{
 			PostQuitMessage(0);
 		}
-		else if ((int)wParam == VK_F2)
-			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
+		
+
 
 		return 0;
 	}

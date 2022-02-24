@@ -66,6 +66,7 @@ private:
 	float mPhi = XM_PIDIV4;
 	float mRadius = 5.0f;
 
+
 	POINT mLastMousePos;
 	StaticMeshInfo* myStruct;
 };
