@@ -118,6 +118,7 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 	else if ((btnState & MK_RBUTTON) != 0) {
 		float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
 		float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
+		camera.RotateLook(dx);
 	}
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;

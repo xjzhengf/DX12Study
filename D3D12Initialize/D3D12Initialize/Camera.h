@@ -49,6 +49,7 @@ public:
 	void UpDown(float d);
 	void Pitch(float angle);
 	void RotateY(float angle);
+	void RotateLook(float angle);
 	glm::vec3 VectorMultiplyAdd(glm::vec3 MultiplyV1, glm::vec3 MultiplyV2, glm::vec3 addV);
 	glm::vec3 Transform(glm::mat4x4 m, glm::vec3 v);
 	void UpdateViewMat();

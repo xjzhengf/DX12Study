@@ -33,10 +33,10 @@ void Camera::UpDown(float d)
 void Camera::Pitch(float angle)
 {
 	glm::mat4x4 R = glm::mat4x4(1.0f);
-	R=glm::rotate(R, angle, mRight);
+	R = glm::rotate(R, angle, mRight);
 	mUp = glm::normalize(Transform(R, mUp));
 	mLook = glm::normalize(Transform(R, mLook));
-
+	mRight = glm::normalize(Transform(R, mRight));
 	mViewDirty = true;
 }
 
@@ -88,6 +88,16 @@ void Camera::RotateY(float angle)
 	mRight = glm::normalize(Transform(M, mRight));
 	mUp = glm::normalize(Transform(M, mUp));
 	mLook = glm::normalize(Transform(M, mLook));
+}
+
+void Camera::RotateLook(float angle)
+{
+	glm::mat4x4 R = glm::mat4x4(1.0f);
+	R = glm::rotate(R, angle, mLook);
+	mUp = glm::normalize(Transform(R, mUp));
+	mRight = glm::normalize(Transform(R, mRight));
+
+	mViewDirty = true;
 }
 
 void Camera::UpdateViewMat()
