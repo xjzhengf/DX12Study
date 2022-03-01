@@ -42,9 +42,11 @@ public:
 
 	glm::mat4x4 GetPerspectiveFovLH(float FovY,float aspect,float nearZ,float farZ);
 
+	float GetCameraSpeed();
 	//Ïà»úÒÆ¶¯
 	void Strafe(float d);
 	void Walk(float d);
+	void UpDown(float d);
 	void Pitch(float angle);
 	void RotateY(float angle);
 	glm::vec3 VectorMultiplyAdd(glm::vec3 MultiplyV1, glm::vec3 MultiplyV2, glm::vec3 addV);
@@ -53,7 +55,7 @@ public:
 private:
 	glm::vec3 mPos = { 1.0f, 1.0f, 1.0f };
 	glm::vec3 mRight = { 1.0f,0.0f,0.0f };
-	glm::vec3 mUp = { 0.0f,1.0f,0.0f };
+	glm::vec3 mUp = { 0.0f,-1.0f,0.0f };
 	glm::vec3 mLook = { 0.0f,0.0f,1.0f };
 
 	float mNearZ = 0.0f;
@@ -65,6 +67,7 @@ private:
 	
 	bool mViewDirty = true;
 
+	float mCameraMoveSpeed = 1.0f;
 	glm::mat4x4 mView = glm::identity<glm::mat4x4>();
 	glm::mat4x4 mProj = glm::identity<glm::mat4x4>();
 };

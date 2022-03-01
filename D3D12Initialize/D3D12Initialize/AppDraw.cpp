@@ -37,7 +37,7 @@ void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
 	camera.SetCameraPos(10.0f, 10.0f, 10.0f);
-	camera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	camera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 5000.0f);
 	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(0.0f,1.0f,0.0f));
 }
 
@@ -57,7 +57,6 @@ void AppDraw::Update(const GameTimer& gt)
 	
 	objConstants.WorldViewProj = glm::transpose(worldViewProj);
 	mObjectCB->CopyData(0, objConstants);
-;
 }
 
 void AppDraw::Draw(const GameTimer& gt)
@@ -112,16 +111,14 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 		//mTheta += dx;
 		//mPhi += dy;
 		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
-		camera.Pitch(dy);
+		
 		camera.RotateY(dx);
+		camera.Pitch(dy);
 	}
-	/*else if ((btnState & MK_RBUTTON) != 0) {
+	else if ((btnState & MK_RBUTTON) != 0) {
 		float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
 		float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
-
-		mRadius += dx - dy;
-		mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
-	}*/
+	}
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 }
@@ -192,7 +189,8 @@ void AppDraw::BulidShadersAndInputLayout()
 	mInputLayout =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
 }
 
@@ -205,7 +203,9 @@ void AppDraw::BuildStaticMeshGeometry()
 	std::vector<Vertex> vertices;
 	vertices.resize(VerticesLen);
 	for (int i = 0; i < VerticesLen; i++) {
-		vertices[i].Pos = myStruct->Vertices[i];
+		vertices[i].Pos.x = myStruct->Vertices[i].x;
+		vertices[i].Pos.y = myStruct->Vertices[i].y;
+		vertices[i].Pos.z = myStruct->Vertices[i].z;
 		if (i % 2 == 0) {
 			vertices[i].Color = XMFLOAT4(Colors::OrangeRed);
 		}
@@ -215,7 +215,28 @@ void AppDraw::BuildStaticMeshGeometry()
 		}
 	}
 
+	for (int i = 0; i < (myStruct->Indices.size()) / 3; i++) {
+		UINT i0 = indices[i * 3 + 0];
+		UINT i1 = indices[i * 3 + 1];
+		UINT i2 = indices[i * 3 + 2];
+
+		Vertex v0 = vertices[i0];
+		Vertex v1 = vertices[i1];
+		Vertex v2 = vertices[i2];
+
+		glm::vec3 e0 = v1.Pos - v0.Pos;
+		glm::vec3 e1 = v2.Pos - v0.Pos;
+		glm::vec3 faceNormal = glm::cross(e0, e1);
+
+		vertices[i0].Normal += faceNormal;
+		vertices[i1].Normal += faceNormal;
+		vertices[i2].Normal += faceNormal;
+	}
 	
+	for (UINT i = 0 ;i<VerticesLen;i++)
+	{
+		vertices[i].Normal = glm::normalize(vertices[i].Normal);
+	}
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(uint32_t);

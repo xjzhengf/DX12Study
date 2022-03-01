@@ -157,16 +157,22 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
 		}
 		else if (wParam == 'A') {
-			 theApp->camera.Strafe(-1.0f);
+			 theApp->camera.Strafe(-10.0f* (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'S') {
-			 theApp->camera.Walk(-1.0f);
+			 theApp->camera.Walk(-10.0f * (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'D') {
-			 theApp->camera.Strafe(1.0f);
+			 theApp->camera.Strafe(10.0f * (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'W') {
-			 theApp->camera.Walk(1.0f);
+			 theApp->camera.Walk(10.0f * (theApp->camera.GetCameraSpeed()));
+		 }
+		else if (wParam == 'E') {
+			 theApp->camera.UpDown(10.0f * (theApp->camera.GetCameraSpeed()));
+		 }
+		else if (wParam == 'Q') {
+			 theApp->camera.UpDown(-10.0f * (theApp->camera.GetCameraSpeed()));
 		 }
 		return 0;
 	case WM_KEYUP:

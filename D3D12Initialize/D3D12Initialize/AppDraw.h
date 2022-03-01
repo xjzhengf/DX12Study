@@ -11,8 +11,9 @@ using namespace DirectX::PackedVector;
 
 struct Vertex
 {
-	FVector Pos;
+	glm::vec3 Pos;
 	XMFLOAT4 Color;
+	glm::vec3 Normal;
 };
 struct ObjectConstants {
 	//XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();

@@ -20,9 +20,24 @@ void Camera::Walk(float d)
 	mViewDirty = true;
 }
 
+void Camera::UpDown(float d)
+{
+	glm::vec3 s = { d,d,d };
+	glm::vec3 u = mUp;
+	glm::vec3 p = mPos;
+
+	mPos = VectorMultiplyAdd(s, u, p);
+	mViewDirty = true;
+}
+
 void Camera::Pitch(float angle)
 {
+	glm::mat4x4 R = glm::mat4x4(1.0f);
+	R=glm::rotate(R, angle, mRight);
+	mUp = glm::normalize(Transform(R, mUp));
+	mLook = glm::normalize(Transform(R, mLook));
 
+	mViewDirty = true;
 }
 
  glm::vec3 Camera::Transform(glm::mat4x4 m,glm::vec3 v) {
@@ -278,4 +293,9 @@ glm::mat4x4 Camera::GetPerspectiveFovLH(float fovY, float aspect, float nearZ, f
 	P[3][2] = -nearZ * farZ / (farZ - nearZ);
 	P[3][3] = 0.0f;
 	return P;
+}
+
+float Camera::GetCameraSpeed()
+{
+	return mCameraMoveSpeed;
 }
