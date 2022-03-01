@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 class FVector {
 public:
 	float x;
@@ -25,3 +26,4 @@ public:
 	uint8_t B;
 	uint8_t A;
 };
+

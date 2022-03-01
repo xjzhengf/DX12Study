@@ -18,18 +18,24 @@ bool AppDraw::Initialize()
 	if (!D3DApp::Initialize())
 		return false;
 
-	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-	BulidDescriptorHeaps();
-	BulidConstantBuffers();
-	BulidRootSignature();
-	BulidShadersAndInputLayout();
-	BuildStaticMeshGeometry();
-	BuildPSO();
 
-	ThrowIfFailed(mCommandList->Close());
-	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
-	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
-	FlushCommandQueue();
+		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
+		BulidDescriptorHeaps();
+		BulidConstantBuffers();
+		BulidRootSignature();
+		BulidShadersAndInputLayout();
+		
+		for (int i = 0; i < myStruct.size(); i++) {
+			BuildStaticMeshData(myStruct[i],i);
+		
+		}
+		BuildStaticMeshGeometry(meshDataVector);
+		BuildPSO();
+		ThrowIfFailed(mCommandList->Close());
+		ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
+		mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+		FlushCommandQueue();
+	
 	return true;
 }
 
@@ -70,7 +76,7 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
 	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-
+	mCommandList->OMSetStencilRef(1);
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 
 	ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap.Get() };
@@ -82,7 +88,10 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
-	mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs["AppDraw"].IndexCount, 1, 0, 0, 0);
+	for (size_t i = 0; i < myStruct.size(); i++) {
+		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[to_string(i)].IndexCount, 1, 
+			mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
+	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	ThrowIfFailed(mCommandList->Close());
@@ -132,7 +141,7 @@ void AppDraw::OnMouseUp(WPARAM btnState, int x, int y)
 
 void AppDraw::BuildStaticMeshStruct(StaticMeshInfo* staticMeshInfo)
 {
-	myStruct = staticMeshInfo;
+	myStruct.push_back(staticMeshInfo) ;
 }
 
 void AppDraw::BulidDescriptorHeaps()
@@ -195,49 +204,44 @@ void AppDraw::BulidShadersAndInputLayout()
 	};
 }
 
-void AppDraw::BuildStaticMeshGeometry()
+void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 {
-	std::vector<uint32_t> indices = myStruct->Indices;
-	indices.resize(myStruct->Indices.size());
-	size_t VerticesLen = myStruct->Vertices.size();
-
-	std::vector<Vertex> vertices;
-	vertices.resize(VerticesLen);
-	for (int i = 0; i < VerticesLen; i++) {
-		vertices[i].Pos.x = myStruct->Vertices[i].x;
-		vertices[i].Pos.y = myStruct->Vertices[i].y;
-		vertices[i].Pos.z = myStruct->Vertices[i].z;
-		if (i % 2 == 0) {
-			vertices[i].Color = XMFLOAT4(Colors::OrangeRed);
+    //将模型数据数组里的数据合并为一个大数据
+	size_t totalVertexSize = 0;
+	size_t totalIndexSize = 0;
+	std::vector<UINT> vertexOffset(myStruct.size());
+	std::vector<UINT> indexOffset(myStruct.size());
+	for (int i = 0; i < meshData.size(); i++) {
+		if (i == 0) {
+			vertexOffset[i] = 0;
+			indexOffset[i] = 0;
 		}
 		else
 		{
-			vertices[i].Color = XMFLOAT4(Colors::Blue);
+			vertexOffset[i] = meshData[i - 1].vertices.size() + vertexOffset[i - 1];
+			indexOffset[i] = meshData[i - 1].indices.size() + indexOffset[i - 1];
 		}
 	}
 
-	for (int i = 0; i < (myStruct->Indices.size()) / 3; i++) {
-		UINT i0 = indices[i * 3 + 0];
-		UINT i1 = indices[i * 3 + 1];
-		UINT i2 = indices[i * 3 + 2];
 
-		Vertex v0 = vertices[i0];
-		Vertex v1 = vertices[i1];
-		Vertex v2 = vertices[i2];
-
-		glm::vec3 e0 = v1.Pos - v0.Pos;
-		glm::vec3 e1 = v2.Pos - v0.Pos;
-		glm::vec3 faceNormal = glm::cross(e0, e1);
-
-		vertices[i0].Normal += faceNormal;
-		vertices[i1].Normal += faceNormal;
-		vertices[i2].Normal += faceNormal;
-	}
 	
-	for (UINT i = 0 ;i<VerticesLen;i++)
-	{
-		vertices[i].Normal = glm::normalize(vertices[i].Normal);
+	std::vector<Vertex> vertices(totalVertexSize);
+	std::vector<uint32_t> indices(totalIndexSize);
+	for (size_t i = 0; i < meshData.size(); i++) {
+
+		
+		for (size_t k =0 ; k<meshData[i].vertices.size();k++)
+		{
+			vertices.push_back(meshData[i].vertices[k]);
+		}
+		for (size_t k = 0; k < meshData[i].indices.size(); k++)
+		{
+			indices.push_back(meshData[i].indices[k]);
+		}
 	}
+
+
+
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(uint32_t);
@@ -258,11 +262,67 @@ void AppDraw::BuildStaticMeshGeometry()
 	mBoxGeo->IndexFormat = DXGI_FORMAT_R32_UINT;
 	mBoxGeo->IndexBufferByteSize = ibByteSize;
 
-	SubmeshGeometry submesh;
-	submesh.IndexCount = (UINT)indices.size();
-	submesh.StartIndexLocation = 0;
-	submesh.BaseVertexLocation = 0;
-	mBoxGeo->DrawArgs["AppDraw"] = submesh;
+
+	for (int i = 0; i < meshData.size(); i++) {
+		totalVertexSize += meshData[i].vertices.size();
+		totalIndexSize += meshData[i].indices.size();
+		SubmeshGeometry submesh;
+		submesh.IndexCount = (UINT)meshData[i].indices.size();
+		submesh.StartIndexLocation = indexOffset[i];
+		submesh.BaseVertexLocation = vertexOffset[i];
+		std::string name = to_string(i);
+		mBoxGeo->DrawArgs[name] = submesh;
+	}
+
+
+}
+
+void AppDraw::BuildStaticMeshData(StaticMeshInfo* myStruct, int index)
+{
+	
+	MeshData meshData;
+	meshData.indices = myStruct->Indices;
+
+	meshData.indices.resize(myStruct->Indices.size());
+	size_t VerticesLen = myStruct->Vertices.size();
+	meshData.vertices.resize(VerticesLen);
+	for (int i = 0; i < VerticesLen; i++) {
+		meshData.vertices[i].Pos.x = myStruct->Vertices[i].x + index * 300;
+		meshData.vertices[i].Pos.y = myStruct->Vertices[i].y ;
+		meshData.vertices[i].Pos.z = myStruct->Vertices[i].z ;
+		if (i % 2 == 0) {
+			meshData.vertices[i].Color = XMFLOAT4(Colors::OrangeRed);
+		}
+		else
+		{
+			meshData.vertices[i].Color = XMFLOAT4(Colors::Blue);
+		}
+	}
+
+	for (int i = 0; i < (myStruct->Indices.size()) / 3; i++) {
+		UINT i0 = meshData.indices[i * 3 + 0];
+		UINT i1 = meshData.indices[i * 3 + 1];
+		UINT i2 = meshData.indices[i * 3 + 2];
+
+		Vertex v0 = meshData.vertices[i0];
+		Vertex v1 = meshData.vertices[i1];
+		Vertex v2 = meshData.vertices[i2];
+
+		glm::vec3 e0 = v1.Pos - v0.Pos;
+		glm::vec3 e1 = v2.Pos - v0.Pos;
+		glm::vec3 faceNormal = glm::cross(e0, e1);
+
+		meshData.vertices[i0].Normal += faceNormal;
+		meshData.vertices[i1].Normal += faceNormal;
+		meshData.vertices[i2].Normal += faceNormal;
+	}
+	
+	for (UINT i = 0 ;i<VerticesLen;i++)
+	{
+		meshData.vertices[i].Normal = glm::normalize(meshData.vertices[i].Normal);
+	}
+	meshDataVector.push_back(meshData);
+	
 }
 
 void AppDraw::BuildPSO()
@@ -285,6 +345,7 @@ void AppDraw::BuildPSO()
 	psoDesc.RasterizerState.FrontCounterClockwise = TRUE;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//psoDesc.DepthStencilState.DepthEnable = TRUE;   默认开启
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;

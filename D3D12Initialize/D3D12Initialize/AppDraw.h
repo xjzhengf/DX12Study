@@ -9,11 +9,19 @@ using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
+
+
 struct Vertex
 {
 	glm::vec3 Pos;
 	XMFLOAT4 Color;
 	glm::vec3 Normal;
+};
+struct MeshData
+{
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
 };
 struct ObjectConstants {
 	//XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
@@ -44,7 +52,8 @@ private:
 	void BulidConstantBuffers();
 	void BulidRootSignature();
 	void BulidShadersAndInputLayout();
-	void BuildStaticMeshGeometry();
+	void BuildStaticMeshGeometry(std::vector<MeshData> meshData);
+	void BuildStaticMeshData(StaticMeshInfo* myStruct,int index);
 	void BuildPSO();
 
 private:
@@ -62,12 +71,8 @@ private:
 
 	glm::mat4x4 mWorld = glm::identity<glm::mat4x4>();
 
-
-
-
-
 	POINT mLastMousePos;
-	StaticMeshInfo* myStruct;
-
+	std::vector<StaticMeshInfo*> myStruct;
+	std::vector<MeshData> meshDataVector;
 
 };
