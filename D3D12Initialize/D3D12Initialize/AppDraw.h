@@ -15,7 +15,8 @@ struct Vertex
 	XMFLOAT4 Color;
 };
 struct ObjectConstants {
-	XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
+	//XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
+	glm::mat4x4 WorldViewProj = glm::identity<glm::mat4x4>();
 };
 
 
@@ -58,15 +59,14 @@ private:
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	ComPtr<ID3D12PipelineState> mPSO = nullptr;
 
-	XMFLOAT4X4 mWorld = MathHelper::Identity4x4();
-	XMFLOAT4X4 mView = MathHelper::Identity4x4();
-	XMFLOAT4X4 mProj = MathHelper::Identity4x4();
+	glm::mat4x4 mWorld = glm::identity<glm::mat4x4>();
 
-	float mTheta = 1.5f * XM_PI;
-	float mPhi = XM_PIDIV4;
-	float mRadius = 5.0f;
+
+
 
 
 	POINT mLastMousePos;
 	StaticMeshInfo* myStruct;
+
+
 };

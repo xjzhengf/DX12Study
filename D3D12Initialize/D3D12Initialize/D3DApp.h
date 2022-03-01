@@ -1,13 +1,12 @@
 #pragma once
+#include "stdafx.h"
 #if defined(DEBUG)||defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#endif
 
-#include "stdafx.h"
+#endif
 #include "D3DUtil.h"
 #include "GameTimer.h"
-
+#include"camera.h"
 
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
@@ -110,8 +109,5 @@ protected:
 	int mClientHeight = 600;
 
 public:
-
-	float CameraPosX = 0.0f;
-	float CameraPosY = 0.0f;
-	float CameraPosZ = 0.0f;
+	Camera camera;
 };

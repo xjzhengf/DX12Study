@@ -36,29 +36,28 @@ bool AppDraw::Initialize()
 void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
-
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 5000.0f);
-	XMStoreFloat4x4(&mProj, P);
+	camera.SetCameraPos(10.0f, 10.0f, 10.0f);
+	camera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(0.0f,1.0f,0.0f));
 }
 
 void AppDraw::Update(const GameTimer& gt)
 {
-	float x = mRadius * sinf(mPhi) * cosf(mTheta) + CameraPosX;
-	float z = mRadius * sinf(mPhi) * sinf(mTheta) + CameraPosZ;
-	float y = mRadius * cosf(mPhi) ;
+	
+	camera.UpdateViewMat();
 
-	XMVECTOR pos = XMVectorSet(x * 500, y * 500, z * 500, 1.0f);
-	XMVECTOR target = {0.0f ,0.0f + CameraPosY,0.0f  };
-	XMVECTOR up = XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f);
-	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-	XMStoreFloat4x4(&mView, view);
-	XMMATRIX world = XMLoadFloat4x4(&mWorld);
-	XMMATRIX proj = XMLoadFloat4x4(&mProj);
-	XMMATRIX worldViewProj = world * view * proj;
-	ObjectConstants objectConstants;
-	XMStoreFloat4x4(&objectConstants.WorldViewProj, XMMatrixTranspose(worldViewProj));
-	mObjectCB->CopyData(0, objectConstants);
+	glm::mat4x4 proj = camera.GetProj4x4();
+	glm::mat4x4 view = camera.GetView4x4();
+	
+	
+	glm::mat4x4 worldViewProj =   proj *view *mWorld;
 
+	
+	ObjectConstants objConstants;
+	
+	objConstants.WorldViewProj = glm::transpose(worldViewProj);
+	mObjectCB->CopyData(0, objConstants);
+;
 }
 
 void AppDraw::Draw(const GameTimer& gt)
@@ -110,17 +109,19 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 	if ((btnState & MK_LBUTTON) != 0) {
 		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
 		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-		mTheta += dx;
-		mPhi += dy;
-		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+		//mTheta += dx;
+		//mPhi += dy;
+		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+		camera.Pitch(dy);
+		camera.RotateY(dx);
 	}
-	else if ((btnState & MK_RBUTTON) != 0) {
+	/*else if ((btnState & MK_RBUTTON) != 0) {
 		float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
 		float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
 
 		mRadius += dx - dy;
 		mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
-	}
+	}*/
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 }
@@ -213,6 +214,9 @@ void AppDraw::BuildStaticMeshGeometry()
 			vertices[i].Color = XMFLOAT4(Colors::Blue);
 		}
 	}
+
+	
+
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(uint32_t);
 

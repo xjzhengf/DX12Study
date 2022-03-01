@@ -7,7 +7,7 @@
 #pragma once
 
 #include "stdafx.h"
-
+#include "MathHelper.h"
 
 extern const int gNumFrameResources;
 

@@ -25,7 +25,10 @@
 #include <assert.h>
 #include <algorithm>
 #include <memory>
+#include <crtdbg.h>
 #include <wrl.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "d3dx12.h"
 #include "DDSTextureLoader.h"
 #include "MathHelper.h"

@@ -12,7 +12,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	try
 	{
-		char* Path = "StaticMeshInfo\\ZLStaticMesh.dat";
+		char* Path = "StaticMeshInfo\\SM_TableRound.dat";
 		std::unique_ptr<StaticMesh> staticMesh = std::make_unique<StaticMesh>();
 		//staticMesh->SelectFile();
 		staticMesh->ReadBinaryFileToStaticMeshStruct(Path);
