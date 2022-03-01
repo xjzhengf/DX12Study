@@ -59,6 +59,7 @@ PCWindows* PCWindows::GetPcWindows()
 
 LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+
 	switch (msg)
 	{
 	case WM_ACTIVATE:
@@ -152,27 +153,36 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 		theApp->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
+	case WM_MOUSEWHEEL:
+		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+			theApp->camera.AddCameraSpeed(1);
+		 }
+		else
+		{
+			theApp->camera.AddCameraSpeed(-1);
+		}
+		return 0;
 	case WM_KEYDOWN:
 		 if ((int)wParam == VK_F2) {
 			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
 		}
 		else if (wParam == 'A') {
-			 theApp->camera.Strafe(-10.0f* (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.Strafe(-1.0f* (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'S') {
-			 theApp->camera.Walk(-10.0f * (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.Walk(-1.0f * (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'D') {
-			 theApp->camera.Strafe(10.0f * (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.Strafe(1.0f * (theApp->camera.GetCameraSpeed()));
 		}
 		else if (wParam == 'W') {
-			 theApp->camera.Walk(10.0f * (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.Walk(1.0f * (theApp->camera.GetCameraSpeed()));
 		 }
 		else if (wParam == 'E') {
-			 theApp->camera.UpDown(10.0f * (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.UpDown(1.0f * (theApp->camera.GetCameraSpeed()));
 		 }
 		else if (wParam == 'Q') {
-			 theApp->camera.UpDown(-10.0f * (theApp->camera.GetCameraSpeed()));
+			 theApp->camera.UpDown(-1.0f * (theApp->camera.GetCameraSpeed()));
 		 }
 		return 0;
 	case WM_KEYUP:

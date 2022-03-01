@@ -309,3 +309,14 @@ float Camera::GetCameraSpeed()
 {
 	return mCameraMoveSpeed;
 }
+
+void Camera::AddCameraSpeed(float speed)
+{
+	mCameraMoveSpeed += speed;
+	if (mCameraMoveSpeed > mCameraMoveMaxSpeed) {
+		mCameraMoveSpeed = mCameraMoveMaxSpeed;
+	}
+	if (mCameraMoveSpeed < mCameraMoveMinSpeed) {
+		mCameraMoveSpeed = mCameraMoveMinSpeed;
+	}
+}

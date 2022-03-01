@@ -43,6 +43,7 @@ public:
 	glm::mat4x4 GetPerspectiveFovLH(float FovY,float aspect,float nearZ,float farZ);
 
 	float GetCameraSpeed();
+	void AddCameraSpeed(float speed);
 	//Ïà»úÒÆ¶¯
 	void Strafe(float d);
 	void Walk(float d);
@@ -69,6 +70,8 @@ private:
 	bool mViewDirty = true;
 
 	float mCameraMoveSpeed = 1.0f;
+	float mCameraMoveMaxSpeed = 30.0f;
+	float mCameraMoveMinSpeed = 0.5f;
 	glm::mat4x4 mView = glm::identity<glm::mat4x4>();
 	glm::mat4x4 mProj = glm::identity<glm::mat4x4>();
 };
