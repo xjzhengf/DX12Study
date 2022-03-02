@@ -14,11 +14,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	{
 		char* Path = "StaticMeshInfo\\ZLStaticMesh.dat";
 		char* TablePath = "StaticMeshInfo\\SM_TableRound.dat";
+		char* GLPath = "StaticMeshInfo\\GLStaticMesh.dat";
 		std::unique_ptr<StaticMesh> staticMesh = std::make_unique<StaticMesh>();
 		std::unique_ptr<StaticMesh> TableMesh = std::make_unique<StaticMesh>();
+		std::unique_ptr<StaticMesh> GLMesh = std::make_unique<StaticMesh>();
 		//staticMesh->SelectFile();
 		staticMesh->ReadBinaryFileToStaticMeshStruct(Path);
 		TableMesh->ReadBinaryFileToStaticMeshStruct(TablePath);
+		GLMesh->ReadBinaryFileToStaticMeshStruct(GLPath);
 		AppDraw theApp(hInstance);
 		unique_ptr<WindowsFactory> fa = make_unique<WindowsFactory>();
 		unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp);
@@ -28,6 +31,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		theApp.BuildStaticMeshStruct(staticMesh->GetStruct());
 		theApp.BuildStaticMeshStruct(TableMesh->GetStruct());
+		theApp.BuildStaticMeshStruct(GLMesh->GetStruct());
 		if (!theApp.Initialize()) {
 			return 0;
 		}
