@@ -43,7 +43,7 @@ bool AppDraw::Initialize()
 void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
-	camera.SetCameraPos(10.0f, 10.0f, 10.0f);
+	camera.SetCameraPos(1000.0f, 1000.0f, 1000.0f);
 	camera.SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
 	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),camera.GetUp());
 }
@@ -70,7 +70,7 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->OMSetStencilRef(0);
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 	
-	Time += 1.0f;
+	Time = gt.TotalTime();
 	for (size_t i = 0; i < myStruct.size(); i++) {
 		camera.UpdateViewMat();
 		ObjectConstants objConstants;

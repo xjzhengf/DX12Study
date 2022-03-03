@@ -31,11 +31,9 @@ VertexOut VS(VertexIn vin)
 {
 	VertexOut vout;
 	float3 POSL = vin.PosL;
-    if(Time%2 == 0){
-		POSL.x -= 10.0;
-	}else{
-		POSL.x += 10.0;
-	}
+
+	POSL.z += sin(Time%180.0)*20 ;
+
 	// Transform to homogeneous clip space.
 	vout.PosH = mul(float4(POSL, 1.0f), gWorldViewProj);
 	

@@ -28,7 +28,7 @@ float GameTimer::DeltaTime() const
 void GameTimer::Reset()
 {
 	__int64 currTime;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&currTime);
+	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 	mBaseTime = currTime;
 	mPrevTime = currTime;
 	mStopTime = 0;
@@ -38,7 +38,7 @@ void GameTimer::Reset()
 void GameTimer::Start()
 {
 	__int64 startTime;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&startTime);
+	QueryPerformanceCounter((LARGE_INTEGER*)&startTime);
 	if (mStopped) {
 		mPausedTime += (startTime - mStopTime);
 
@@ -52,7 +52,7 @@ void GameTimer::Stop()
 {
 	if (!mStopped) {
 		__int64 currTime;
-		QueryPerformanceFrequency((LARGE_INTEGER*)&currTime);
+		QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 
 		mStopTime = currTime;
 		mStopped = true;
@@ -66,7 +66,7 @@ void GameTimer::Tick()
 		return;
 	}
 	__int64 currTime;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&currTime);
+	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 	mCurrTime = currTime;
 	mDeltaTime = (mCurrTime - mPrevTime) * mSecondsPerCount;
 

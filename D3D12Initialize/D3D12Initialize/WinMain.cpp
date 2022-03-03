@@ -206,6 +206,7 @@ int PCWindows::Run()
 {
 	MSG msg = { 0 };
 	mTimer.Reset();
+
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
@@ -242,10 +243,12 @@ void PCWindows::CalculateFrameStats()
 
 		wstring fpsStr = to_wstring(fps);
 		wstring mspfStr = to_wstring(mspf);
+		wstring timeStr = to_wstring(mTimer.TotalTime());
 
 		wstring windowText = mMainWndCaption +
 			L"    fps: " + fpsStr +
-			L"   mspf: " + mspfStr;
+			L"   mspf: " + mspfStr+
+			L"   TotalTime: " + timeStr;
 
 		SetWindowText(mhMainWnd, windowText.c_str());
 
