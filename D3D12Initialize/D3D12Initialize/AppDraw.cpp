@@ -67,8 +67,9 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
 	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-	mCommandList->OMSetStencilRef(1);
+	mCommandList->OMSetStencilRef(0);
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
+<<<<<<< HEAD
 
 	
 	Time += 1.0f;
@@ -103,6 +104,14 @@ void AppDraw::Draw(const GameTimer& gt)
 		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
 		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
 		objConstants.WorldViewProj = glm::transpose(worldViewProj);
+=======
+	ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap.Get() };
+	mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+	mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
+	mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
+	mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
+	mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+>>>>>>> b174b4335925b67ce317c7e56ff8ea5eccec90ee
 
 		mObjectCB[i]->CopyData(0, objConstants);
 
@@ -373,11 +382,34 @@ void AppDraw::BuildPSO()
 		mpsByteCode->GetBufferSize()
 	};
 
+
+	D3D12_DEPTH_STENCIL_DESC stencilDesc;
+	//反面
+	stencilDesc.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	stencilDesc.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	stencilDesc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
+	stencilDesc.BackFace.StencilPassOp = D3D12_STENCIL_OP_INCR;
+	stencilDesc.DepthEnable = true;
+	stencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	stencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	//正面
+	stencilDesc.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+	stencilDesc.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+	stencilDesc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	stencilDesc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_INCR;
+	stencilDesc.StencilEnable = true;
+	stencilDesc.StencilReadMask = 0xff;
+	stencilDesc.StencilWriteMask = 0xff;
+	
+
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	psoDesc.RasterizerState.FrontCounterClockwise = TRUE;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	//psoDesc.DepthStencilState.DepthEnable = TRUE;   默认开启
+	//psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	//psoDesc.DepthStencilState.StencilEnable = TRUE;
+	//psoDesc.DepthStencilState.StencilReadMask = 1;
+	//psoDesc.DepthStencilState.StencilWriteMask = 1;
+	psoDesc.DepthStencilState = stencilDesc;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	psoDesc.NumRenderTargets = 1;
