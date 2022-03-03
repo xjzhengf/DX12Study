@@ -74,6 +74,7 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	case WM_SIZE:
+		return 0;
 		mClientWidht = LOWORD(lParam);
 		mClientHeight = HIWORD(lParam);
 		if (theApp->IsHaveDevice())
@@ -115,11 +116,13 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	case WM_ENTERSIZEMOVE:
+		return 0;
 		mAppPause = true;
 		mResizing = true;
 		mTimer.Stop();
 		return 0;
 	case WM_EXITSIZEMOVE:
+		return 0;
 		mAppPause = false;
 		mResizing = false;
 		mTimer.Start();
@@ -155,11 +158,11 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	case WM_MOUSEWHEEL:
 		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-			theApp->camera.AddCameraSpeed(1);
+			theApp->camera.AddCameraSpeed(10);
 		 }
 		else
 		{
-			theApp->camera.AddCameraSpeed(-1);
+			theApp->camera.AddCameraSpeed(-10);
 		}
 		return 0;
 	case WM_KEYDOWN:

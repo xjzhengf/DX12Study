@@ -56,9 +56,9 @@ public:
 	void UpdateViewMat();
 private:
 	glm::vec3 mPos = { 1.0f, 1.0f, 1.0f };
-	glm::vec3 mRight = { 1.0f,0.0f,0.0f };
-	glm::vec3 mUp = { 0.0f,-1.0f,0.0f };
-	glm::vec3 mLook = { 0.0f,0.0f,1.0f };
+	glm::vec3 mRight = { 0.0f,1.0f,0.0f };
+	glm::vec3 mUp = { 0.0f,0.0f,1.0f };
+	glm::vec3 mLook = { 1.0f,0.0f,0.0f };
 
 	float mNearZ = 0.0f;
 	float mFarZ = 0.0f;
@@ -69,9 +69,9 @@ private:
 	
 	bool mViewDirty = true;
 
-	float mCameraMoveSpeed = 1.0f;
-	float mCameraMoveMaxSpeed = 30.0f;
-	float mCameraMoveMinSpeed = 0.5f;
+	float mCameraMoveSpeed = 30.0f;
+	float mCameraMoveMaxSpeed = 100.0f;
+	float mCameraMoveMinSpeed = 10.0f;
 	glm::mat4x4 mView = glm::identity<glm::mat4x4>();
 	glm::mat4x4 mProj = glm::identity<glm::mat4x4>();
 };

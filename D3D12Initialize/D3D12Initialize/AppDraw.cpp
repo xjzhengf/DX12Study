@@ -20,14 +20,15 @@ bool AppDraw::Initialize()
 
 
 		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-		BulidDescriptorHeaps();
-		BulidConstantBuffers();
+
 		BulidRootSignature();
 		BulidShadersAndInputLayout();
-		
+		mCbvHeap.resize(myStruct.size());
+		mObjectCB.resize(myStruct.size());
 		for (int i = 0; i < myStruct.size(); i++) {
-			BuildStaticMeshData(myStruct[i],i);
-		
+			BuildStaticMeshData(&myStruct[i],i);
+			BulidDescriptorHeaps(i);
+			BulidConstantBuffers(i);
 		}
 		BuildStaticMeshGeometry(meshDataVector);
 		BuildPSO();
@@ -43,26 +44,16 @@ void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
 	camera.SetCameraPos(10.0f, 10.0f, 10.0f);
-	camera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 5000.0f);
-	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(0.0f,1.0f,0.0f));
+	camera.SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
+	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),camera.GetUp());
 }
 
 void AppDraw::Update(const GameTimer& gt)
 {
-	
-	camera.UpdateViewMat();
+	//ObjectConstants objConstants;
 
-	glm::mat4x4 proj = camera.GetProj4x4();
-	glm::mat4x4 view = camera.GetView4x4();
-	
-	
-	glm::mat4x4 worldViewProj =   proj *view *mWorld;
 
-	
-	ObjectConstants objConstants;
-	
-	objConstants.WorldViewProj = glm::transpose(worldViewProj);
-	mObjectCB->CopyData(0, objConstants);
+	//mObjectCB[1]->CopyData(0, objConstants);
 }
 
 void AppDraw::Draw(const GameTimer& gt)
@@ -79,18 +70,53 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->OMSetStencilRef(1);
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 
-	ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap.Get() };
-	mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-	mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
-
-	mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
-	mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
-	mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
+	
+	Time += 1.0f;
 	for (size_t i = 0; i < myStruct.size(); i++) {
+		camera.UpdateViewMat();
+		ObjectConstants objConstants;
+		glm::qua<float> q = glm::qua<float>(
+			myStruct[i].actorStruct.Transform[0].Rotation.w,
+			myStruct[i].actorStruct.Transform[0].Rotation.x,
+			myStruct[i].actorStruct.Transform[0].Rotation.y,
+			myStruct[i].actorStruct.Transform[0].Rotation.z
+			);
+
+		glm::vec3 location = glm::vec3(
+			myStruct[i].actorStruct.Transform[0].Location.x,
+			myStruct[i].actorStruct.Transform[0].Location.y,
+			myStruct[i].actorStruct.Transform[0].Location.z
+		);
+		glm::vec3 Scale = glm::vec3(
+			myStruct[i].actorStruct.Transform[0].Scale3D.x,
+			myStruct[i].actorStruct.Transform[0].Scale3D.y,
+			myStruct[i].actorStruct.Transform[0].Scale3D.z
+		);
+		objConstants.Rotation = glm::mat4_cast(q);
+		objConstants.Translate = glm::translate(objConstants.Translate, location);
+		objConstants.Scale = glm::scale(objConstants.Scale, Scale);
+		
+		objConstants.Time = Time;
+		glm::mat4x4 proj = camera.GetProj4x4();
+		glm::mat4x4 view = camera.GetView4x4();
+
+		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
+		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
+		objConstants.WorldViewProj = glm::transpose(worldViewProj);
+
+		mObjectCB[i]->CopyData(0, objConstants);
+
+		ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
+		mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+		mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
+
+		mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
+		mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
+		mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
 		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[to_string(i)].IndexCount, 1, 
-			mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
+		mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
 	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -98,6 +124,7 @@ void AppDraw::Draw(const GameTimer& gt)
 
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
 	mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+
 
 	ThrowIfFailed(mSwapChain->Present(0, 0));
 	mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
@@ -125,9 +152,15 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 		camera.Pitch(dy);
 	}
 	else if ((btnState & MK_RBUTTON) != 0) {
-		float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
-		float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
-		camera.RotateLook(dx);
+		//相机旋转
+		/*	float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
+			float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
+			camera.RotateLook(dx);*/
+		//相机移动
+		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+		camera.RotateY(dx);
+		camera.Pitch(dy);
 	}
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
@@ -139,34 +172,35 @@ void AppDraw::OnMouseUp(WPARAM btnState, int x, int y)
 }
 
 
-void AppDraw::BuildStaticMeshStruct(StaticMeshInfo* staticMeshInfo)
+void AppDraw::BuildStaticMeshStruct(StaticMeshData& meshData)
 {
-	myStruct.push_back(staticMeshInfo) ;
+	myStruct.push_back(std::move(meshData)) ;
 }
 
-void AppDraw::BulidDescriptorHeaps()
+void AppDraw::BulidDescriptorHeaps(int index)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc;
 	cbvHeapDesc.NumDescriptors = 1;
 	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	cbvHeapDesc.NodeMask = 0;
-	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&mCbvHeap)));
-
+	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&mCbvHeap[index])));
 }
 
-void AppDraw::BulidConstantBuffers()
+void AppDraw::BulidConstantBuffers(int index)
 {
-	mObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
+	mObjectCB[index] =std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 	UINT objecBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-	D3D12_GPU_VIRTUAL_ADDRESS cbAddress = mObjectCB->Resource()->GetGPUVirtualAddress();
-
+	D3D12_GPU_VIRTUAL_ADDRESS cbAddress = mObjectCB[index]->Resource()->GetGPUVirtualAddress();
 	int boxCBufIndex = 0;
 	cbAddress += boxCBufIndex * objecBByteSize;
+
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
 	cbvDesc.BufferLocation = cbAddress;
 	cbvDesc.SizeInBytes = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-	md3dDevice->CreateConstantBufferView(&cbvDesc, mCbvHeap->GetCPUDescriptorHandleForHeapStart());
+	md3dDevice->CreateConstantBufferView(&cbvDesc, mCbvHeap[index]->GetCPUDescriptorHandleForHeapStart());
+
+
 }
 
 void AppDraw::BulidRootSignature()
@@ -211,7 +245,7 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 	size_t totalIndexSize = 0;
 	std::vector<UINT> vertexOffset(myStruct.size());
 	std::vector<UINT> indexOffset(myStruct.size());
-	for (int i = 0; i < meshData.size(); i++) {
+	for (size_t i = 0; i < meshData.size(); i++) {
 		if (i == 0) {
 			vertexOffset[i] = 0;
 			indexOffset[i] = 0;
@@ -277,19 +311,18 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 
 }
 
-void AppDraw::BuildStaticMeshData(StaticMeshInfo* myStruct, int index)
+void AppDraw::BuildStaticMeshData(StaticMeshData* myStruct, int index)
 {
-	
 	MeshData meshData;
-	meshData.indices = myStruct->Indices;
+	meshData.indices = myStruct->StaticMeshStruct.Indices;
 
-	meshData.indices.resize(myStruct->Indices.size());
-	size_t VerticesLen = myStruct->Vertices.size();
+	meshData.indices.resize(myStruct->StaticMeshStruct.Indices.size());
+	size_t VerticesLen = myStruct->StaticMeshStruct.Vertices.size();
 	meshData.vertices.resize(VerticesLen);
 	for (int i = 0; i < VerticesLen; i++) {
-		meshData.vertices[i].Pos.x = myStruct->Vertices[i].x + index * 300;
-		meshData.vertices[i].Pos.y = myStruct->Vertices[i].y ;
-		meshData.vertices[i].Pos.z = myStruct->Vertices[i].z ;
+		meshData.vertices[i].Pos.x = myStruct->StaticMeshStruct.Vertices[i].x ;
+		meshData.vertices[i].Pos.y = myStruct->StaticMeshStruct.Vertices[i].y ;
+		meshData.vertices[i].Pos.z = myStruct->StaticMeshStruct.Vertices[i].z ;
 		if (i % 2 == 0) {
 			meshData.vertices[i].Color = XMFLOAT4(Colors::OrangeRed);
 		}
@@ -299,7 +332,7 @@ void AppDraw::BuildStaticMeshData(StaticMeshInfo* myStruct, int index)
 		}
 	}
 
-	for (int i = 0; i < (myStruct->Indices.size()) / 3; i++) {
+	for (size_t i = 0; i < (myStruct->StaticMeshStruct.Indices.size()) / 3; i++) {
 		UINT i0 = meshData.indices[i * 3 + 0];
 		UINT i1 = meshData.indices[i * 3 + 1];
 		UINT i2 = meshData.indices[i * 3 + 2];
@@ -321,8 +354,7 @@ void AppDraw::BuildStaticMeshData(StaticMeshInfo* myStruct, int index)
 	{
 		meshData.vertices[i].Normal = glm::normalize(meshData.vertices[i].Normal);
 	}
-	meshDataVector.push_back(meshData);
-	
+	meshDataVector.push_back(std::move(meshData));
 }
 
 void AppDraw::BuildPSO()

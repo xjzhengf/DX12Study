@@ -14,18 +14,32 @@ struct StaticMeshInfo
 	std::vector<FColor> ColorVertices;
 };
 
+struct ActorStruct {
+	std::string ActorName;
+	std::vector<FTransform> Transform;
+	std::vector <std::string> StaticMeshAssetName;
+};
 
+struct StaticMeshData
+{
+	ActorStruct actorStruct;
+	StaticMeshInfo StaticMeshStruct;
+};
 
 class StaticMesh
 {
 public:
 	StaticMesh();
 	~StaticMesh();
-	void ReadBinaryFileToStaticMeshStruct(char* TextPath);
+	void ReadBinaryFileToStaticMeshStruct(const char* TextPath);
+	void ReadBinaryFileToActorStruct(const char* TextPathName);
 	void SelectFile();
-	StaticMeshInfo* GetStruct();
+	StaticMeshInfo* GetStaticMeshStruct();
+	ActorStruct* GetActorSrtuct();
+	StaticMeshData& GetStruct();
 private:
-	StaticMeshInfo myStruct;
+	StaticMeshData meshData;
+
 };
 
 

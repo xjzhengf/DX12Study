@@ -12,22 +12,50 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	try
 	{
-		char* Path = "StaticMeshInfo\\ZLStaticMesh.dat";
-		char* TablePath = "StaticMeshInfo\\SM_TableRound.dat";
-		std::unique_ptr<StaticMesh> staticMesh = std::make_unique<StaticMesh>();
-		std::unique_ptr<StaticMesh> TableMesh = std::make_unique<StaticMesh>();
-		//staticMesh->SelectFile();
-		staticMesh->ReadBinaryFileToStaticMeshStruct(Path);
-		TableMesh->ReadBinaryFileToStaticMeshStruct(TablePath);
+		std::vector<std::string> PathVector;
+		std::string Path;
+		Path= "StaticMeshInfo\\Actor\\Wall10.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Wall11.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Bump_StaticMesh.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\CubeMesh_5.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Floor_1.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\LeftArm_StaticMesh.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Linear_Stair_StaticMesh.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Ramp_StaticMesh.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\RightArm_StaticMesh.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\StaticMeshActor_1.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\StaticMeshActor_3.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Wall7_4.dat";
+		PathVector.push_back(Path);
+		Path = "StaticMeshInfo\\Actor\\Wall9.dat";
+		PathVector.push_back(Path);
+
+
 		AppDraw theApp(hInstance);
 		unique_ptr<WindowsFactory> fa = make_unique<WindowsFactory>();
 		unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp);
+		std::shared_ptr<StaticMesh> staticMesh = std::make_shared<StaticMesh>();
+		for (int i =0;i<PathVector.size();i++)
+		{
+			staticMesh->ReadBinaryFileToActorStruct(PathVector[i].c_str());
+			theApp.BuildStaticMeshStruct(staticMesh->GetStruct());
+		}
 
 		if (!myWindows->InitWindows()) {
 			return 0;
 		}
-		theApp.BuildStaticMeshStruct(staticMesh->GetStruct());
-		theApp.BuildStaticMeshStruct(TableMesh->GetStruct());
+
 		if (!theApp.Initialize()) {
 			return 0;
 		}

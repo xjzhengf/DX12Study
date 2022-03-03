@@ -21,13 +21,16 @@ struct MeshData
 {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
-
+	
 };
 struct ObjectConstants {
 	//XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
 	glm::mat4x4 WorldViewProj = glm::identity<glm::mat4x4>();
+	glm::mat4x4 Rotation = glm::identity<glm::mat4x4>();
+	glm::mat4x4 Scale = glm::identity<glm::mat4x4>();
+	glm::mat4x4 Translate = glm::identity<glm::mat4x4>();
+	float Time = 0.0f;
 };
-
 
 class AppDraw : public D3DApp {
 public:
@@ -37,7 +40,7 @@ public:
 	~AppDraw();
 
 	virtual bool Initialize() override;
-	void BuildStaticMeshStruct(StaticMeshInfo* staticMeshInfo);
+	void BuildStaticMeshStruct(StaticMeshData& staticMeshInfo);
 private:
 	virtual void OnResize() override;
 	virtual void Update(const GameTimer& gt) override;
@@ -48,31 +51,30 @@ private:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
 
 
-	void BulidDescriptorHeaps();
-	void BulidConstantBuffers();
+	void BulidDescriptorHeaps(int index);
+	void BulidConstantBuffers(int index);
 	void BulidRootSignature();
 	void BulidShadersAndInputLayout();
 	void BuildStaticMeshGeometry(std::vector<MeshData> meshData);
-	void BuildStaticMeshData(StaticMeshInfo* myStruct,int index);
+	void BuildStaticMeshData(StaticMeshData* myStruct,int index);
 	void BuildPSO();
 
 private:
 	ComPtr<ID3D12RootSignature> mRootSigmature = nullptr;
-	ComPtr<ID3D12DescriptorHeap> mCbvHeap = nullptr;
-
-	std::unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
+	std::vector < ComPtr<ID3D12DescriptorHeap>> mCbvHeap ;
+	std::vector<std::unique_ptr<UploadBuffer<ObjectConstants>>> mObjectCB ;
 	std::unique_ptr<MeshGeometry> mBoxGeo = nullptr;
 
 	ComPtr<ID3DBlob> mvsByteCode = nullptr;
 	ComPtr<ID3DBlob> mpsByteCode = nullptr;
-
+	
 	std::vector<D3D12_INPUT_ELEMENT_DESC> mInputLayout;
 	ComPtr<ID3D12PipelineState> mPSO = nullptr;
 
 	glm::mat4x4 mWorld = glm::identity<glm::mat4x4>();
 
 	POINT mLastMousePos;
-	std::vector<StaticMeshInfo*> myStruct;
+	std::vector<StaticMeshData> myStruct;
 	std::vector<MeshData> meshDataVector;
-
+	float Time;
 };
