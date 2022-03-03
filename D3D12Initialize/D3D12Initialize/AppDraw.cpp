@@ -69,8 +69,6 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 	mCommandList->OMSetStencilRef(0);
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
-<<<<<<< HEAD
-
 	
 	Time += 1.0f;
 	for (size_t i = 0; i < myStruct.size(); i++) {
@@ -104,14 +102,6 @@ void AppDraw::Draw(const GameTimer& gt)
 		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
 		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
 		objConstants.WorldViewProj = glm::transpose(worldViewProj);
-=======
-	ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap.Get() };
-	mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-	mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
-	mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
-	mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
-	mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
->>>>>>> b174b4335925b67ce317c7e56ff8ea5eccec90ee
 
 		mObjectCB[i]->CopyData(0, objConstants);
 
