@@ -50,10 +50,7 @@ void AppDraw::OnResize()
 
 void AppDraw::Update(const GameTimer& gt)
 {
-	//ObjectConstants objConstants;
 
-
-	//mObjectCB[1]->CopyData(0, objConstants);
 }
 
 void AppDraw::Draw(const GameTimer& gt)
@@ -102,7 +99,6 @@ void AppDraw::Draw(const GameTimer& gt)
 		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
 		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
 		objConstants.WorldViewProj = glm::transpose(worldViewProj);
-
 		mObjectCB[i]->CopyData(0, objConstants);
 
 		ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
@@ -233,7 +229,7 @@ void AppDraw::BulidShadersAndInputLayout()
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 }
 
