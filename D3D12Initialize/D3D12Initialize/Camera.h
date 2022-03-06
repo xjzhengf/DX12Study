@@ -15,7 +15,10 @@ public:
 	glm::vec3 GetRight() const;
 	glm::vec3 GetUp() const;
 	glm::vec3 GetLook() const;
-
+	//更新相机的基向量
+	void SetRight( const glm::vec3 right) ;
+	void SetUp(const glm::vec3 up) ;
+	void SetLook(const glm::vec3 look) ;
 	//获取视锥体的属性
 	float GetNearZ() const;
 	float GetFarZ() const;

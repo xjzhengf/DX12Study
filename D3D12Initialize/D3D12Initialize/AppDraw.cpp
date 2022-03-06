@@ -111,7 +111,7 @@ void AppDraw::Draw(const GameTimer& gt)
 
 		mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
 		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[to_string(i)].IndexCount, 1, 
-		mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
+		(UINT)mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
 	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -238,8 +238,8 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
     //将模型数据数组里的数据合并为一个大数据
 	size_t totalVertexSize = 0;
 	size_t totalIndexSize = 0;
-	std::vector<UINT> vertexOffset(myStruct.size());
-	std::vector<UINT> indexOffset(myStruct.size());
+	std::vector<size_t> vertexOffset(myStruct.size());
+	std::vector<size_t> indexOffset(myStruct.size());
 	for (size_t i = 0; i < meshData.size(); i++) {
 		if (i == 0) {
 			vertexOffset[i] = 0;
@@ -318,13 +318,7 @@ void AppDraw::BuildStaticMeshData(StaticMeshData* myStruct, int index)
 		meshData.vertices[i].Pos.x = myStruct->StaticMeshStruct.Vertices[i].x ;
 		meshData.vertices[i].Pos.y = myStruct->StaticMeshStruct.Vertices[i].y ;
 		meshData.vertices[i].Pos.z = myStruct->StaticMeshStruct.Vertices[i].z ;
-		if (i % 2 == 0) {
-			meshData.vertices[i].Color = XMFLOAT4(Colors::OrangeRed);
-		}
-		else
-		{
-			meshData.vertices[i].Color = XMFLOAT4(Colors::Blue);
-		}
+
 	}
 
 	for (size_t i = 0; i < (myStruct->StaticMeshStruct.Indices.size()) / 3; i++) {

@@ -4,7 +4,7 @@
 #include "D3DApp.h"
 #include "UploadBuffer.h"
 #include "MathHelper.h"
-#include "StaticMesh.h"
+#include "MeshProperty.h"
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;

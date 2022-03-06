@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "StaticMesh.h"
+#include "SenceManger.h"
 #include "fstream"
 
 

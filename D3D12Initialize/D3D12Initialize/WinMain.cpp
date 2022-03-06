@@ -73,62 +73,7 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 			mTimer.Start();
 		}
 		return 0;
-	case WM_SIZE:
-		return 0;
-		mClientWidht = LOWORD(lParam);
-		mClientHeight = HIWORD(lParam);
-		if (theApp->IsHaveDevice())
-		{
-			if (wParam == SIZE_MINIMIZED) {
-				mAppPause = true;
-				mMinimized = true;
-				mMaximized = false;
-			}
-			else if (wParam == SIZE_MAXIMIZED)
-			{
-				mAppPause = false;
-				mMinimized = false;
-				mMaximized = true;
-				theApp->OnResize();
-			}
-			else if (wParam == SIZE_RESTORED)
-			{
-				if (mMinimized)
-				{
-					mAppPause = false;
-					mMinimized = false;
-					theApp->OnResize();
-				}
-				else if (mMaximized) {
-					mAppPause = false;
-					mMaximized = false;
-					theApp->OnResize();
-				}
-				else if (mResizing)
-				{
-
-				}
-				else
-				{
-					theApp->OnResize();
-				}
-			}
-		}
-		return 0;
-	case WM_ENTERSIZEMOVE:
-		return 0;
-		mAppPause = true;
-		mResizing = true;
-		mTimer.Stop();
-		return 0;
-	case WM_EXITSIZEMOVE:
-		return 0;
-		mAppPause = false;
-		mResizing = false;
-		mTimer.Start();
-		theApp->OnResize();
-		return 0;
-
+	
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -141,8 +86,6 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		((MINMAXINFO*)lParam)->ptMinTrackSize.x = 200;
 		((MINMAXINFO*)lParam)->ptMinTrackSize.y = 200;
 		return 0;
-
-
 	case WM_LBUTTONDOWN:
 	case WM_MBUTTONDOWN:
 	case WM_RBUTTONDOWN:
@@ -193,8 +136,6 @@ LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			PostQuitMessage(0);
 		}
-		
-
 
 		return 0;
 	}

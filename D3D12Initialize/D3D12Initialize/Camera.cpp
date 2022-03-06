@@ -64,25 +64,6 @@ void Camera::Pitch(float angle)
 void Camera::RotateY(float angle)
 {
 	glm::mat4x4 M = glm::identity<glm::mat4x4>();
-	//M[0][0] = cosf(angle);
-	//M[0][1] = 0.0f;
-	//M[0][2] = -sinf(angle);
-	//M[0][3] = 0.0f;
-
-	//M[1][0] = 0.0f;
-	//M[1][1] = 1.0f;
-	//M[1][2] = 0.0f;
-	//M[1][3] = 0.0f;
-
-	//M[2][0] = sinf(angle);
-	//M[2][1] = 0.0f;
-	//M[2][2] = cosf(angle);
-	//M[2][3] = 0.0f;
-
-	//M[3][0] = 0.0f;
-	//M[3][1] = 0.0f;
-	//M[3][2] = 0.0f;
-	//M[3][3] = 1.0f;
 
 	M = glm::rotate(M, angle, glm::vec3(0.0f,0.0f,1.0f));
 	mRight = glm::normalize(Transform(M, mRight));
@@ -189,6 +170,24 @@ glm::vec3 Camera::GetLook() const
 {
 	return mLook;
 }
+
+void Camera::SetRight(const glm::vec3 right) 
+{
+	mRight = right;
+}
+
+void Camera::SetUp(const glm::vec3 up) 
+{
+	mUp = up;
+}
+
+void Camera::SetLook(const glm::vec3 look) 
+{
+	mLook = look;
+}
+
+
+
 
 float Camera::GetNearZ() const
 {
