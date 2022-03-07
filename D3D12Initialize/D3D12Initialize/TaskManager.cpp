@@ -16,7 +16,7 @@ TaskManager* TaskManager::GetTaskManager()
 void TaskManager::RunInput(const std::string& FuncName)
 {
 	isInput = true;
-	for (const auto& EventPair : EventMap)
+	for (const auto& EventPair : EventMapInString)
 	{
 		auto& Event = EventPair.second;
 		if (Event) {
@@ -24,20 +24,30 @@ void TaskManager::RunInput(const std::string& FuncName)
 		}
 	}
 	for (const auto& Name : PrepareRemove) {
-		EventMap.erase(Name);
+		EventMapInString.erase(Name);
 	}
 	isInput = false;
 }
 
-void TaskManager::Register(const std::string& Name, CallBackType Callback)
+void TaskManager::Register(const std::string& Name, CallBackInString Callback)
 {
-	EventMap.insert({Name,Callback});
+	EventMapInString.insert({Name,Callback});
 }
+
+void TaskManager::RegisterMouse(const std::string& Name, LPARAM lParam)
+{
+	EventMapInMouse.insert({ Name,lParam });
+}
+
+
+
 
 void TaskManager::RegisterKey(const std::string& Name)
 {
 	PrepareKey.insert(Name);
 }
+
+
 
 void TaskManager::UnRegister(const std::string& Name)
 {
@@ -46,6 +56,6 @@ void TaskManager::UnRegister(const std::string& Name)
 	}
 	else
 	{
-		EventMap.erase(Name);
+		EventMapInString.erase(Name);
 	}
 }

@@ -13,6 +13,7 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
+#include <map>
 #include <set>
 #include <cstdint>
 #include <fstream>
@@ -38,4 +39,4 @@
 #include"iostream"
 #include "vector"
 
-using CallBackType = std::function<void(std::string)>;
+using CallBackInString = std::function<void(std::string)>;

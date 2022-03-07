@@ -48,6 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		std::shared_ptr<WindowsInputBase> windowInput = std::make_shared<WindowsInput>();
 		std::unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp, windowInput.get());
 		std::shared_ptr<Camera> cameraInput = std::make_shared<FirstPersonCamera>();
+		cameraInput->SetCameraWnd(theApp.MainWnd());
 		theApp.SetCameraInput(cameraInput.get());
 		std::shared_ptr<SenceManager> staticMesh = std::make_shared<SenceManager>();
 		for (int i =0;i<PathVector.size();i++)

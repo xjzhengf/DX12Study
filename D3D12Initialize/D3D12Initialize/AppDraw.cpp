@@ -50,11 +50,19 @@ void AppDraw::OnResize()
 
 void AppDraw::Update(const GameTimer& gt)
 {
-	for (auto& Key : mTaskManager->PrepareKey) {
-		camera->CameraMove(Key);
+	if (!mTaskManager->PrepareKey.empty()) {
+		for (auto& Key : mTaskManager->PrepareKey) {
+			camera->CameraMove(Key,NULL);
+		}
+		mTaskManager->PrepareKey.clear();
 	}
-	mTaskManager->PrepareKey.clear();
-	std::cout << camera->GetCameraPos3f().x << std::endl;
+	if (!mTaskManager->EventMapInMouse.empty()) {
+		for (auto&& MouseKey : mTaskManager->EventMapInMouse) {
+			camera->CameraMove(MouseKey.first, MouseKey.second);
+		}
+		mTaskManager->EventMapInMouse.clear();
+	}
+
 }
 
 void AppDraw::Draw(const GameTimer& gt)

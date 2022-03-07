@@ -59,35 +59,32 @@ void FirstPersonCamera::RotateLook(float angle)
 	SetViewDirty(true);
 }
 
-void FirstPersonCamera::OnMouseDown(WPARAM btnState, int x, int y, HWND mhMainWnd)
+void FirstPersonCamera::OnMouseDown(int x, int y)
 {
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 	SetCapture(mhMainWnd);
 }
 
-void FirstPersonCamera::OnMouseMove(WPARAM btnState, int x, int y)
+void FirstPersonCamera::OnMouseMove(int x, int y)
 {
-	if ((btnState & MK_LBUTTON) != 0|| (btnState & MK_RBUTTON) != 0) {
-		float dx = glm::radians(0.25f * static_cast<float>(x - mLastMousePos.x));
-		float dy = glm::radians(0.25f * static_cast<float>(y - mLastMousePos.y));
-		//mTheta += dx;
-		//mPhi += dy;
-		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
 
-		RotateY(dx);
-		Pitch(dy);
-	}
+	float dx = glm::radians(0.25f * static_cast<float>(x - mLastMousePos.x));
+	float dy = glm::radians(0.25f * static_cast<float>(y - mLastMousePos.y));
+
+	RotateY(dx);
+	Pitch(dy);
+	
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 }
 
-void FirstPersonCamera::OnMouseUp(WPARAM btnState, int x, int y)
+void FirstPersonCamera::OnMouseUp( int x, int y)
 {
 	ReleaseCapture();
 }
 
-void FirstPersonCamera::CameraMove(std::string inputKey)
+void FirstPersonCamera::CameraMove(const std::string& inputKey, LPARAM lParam)
 {
 	if (inputKey == "KEYDOWN_A") {
 		Strafe(-1.0f * (GetCameraSpeed()));
@@ -111,6 +108,18 @@ void FirstPersonCamera::CameraMove(std::string inputKey)
 	}
 	if (inputKey == "KEYDOWN_Q") {
 		UpDown(-1.0f * (GetCameraSpeed()));
+		return;
+	}
+	if (inputKey == "RBUTTONDOWN") {
+		OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return;
+	}
+	if (inputKey == "RBUTTONUP") {
+		OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return;
+	}
+	if (inputKey == "LBUTMOUSEMOVE"|| inputKey == "RBUTMOUSEMOVE") {
+		OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return;
 	}
 }

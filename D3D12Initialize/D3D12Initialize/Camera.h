@@ -20,6 +20,7 @@ public:
 	void SetUp(const glm::vec3 up) ;
 	void SetLook(const glm::vec3 look) ;
 
+	void SetCameraWnd(const HWND& mhMainWnd);
 	void SetViewDirty(bool isUpdate);
 	//获取视锥体的属性
 	float GetNearZ() const;
@@ -52,8 +53,8 @@ public:
 
 
 	//相机移动
-	virtual void CameraMove(std::string) =0;
-
+	virtual void CameraMove(const std::string& Name,LPARAM lParam) =0;
+	HWND mhMainWnd;
 	glm::vec3 VectorMultiplyAdd(glm::vec3 MultiplyV1, glm::vec3 MultiplyV2, glm::vec3 addV);
 	glm::vec3 Transform(glm::mat4x4 m, glm::vec3 v);
 	void UpdateViewMat();
@@ -77,5 +78,6 @@ private:
 	float mCameraMoveMinSpeed = 10.0f;
 	glm::mat4x4 mView = glm::identity<glm::mat4x4>();
 	glm::mat4x4 mProj = glm::identity<glm::mat4x4>();
+
 
 };

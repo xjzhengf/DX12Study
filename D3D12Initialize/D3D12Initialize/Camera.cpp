@@ -131,6 +131,11 @@ void Camera::SetLook(const glm::vec3 look)
 	mLook = look;
 }
 
+void Camera::SetCameraWnd(const HWND& mhMainWnd)
+{
+	this->mhMainWnd = mhMainWnd;
+}
+
 void Camera::SetViewDirty(bool isUpdate)
 {
 	mViewDirty = isUpdate;

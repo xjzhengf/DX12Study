@@ -13,11 +13,13 @@ public:
 	void RotateY(float angle) ;
 	void RotateLook(float angle) ;
 
-	 void OnMouseDown(WPARAM btnState, int x, int y, HWND mhMainWnd) ;
-	 void OnMouseMove(WPARAM btnState, int x, int y) ;
-	 void OnMouseUp(WPARAM btnState, int x, int y) ;
+	 void OnMouseDown( int x, int y);
+	 void OnMouseMove(int x, int y) ;
+	 void OnMouseUp(int x, int y) ;
 
-	 void CameraMove(std::string inputKey) override;
+
+	 void CameraMove(const std::string& inputKey, LPARAM lParam) override;
 private:
 	POINT mLastMousePos;
+
 };
