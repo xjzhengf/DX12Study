@@ -2,13 +2,9 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-class CameraInput : public Camera
+class CameraMove : public Camera
 {
 public:
-	CameraInput();
-	~CameraInput();
-
-
 	//Ïà»úÒÆ¶¯
 	void Strafe(float d);
 	void Walk(float d);
@@ -19,11 +15,3 @@ public:
 private:
 
 };
-
-CameraInput::CameraInput()
-{
-}
-
-CameraInput::~CameraInput()
-{
-}

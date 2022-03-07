@@ -77,4 +77,5 @@ private:
 	float mCameraMoveMinSpeed = 10.0f;
 	glm::mat4x4 mView = glm::identity<glm::mat4x4>();
 	glm::mat4x4 mProj = glm::identity<glm::mat4x4>();
+
 };

@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WinMain.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
     <ClInclude Include="AppDraw.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
@@ -69,10 +66,7 @@
     <ClInclude Include="WindowBase.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
-    <ClInclude Include="WindowsFactory.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraMove.h">
+    <ClInclude Include="CameraInput.h">
       <Filter>Game\Header</Filter>
     </ClInclude>
     <ClInclude Include="SenceManger.h">
@@ -80,6 +74,18 @@
     </ClInclude>
     <ClInclude Include="MeshProperty.h">
       <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="LauncherPCWindow.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsFactory.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsInputBase.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsInput.h">
+      <Filter>Game\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,14 +119,20 @@
     <ClCompile Include="WindowsFactory.cpp">
       <Filter>Engine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="WinMain.cpp">
+    <ClCompile Include="LauncherPCWindow.cpp">
       <Filter>Engine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="CameraMove.cpp">
+    <ClCompile Include="CameraInput.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
     <ClCompile Include="SenceManger.cpp">
       <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsInput.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsInputBase.cpp">
+      <Filter>Engine\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

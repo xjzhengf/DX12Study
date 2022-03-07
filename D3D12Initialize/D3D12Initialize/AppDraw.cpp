@@ -43,9 +43,9 @@ bool AppDraw::Initialize()
 void AppDraw::OnResize()
 {
 	D3DApp::OnResize();
-	camera.SetCameraPos(1000.0f, 1000.0f, 1000.0f);
-	camera.SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
-	camera.LookAt(camera.GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),camera.GetUp());
+	camera->SetCameraPos(1000.0f, 1000.0f, 1000.0f);
+	camera->SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
+	camera->LookAt(camera->GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),camera->GetUp());
 }
 
 void AppDraw::Update(const GameTimer& gt)
@@ -69,7 +69,7 @@ void AppDraw::Draw(const GameTimer& gt)
 	
 	Time = gt.TotalTime();
 	for (size_t i = 0; i < myStruct.size(); i++) {
-		camera.UpdateViewMat();
+		camera->UpdateViewMat();
 		ObjectConstants objConstants;
 		glm::qua<float> q = glm::qua<float>(
 			myStruct[i].actorStruct.Transform[0].Rotation.w,
@@ -93,8 +93,8 @@ void AppDraw::Draw(const GameTimer& gt)
 		objConstants.Scale = glm::scale(objConstants.Scale, Scale);
 		
 		objConstants.Time = Time;
-		glm::mat4x4 proj = camera.GetProj4x4();
-		glm::mat4x4 view = camera.GetView4x4();
+		glm::mat4x4 proj = camera->GetProj4x4();
+		glm::mat4x4 view = camera->GetView4x4();
 
 		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
 		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
@@ -143,8 +143,8 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 		//mPhi += dy;
 		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
 		
-		camera.RotateY(dx);
-		camera.Pitch(dy);
+		camera->RotateY(dx);
+		camera->Pitch(dy);
 	}
 	else if ((btnState & MK_RBUTTON) != 0) {
 		//相机旋转
@@ -154,8 +154,8 @@ void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
 		//相机移动
 		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
 		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-		camera.RotateY(dx);
-		camera.Pitch(dy);
+		camera->RotateY(dx);
+		camera->Pitch(dy);
 	}
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;

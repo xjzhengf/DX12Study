@@ -3,20 +3,20 @@
 #include "WindowBase.h"
 class PCWindows :public WindowBase{
 public:
-	PCWindows(D3DApp* theApp);
+	PCWindows(D3DApp* theApp, WindowsInputBase* windowsInput);
 	virtual bool InitWindows() override;
 
-
 	static PCWindows* GetPcWindows();
-
-	virtual LRESULT MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static WindowsInputBase* GetWindowsInput();
+	
+	//virtual LRESULT MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	virtual int Run() override;
 
 	void CalculateFrameStats();
 protected:
 	GameTimer mTimer;
-
+	static WindowsInputBase* mWindowsInput;
 	static PCWindows* pcWindows;
 private:	
 	   HINSTANCE mhAppInst = nullptr;
@@ -29,6 +29,6 @@ private:
 	   std::wstring mMainWndCaption = L"My Windows App";
 	   int mClientWidht = 800;
 	   int mClientHeight = 600;
-
 	   D3DApp* theApp;
+	
 };

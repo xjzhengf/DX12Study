@@ -82,6 +82,11 @@ void D3DApp::SetClientHeight(int Height)
 	this->mClientHeight = Height;
 }
 
+void D3DApp::SetCameraInput(Camera* camera)
+{
+	this->camera = camera;
+}
+
 
 
 bool D3DApp::Initialize()

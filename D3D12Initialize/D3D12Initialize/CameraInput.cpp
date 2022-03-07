@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "CameraMove.h"
+#include "CameraInput.h"
 
-void CameraInput::Strafe(float d)
+void CameraMove::Strafe(float d)
 {
 	glm::vec3 s = { d,d,d };
 	glm::vec3 r = GetRight();
@@ -9,7 +9,7 @@ void CameraInput::Strafe(float d)
 	SetCameraPos(VectorMultiplyAdd(s, r, p));
 }
 
-void CameraInput::Walk(float d)
+void CameraMove::Walk(float d)
 {
 	glm::vec3 s = { d,d,d };
 	glm::vec3 l = GetLook();
@@ -19,7 +19,7 @@ void CameraInput::Walk(float d)
 
 }
 
-void CameraInput::UpDown(float d)
+void CameraMove::UpDown(float d)
 {
 	glm::vec3 s = { d,d,d };
 	glm::vec3 u = GetUp();
@@ -28,7 +28,7 @@ void CameraInput::UpDown(float d)
 
 }
 
-void CameraInput::Pitch(float angle)
+void CameraMove::Pitch(float angle)
 {
 	glm::mat4x4 R = glm::mat4x4(1.0f);
 	R = glm::rotate(R, angle, GetRight());
@@ -38,7 +38,7 @@ void CameraInput::Pitch(float angle)
 
 }
 
-void CameraInput::RotateY(float angle)
+void CameraMove::RotateY(float angle)
 {
 	glm::mat4x4 M = glm::identity<glm::mat4x4>();
 
@@ -48,7 +48,7 @@ void CameraInput::RotateY(float angle)
 	SetLook(glm::normalize(Transform(M, GetLook())));
 }
 
-void CameraInput::RotateLook(float angle)
+void CameraMove::RotateLook(float angle)
 {
 	glm::mat4x4 R = glm::mat4x4(1.0f);
 	R = glm::rotate(R, angle, GetLook());

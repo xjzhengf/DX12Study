@@ -77,4 +77,5 @@ private:
 	std::vector<StaticMeshData> myStruct;
 	std::vector<MeshData> meshDataVector;
 	float Time;
+
 };

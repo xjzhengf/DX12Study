@@ -142,7 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraMove.h" />
+    <ClInclude Include="CameraInput.h" />
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
@@ -156,11 +156,13 @@
     <ClInclude Include="AppDraw.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="WindowsFactory.h" />
-    <ClInclude Include="WinMain.h" />
+    <ClInclude Include="LauncherPCWindow.h" />
+    <ClInclude Include="WindowsInput.h" />
+    <ClInclude Include="WindowsInputBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraMove.cpp" />
+    <ClCompile Include="CameraInput.cpp" />
     <ClCompile Include="D3DApp.cpp" />
     <ClCompile Include="D3DUtil.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -175,7 +177,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WindowsFactory.cpp" />
-    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="LauncherPCWindow.cpp" />
+    <ClCompile Include="WindowsInput.cpp" />
+    <ClCompile Include="WindowsInputBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\color.hlsl">

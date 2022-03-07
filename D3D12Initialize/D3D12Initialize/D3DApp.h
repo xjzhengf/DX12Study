@@ -30,7 +30,7 @@ public:
 	void SetWindow(HWND mhMainWnd);
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
-
+	void SetCameraInput(Camera* camera);
 
 	virtual bool Initialize();
 
@@ -107,7 +107,6 @@ protected:
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	int mClientWidht = 800;
 	int mClientHeight = 600;
-
 public:
-	Camera camera;
+	Camera* camera;
 };

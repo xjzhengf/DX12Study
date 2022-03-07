@@ -1,4 +1,5 @@
 #pragma once
+#include "WindowsInputBase.h"
 class WindowBase
 {
 public:

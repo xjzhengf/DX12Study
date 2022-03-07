@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "AppDraw.h"
 #include "WindowsFactory.h"
-#include "WinMain.h"
+#include "LauncherPCWindow.h"
 #include "SenceManger.h"
-
+#include "WindowsInput.h"
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
 
 #if defined(Debug) | defined(_DEBUG)
@@ -44,7 +44,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		AppDraw theApp(hInstance);
 		unique_ptr<WindowsFactory> fa = make_unique<WindowsFactory>();
-		unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp);
+		shared_ptr<WindowsInputBase> windowInput = make_shared<WindowsInput>();
+		
+		unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp, windowInput.get());
 		std::shared_ptr<StaticMesh> staticMesh = std::make_shared<StaticMesh>();
 		for (int i =0;i<PathVector.size();i++)
 		{

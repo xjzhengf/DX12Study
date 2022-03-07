@@ -18,6 +18,7 @@
 #include <sstream>
 #include <cassert>
 #include <windowsx.h>
+#include <functional>
 #include <Windows.h>
 #include <commdlg.h>  
 #include <DirectXMath.h>
