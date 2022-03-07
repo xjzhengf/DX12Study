@@ -2,7 +2,8 @@
 #include "AppDraw.h"
 #include "WindowsFactory.h"
 #include "LauncherPCWindow.h"
-#include "SenceManger.h"
+#include "SenceManager.h"
+#include "FirstPersonCamera.h"
 #include "WindowsInput.h"
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
 
@@ -43,11 +44,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 		AppDraw theApp(hInstance);
-		unique_ptr<WindowsFactory> fa = make_unique<WindowsFactory>();
-		shared_ptr<WindowsInputBase> windowInput = make_shared<WindowsInput>();
-		
-		unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp, windowInput.get());
-		std::shared_ptr<StaticMesh> staticMesh = std::make_shared<StaticMesh>();
+		std::unique_ptr<WindowsFactory> fa = std::make_unique<WindowsFactory>();
+		std::shared_ptr<WindowsInputBase> windowInput = std::make_shared<WindowsInput>();
+		std::unique_ptr<WindowBase>myWindows =  fa->GetPCWindow(&theApp, windowInput.get());
+		std::shared_ptr<Camera> cameraInput = std::make_shared<FirstPersonCamera>();
+		theApp.SetCameraInput(cameraInput.get());
+		std::shared_ptr<SenceManager> staticMesh = std::make_shared<SenceManager>();
 		for (int i =0;i<PathVector.size();i++)
 		{
 			staticMesh->ReadBinaryFileToActorStruct(PathVector[i].c_str());

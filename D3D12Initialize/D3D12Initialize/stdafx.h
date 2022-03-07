@@ -13,6 +13,7 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
+#include <set>
 #include <cstdint>
 #include <fstream>
 #include <sstream>
@@ -36,4 +37,5 @@
 #include "MathHelper.h"
 #include"iostream"
 #include "vector"
-using namespace std;
+
+using CallBackType = std::function<void(std::string)>;

@@ -142,7 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraInput.h" />
+    <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
@@ -150,8 +150,9 @@
     <ClInclude Include="MeshProperty.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MathHelper.h" />
-    <ClInclude Include="SenceManger.h" />
+    <ClInclude Include="SenceManager.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TaskManager.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="AppDraw.h" />
     <ClInclude Include="WindowBase.h" />
@@ -162,7 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraInput.cpp" />
+    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="D3DApp.cpp" />
     <ClCompile Include="D3DUtil.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -171,11 +172,12 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
-    <ClCompile Include="SenceManger.cpp" />
+    <ClCompile Include="SenceManager.cpp" />
     <ClCompile Include="AppDraw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="WindowsFactory.cpp" />
     <ClCompile Include="LauncherPCWindow.cpp" />
     <ClCompile Include="WindowsInput.cpp" />

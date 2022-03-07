@@ -1,44 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-void Camera::Strafe(float d)
-{
-	glm::vec3 s = { d,d,d };
-	glm::vec3 r = mRight;
-	glm::vec3 p = mPos;
-	mPos = VectorMultiplyAdd(s, r, p); 
-	mViewDirty = true;
-}
 
-void Camera::Walk(float d)
-{
-	glm::vec3 s = {d,d,d};
-	glm::vec3 l = mLook;
-	glm::vec3 p = mPos;
-	//mPos = glm::vec3(s[0] * l[0] + p[0], s[1] * l[1] + p[1], s[2] * l[2] + p[2]);
-	mPos = VectorMultiplyAdd(s, l, p);
-	mViewDirty = true;
-}
-
-void Camera::UpDown(float d)
-{
-	glm::vec3 s = { d,d,d };
-	glm::vec3 u = mUp;
-	glm::vec3 p = mPos;
-
-	mPos = VectorMultiplyAdd(s, u, p);
-	mViewDirty = true;
-}
-
-void Camera::Pitch(float angle)
-{
-	glm::mat4x4 R = glm::mat4x4(1.0f);
-	R = glm::rotate(R, angle, mRight);
-	mUp = glm::normalize(Transform(R, mUp));
-	mLook = glm::normalize(Transform(R, mLook));
-	mRight = glm::normalize(Transform(R, mRight));
-	mViewDirty = true;
-}
 
  glm::vec3 Camera::Transform(glm::mat4x4 m,glm::vec3 v) {
 	glm::vec4 Z = { v.z,v.z,v.z,v.z };
@@ -61,25 +24,7 @@ void Camera::Pitch(float angle)
 
 	return result;
 }
-void Camera::RotateY(float angle)
-{
-	glm::mat4x4 M = glm::identity<glm::mat4x4>();
 
-	M = glm::rotate(M, angle, glm::vec3(0.0f,0.0f,1.0f));
-	mRight = glm::normalize(Transform(M, mRight));
-	mUp = glm::normalize(Transform(M, mUp));
-	mLook = glm::normalize(Transform(M, mLook));
-}
-
-void Camera::RotateLook(float angle)
-{
-	glm::mat4x4 R = glm::mat4x4(1.0f);
-	R = glm::rotate(R, angle, mLook);
-	mUp = glm::normalize(Transform(R, mUp));
-	mRight = glm::normalize(Transform(R, mRight));
-
-	mViewDirty = true;
-}
 
 void Camera::UpdateViewMat()
 {
@@ -184,6 +129,11 @@ void Camera::SetUp(const glm::vec3 up)
 void Camera::SetLook(const glm::vec3 look) 
 {
 	mLook = look;
+}
+
+void Camera::SetViewDirty(bool isUpdate)
+{
+	mViewDirty = isUpdate;
 }
 
 

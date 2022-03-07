@@ -30,7 +30,9 @@ public:
 	void SetWindow(HWND mhMainWnd);
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
-	void SetCameraInput(Camera* camera);
+	void SetCameraInput(Camera* camera
+	
+	);
 
 	virtual bool Initialize();
 
@@ -42,9 +44,9 @@ public:
 	virtual void Update(const GameTimer& gt) = 0;
 	virtual void Draw(const GameTimer& gt) = 0;
 
-	virtual void OnMouseDown(WPARAM btnState,int x ,int y){}
-	virtual void OnMouseUp(WPARAM btnState, int x, int y){}
-	virtual void OnMouseMove(WPARAM btnState, int x, int y){}
+	//virtual void OnMouseDown(WPARAM btnState,int x ,int y){}
+	//virtual void OnMouseUp(WPARAM btnState, int x, int y){}
+	//virtual void OnMouseMove(WPARAM btnState, int x, int y){}
 protected:
 	bool InitDirect3D();
 	void CreateCommandObjects();

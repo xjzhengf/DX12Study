@@ -5,6 +5,7 @@
 #include "UploadBuffer.h"
 #include "MathHelper.h"
 #include "MeshProperty.h"
+#include "TaskManager.h"
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -46,9 +47,9 @@ private:
 	virtual void Update(const GameTimer& gt) override;
 	virtual void Draw(const GameTimer& gt) override;
 
-	virtual void OnMouseDown(WPARAM btnState, int x, int y) override;
-	virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
-	virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
+	//virtual void OnMouseDown(WPARAM btnState, int x, int y) override;
+	//virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
+	//virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
 
 
 	void BulidDescriptorHeaps(int index);
@@ -77,5 +78,5 @@ private:
 	std::vector<StaticMeshData> myStruct;
 	std::vector<MeshData> meshDataVector;
 	float Time;
-
+	std::unique_ptr<TaskManager> mTaskManager;
 };

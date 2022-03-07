@@ -19,6 +19,8 @@ public:
 	void SetRight( const glm::vec3 right) ;
 	void SetUp(const glm::vec3 up) ;
 	void SetLook(const glm::vec3 look) ;
+
+	void SetViewDirty(bool isUpdate);
 	//获取视锥体的属性
 	float GetNearZ() const;
 	float GetFarZ() const;
@@ -47,13 +49,11 @@ public:
 
 	float GetCameraSpeed();
 	void AddCameraSpeed(float speed);
+
+
 	//相机移动
-	void Strafe(float d);
-	void Walk(float d);
-	void UpDown(float d);
-	void Pitch(float angle);
-	void RotateY(float angle);
-	void RotateLook(float angle);
+	virtual void CameraMove(std::string) =0;
+
 	glm::vec3 VectorMultiplyAdd(glm::vec3 MultiplyV1, glm::vec3 MultiplyV2, glm::vec3 addV);
 	glm::vec3 Transform(glm::mat4x4 m, glm::vec3 v);
 	void UpdateViewMat();

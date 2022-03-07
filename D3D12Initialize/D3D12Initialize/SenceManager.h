@@ -1,14 +1,10 @@
 #pragma once
-
 #include "MeshProperty.h"
-
-
-
-class StaticMesh
+class SenceManager
 {
 public:
-	StaticMesh();
-	~StaticMesh();
+	SenceManager();
+	~SenceManager();
 	void ReadBinaryFileToStaticMeshStruct(const char* TextPath);
 	void ReadBinaryFileToActorStruct(const char* TextPathName);
 	void SelectFile();

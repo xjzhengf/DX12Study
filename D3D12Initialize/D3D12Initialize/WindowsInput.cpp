@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "WindowsInput.h"
-
+#include "TaskManager.h"
 
 
 WindowsInput::WindowsInput()
 {
-	theApp->SetCameraInput(cameraInput.get());
+	
 }
 
 LRESULT WindowsInput::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -27,46 +27,59 @@ LRESULT WindowsInput::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDOWN:
 	case WM_MBUTTONDOWN:
 	case WM_RBUTTONDOWN:
-		theApp->OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		TaskManager::GetTaskManager()->RegisterKey("RBUTTONDOWN");
+		//cameraInput->OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	case WM_LBUTTONUP:
 	case WM_MBUTTONUP:
 	case WM_RBUTTONUP:
-		theApp->OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		TaskManager::GetTaskManager()->RegisterKey("RBUTTONUP");
+		//cameraInput->OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	case WM_MOUSEMOVE:
-		theApp->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		//TaskManager::GetTaskManager()->RegisterKey("MOUSEMOVE");
+		//cameraInput->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		return 0;
 	case WM_MOUSEWHEEL:
+		
 		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-			cameraInput->AddCameraSpeed(10.0f);
+			//cameraInput->AddCameraSpeed(10.0f);
+			TaskManager::GetTaskManager()->RegisterKey("MOUSEWHEEL_UP");
 		}
 		else
 		{
-			cameraInput->AddCameraSpeed(-10.0f);
+			TaskManager::GetTaskManager()->RegisterKey("MOUSEWHEEL_DOWN");
+			//cameraInput->AddCameraSpeed(-10.0f);
 		}
 		return 0;
 	case WM_KEYDOWN:
-		if ((int)wParam == VK_F2) {
-			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
-		}
-		else if (wParam == 'A') {
-			cameraInput->Strafe(-1.0f * (cameraInput->GetCameraSpeed()));
+	
+		//if ((int)wParam == VK_F2) {
+		//	theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
+		//}
+		if (wParam == 'A') {
+			TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_A");
+		//cameraInput->Strafe(-1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		else if (wParam == 'S') {
-			cameraInput->Walk(-1.0f * (cameraInput->GetCameraSpeed()));
+		    TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_S");
+		//cameraInput->Walk(-1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		else if (wParam == 'D') {
-			cameraInput->Strafe(1.0f * (cameraInput->GetCameraSpeed()));
+			TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_D");
+		//cameraInput->Strafe(1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		else if (wParam == 'W') {
-			cameraInput->Walk(1.0f * (cameraInput->GetCameraSpeed()));
+			TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_W");
+		//cameraInput->Walk(1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		else if (wParam == 'E') {
-			cameraInput->UpDown(1.0f * (cameraInput->GetCameraSpeed()));
+			TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_E");
+		//cameraInput->UpDown(1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		else if (wParam == 'Q') {
-			cameraInput->UpDown(-1.0f * (cameraInput->GetCameraSpeed()));
+			TaskManager::GetTaskManager()->RegisterKey("KEYDOWN_Q");
+		//cameraInput->UpDown(-1.0f * (cameraInput->GetCameraSpeed()));
 		}
 		return 0;
 	case WM_KEYUP:

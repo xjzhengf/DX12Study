@@ -189,11 +189,11 @@ void PCWindows::CalculateFrameStats()
 		float fps = (float)frameCnt; // fps = frameCnt / 1
 		float mspf = 1000.0f / fps;
 
-		wstring fpsStr = to_wstring(fps);
-		wstring mspfStr = to_wstring(mspf);
-		wstring timeStr = to_wstring(mTimer.TotalTime());
+		std::wstring fpsStr = std::to_wstring(fps);
+		std::wstring mspfStr = std::to_wstring(mspf);
+		std::wstring timeStr = std::to_wstring(mTimer.TotalTime());
 
-		wstring windowText = mMainWndCaption +
+		std::wstring windowText = mMainWndCaption +
 			L"    fps: " + fpsStr +
 			L"   mspf: " + mspfStr+
 			L"   TotalTime: " + timeStr;

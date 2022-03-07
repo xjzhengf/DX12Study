@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "SenceManger.h"
+#include "SenceManager.h"
 #include "fstream"
 
 
-StaticMesh::StaticMesh()
+SenceManager::SenceManager()
 {
 }
 
-StaticMesh::~StaticMesh()
+SenceManager::~SenceManager()
 {
 }
 
 
 
-void StaticMesh::ReadBinaryFileToStaticMeshStruct(const char* TextPath)
+void SenceManager::ReadBinaryFileToStaticMeshStruct(const char* TextPath)
 {
 	std::ifstream inFile(TextPath, std::ios::binary);
 	if (inFile.is_open()) {
@@ -49,7 +49,7 @@ void StaticMesh::ReadBinaryFileToStaticMeshStruct(const char* TextPath)
 
 }
 
-void StaticMesh::ReadBinaryFileToActorStruct(const char* TextPathName)
+void SenceManager::ReadBinaryFileToActorStruct(const char* TextPathName)
 {
 
 	int ComponentLen = 0;
@@ -87,7 +87,7 @@ void StaticMesh::ReadBinaryFileToActorStruct(const char* TextPathName)
 
 }
 
-void StaticMesh::SelectFile()
+void SenceManager::SelectFile()
 {
 	char* TextPathName = new char;
 	int len;
@@ -124,17 +124,17 @@ void StaticMesh::SelectFile()
 	}
 }
 
-StaticMeshInfo* StaticMesh::GetStaticMeshStruct()
+StaticMeshInfo* SenceManager::GetStaticMeshStruct()
 {
 	return &meshData.StaticMeshStruct;
 }
 
-ActorStruct* StaticMesh::GetActorSrtuct()
+ActorStruct* SenceManager::GetActorSrtuct()
 {
 	return &meshData.actorStruct;
 }
 
-StaticMeshData& StaticMesh::GetStruct()
+StaticMeshData& SenceManager::GetStruct()
 {
 	return meshData;
 }

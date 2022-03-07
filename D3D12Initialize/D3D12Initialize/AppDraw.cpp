@@ -17,8 +17,8 @@ bool AppDraw::Initialize()
 
 	if (!D3DApp::Initialize())
 		return false;
-
-
+	
+	    mTaskManager = std::make_unique<TaskManager>(GetAppInst());
 		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
 		BulidRootSignature();
@@ -50,7 +50,11 @@ void AppDraw::OnResize()
 
 void AppDraw::Update(const GameTimer& gt)
 {
-
+	for (auto& Key : mTaskManager->PrepareKey) {
+		camera->CameraMove(Key);
+	}
+	mTaskManager->PrepareKey.clear();
+	std::cout << camera->GetCameraPos3f().x << std::endl;
 }
 
 void AppDraw::Draw(const GameTimer& gt)
@@ -110,8 +114,8 @@ void AppDraw::Draw(const GameTimer& gt)
 		mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
-		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[to_string(i)].IndexCount, 1, 
-		(UINT)mBoxGeo->DrawArgs[to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[to_string(i)].BaseVertexLocation, 0);
+		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[std::to_string(i)].IndexCount, 1, 
+		(UINT)mBoxGeo->DrawArgs[std::to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[std::to_string(i)].BaseVertexLocation, 0);
 	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -127,44 +131,44 @@ void AppDraw::Draw(const GameTimer& gt)
 	FlushCommandQueue();
 }
 
-void AppDraw::OnMouseDown(WPARAM btnState, int x, int y)
-{
-	mLastMousePos.x = x;
-	mLastMousePos.y = y;
-	SetCapture(mhMainWnd);
-}
-
-void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
-{
-	if ((btnState & MK_LBUTTON) != 0) {
-		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-		//mTheta += dx;
-		//mPhi += dy;
-		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
-		
-		camera->RotateY(dx);
-		camera->Pitch(dy);
-	}
-	else if ((btnState & MK_RBUTTON) != 0) {
-		//相机旋转
-		/*	float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
-			float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
-			camera.RotateLook(dx);*/
-		//相机移动
-		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-		camera->RotateY(dx);
-		camera->Pitch(dy);
-	}
-	mLastMousePos.x = x;
-	mLastMousePos.y = y;
-}
-
-void AppDraw::OnMouseUp(WPARAM btnState, int x, int y)
-{
-	ReleaseCapture();
-}
+//void AppDraw::OnMouseDown(WPARAM btnState, int x, int y)
+//{
+//	mLastMousePos.x = x;
+//	mLastMousePos.y = y;
+//	SetCapture(mhMainWnd);
+//}
+//
+//void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
+//{
+//	if ((btnState & MK_LBUTTON) != 0) {
+//		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+//		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+//		//mTheta += dx;
+//		//mPhi += dy;
+//		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+//		
+//		camera->RotateY(dx);
+//		camera->Pitch(dy);
+//	}
+//	else if ((btnState & MK_RBUTTON) != 0) {
+//		//相机旋转
+//		/*	float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
+//			float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
+//			camera.RotateLook(dx);*/
+//		//相机移动
+//		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+//		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+//		camera->RotateY(dx);
+//		camera->Pitch(dy);
+//	}
+//	mLastMousePos.x = x;
+//	mLastMousePos.y = y;
+//}
+//
+//void AppDraw::OnMouseUp(WPARAM btnState, int x, int y)
+//{
+//	ReleaseCapture();
+//}
 
 
 void AppDraw::BuildStaticMeshStruct(StaticMeshData& meshData)
@@ -299,7 +303,7 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 		submesh.IndexCount = (UINT)meshData[i].indices.size();
 		submesh.StartIndexLocation = indexOffset[i];
 		submesh.BaseVertexLocation = vertexOffset[i];
-		std::string name = to_string(i);
+		std::string name = std::to_string(i);
 		mBoxGeo->DrawArgs[name] = submesh;
 	}
 
