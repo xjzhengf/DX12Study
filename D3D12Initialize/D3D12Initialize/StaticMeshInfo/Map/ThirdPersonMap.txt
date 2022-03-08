@@ -1,0 +1,13 @@
+StaticMeshInfo\\Actor\\Wall10.dat
+StaticMeshInfo\\Actor\\Wall11.dat
+StaticMeshInfo\\Actor\\Bump_StaticMesh.dat
+StaticMeshInfo\\Actor\\CubeMesh_5.dat
+StaticMeshInfo\\Actor\\Floor_1.dat
+StaticMeshInfo\\Actor\\LeftArm_StaticMesh.dat
+StaticMeshInfo\\Actor\\Linear_Stair_StaticMesh.dat
+StaticMeshInfo\\Actor\\Ramp_StaticMesh.dat
+StaticMeshInfo\\Actor\\RightArm_StaticMesh.dat
+StaticMeshInfo\\Actor\\StaticMeshActor_1.dat
+StaticMeshInfo\\Actor\\StaticMeshActor_3.dat
+StaticMeshInfo\\Actor\\Wall7_4.dat
+StaticMeshInfo\\Actor\\Wall9.dat

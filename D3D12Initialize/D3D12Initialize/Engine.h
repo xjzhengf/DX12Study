@@ -6,6 +6,7 @@
 #include "MathHelper.h"
 #include "MeshProperty.h"
 #include "TaskManager.h"
+
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -33,15 +34,15 @@ struct ObjectConstants {
 	float Time = 0.0f;
 };
 
-class AppDraw : public D3DApp {
+class Engine : public D3DApp {
 public:
-	AppDraw(HINSTANCE hInstance);
-	AppDraw(const AppDraw& sm) = delete;
-	AppDraw& operator=(const AppDraw& sm) = delete;
-	~AppDraw();
+	Engine(HINSTANCE hInstance);
+	Engine(const Engine& sm) = delete;
+	Engine& operator=(const Engine& sm) = delete;
+	~Engine();
 
 	virtual bool Initialize() override;
-	void BuildStaticMeshStruct(StaticMeshData& staticMeshInfo);
+	
 private:
 	virtual void OnResize() override;
 	virtual void Update(const GameTimer& gt) override;
@@ -51,13 +52,13 @@ private:
 	//virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 	//virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
 
-
+	AssetManager* GetAssetManager() ;
 	void BulidDescriptorHeaps(int index);
 	void BulidConstantBuffers(int index);
 	void BulidRootSignature();
 	void BulidShadersAndInputLayout();
 	void BuildStaticMeshGeometry(std::vector<MeshData> meshData);
-	void BuildStaticMeshData(StaticMeshData* myStruct,int index);
+	void BuildStaticMeshData(StaticMeshInfo* myStruct);
 	void BuildPSO();
 
 private:
@@ -75,8 +76,11 @@ private:
 	glm::mat4x4 mWorld = glm::identity<glm::mat4x4>();
 
 	POINT mLastMousePos;
-	std::vector<StaticMeshData> myStruct;
+
 	std::vector<MeshData> meshDataVector;
+
 	float Time;
 	std::unique_ptr<TaskManager> mTaskManager;
+	std::unique_ptr<AssetManager> mAssetManager ;
+	std::unique_ptr<SceneManager> mSceneManager;
 };

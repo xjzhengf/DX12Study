@@ -1,34 +1,46 @@
 #include "stdafx.h"
-#include "AppDraw.h"
+#include "Engine.h"
 
 
 
-AppDraw::AppDraw(HINSTANCE hInstance) :D3DApp(hInstance)
+Engine::Engine(HINSTANCE hInstance) :D3DApp(hInstance)
 {
 }
 
-AppDraw::~AppDraw()
+Engine::~Engine()
 {
 }
 
-bool AppDraw::Initialize()
+bool Engine::Initialize()
 {
 
 
 	if (!D3DApp::Initialize())
 		return false;
 	
+	//创建任务管理系统
 	    mTaskManager = std::make_unique<TaskManager>(GetAppInst());
-		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
+		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
+		//将actor放入场景
+		mAssetManager = std::make_unique<AssetManager>();
+	
+		mAssetManager->LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
+		mSceneManager = std::make_unique<SceneManager>();
+		mSceneManager->SetMapActors(mAssetManager->GetActors());
+		size_t SceneSize = mSceneManager->GetAllActor().size();
+		
 		BulidRootSignature();
 		BulidShadersAndInputLayout();
-		mCbvHeap.resize(myStruct.size());
-		mObjectCB.resize(myStruct.size());
-		for (int i = 0; i < myStruct.size(); i++) {
-			BuildStaticMeshData(&myStruct[i],i);
+		mCbvHeap.resize(SceneSize);
+		mObjectCB.resize(SceneSize);
+		int i = 0;
+		for (auto&& ActorPair: mSceneManager->GetAllActor()) {
+			StaticMeshInfo* MeshInfo =mAssetManager->FindAssetByActor(ActorPair.second);
+			BuildStaticMeshData(MeshInfo);
 			BulidDescriptorHeaps(i);
 			BulidConstantBuffers(i);
+			i++;
 		}
 		BuildStaticMeshGeometry(meshDataVector);
 		BuildPSO();
@@ -40,7 +52,7 @@ bool AppDraw::Initialize()
 	return true;
 }
 
-void AppDraw::OnResize()
+void Engine::OnResize()
 {
 	D3DApp::OnResize();
 	camera->SetCameraPos(1000.0f, 1000.0f, 1000.0f);
@@ -48,7 +60,7 @@ void AppDraw::OnResize()
 	camera->LookAt(camera->GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f),camera->GetUp());
 }
 
-void AppDraw::Update(const GameTimer& gt)
+void Engine::Update(const GameTimer& gt)
 {
 	if (!mTaskManager->PrepareKey.empty()) {
 		for (auto& Key : mTaskManager->PrepareKey) {
@@ -65,7 +77,7 @@ void AppDraw::Update(const GameTimer& gt)
 
 }
 
-void AppDraw::Draw(const GameTimer& gt)
+void Engine::Draw(const GameTimer& gt)
 {
 	ThrowIfFailed(mDirectCmdListAlloc->Reset());
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), mPSO.Get()));
@@ -80,50 +92,52 @@ void AppDraw::Draw(const GameTimer& gt)
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 	
 	Time = gt.TotalTime();
-	for (size_t i = 0; i < myStruct.size(); i++) {
-		camera->UpdateViewMat();
-		ObjectConstants objConstants;
-		glm::qua<float> q = glm::qua<float>(
-			myStruct[i].actorStruct.Transform[0].Rotation.w,
-			myStruct[i].actorStruct.Transform[0].Rotation.x,
-			myStruct[i].actorStruct.Transform[0].Rotation.y,
-			myStruct[i].actorStruct.Transform[0].Rotation.z
+	for (size_t i = 0; i < mSceneManager->GetAllActor().size(); i++) {
+		for (auto&& ActorPair : mSceneManager->GetAllActor()) {
+			camera->UpdateViewMat();
+			ObjectConstants objConstants;
+			glm::qua<float> q = glm::qua<float>(
+				ActorPair.second->Transform[0].Rotation.w,
+				ActorPair.second->Transform[0].Rotation.x,
+				ActorPair.second->Transform[0].Rotation.y,
+				ActorPair.second->Transform[0].Rotation.z
+				);
+
+			glm::vec3 location = glm::vec3(
+				ActorPair.second->Transform[0].Location.x,
+				ActorPair.second->Transform[0].Location.y,
+				ActorPair.second->Transform[0].Location.z
 			);
+			glm::vec3 Scale = glm::vec3(
+				ActorPair.second->Transform[0].Scale3D.x,
+				ActorPair.second->Transform[0].Scale3D.y,
+				ActorPair.second->Transform[0].Scale3D.z
+			);
+			objConstants.Rotation = glm::mat4_cast(q);
+			objConstants.Translate = glm::translate(objConstants.Translate, location);
+			objConstants.Scale = glm::scale(objConstants.Scale, Scale);
 
-		glm::vec3 location = glm::vec3(
-			myStruct[i].actorStruct.Transform[0].Location.x,
-			myStruct[i].actorStruct.Transform[0].Location.y,
-			myStruct[i].actorStruct.Transform[0].Location.z
-		);
-		glm::vec3 Scale = glm::vec3(
-			myStruct[i].actorStruct.Transform[0].Scale3D.x,
-			myStruct[i].actorStruct.Transform[0].Scale3D.y,
-			myStruct[i].actorStruct.Transform[0].Scale3D.z
-		);
-		objConstants.Rotation = glm::mat4_cast(q);
-		objConstants.Translate = glm::translate(objConstants.Translate, location);
-		objConstants.Scale = glm::scale(objConstants.Scale, Scale);
-		
-		objConstants.Time = Time;
-		glm::mat4x4 proj = camera->GetProj4x4();
-		glm::mat4x4 view = camera->GetView4x4();
+			objConstants.Time = Time;
+			glm::mat4x4 proj = camera->GetProj4x4();
+			glm::mat4x4 view = camera->GetView4x4();
 
-		glm::mat4x4 W = objConstants.Translate *objConstants.Rotation *objConstants.Scale;
-		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
-		objConstants.WorldViewProj = glm::transpose(worldViewProj);
-		mObjectCB[i]->CopyData(0, objConstants);
+			glm::mat4x4 W = objConstants.Translate * objConstants.Rotation * objConstants.Scale;
+			glm::mat4x4 worldViewProj = proj * view * W * mWorld;
+			objConstants.WorldViewProj = glm::transpose(worldViewProj);
+			mObjectCB[i]->CopyData(0, objConstants);
 
-		ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
-		mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-		mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
+			ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
+			mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+			mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
 
-		mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
-		mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
-		mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
+			mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
+			mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
-		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[std::to_string(i)].IndexCount, 1, 
-		(UINT)mBoxGeo->DrawArgs[std::to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[std::to_string(i)].BaseVertexLocation, 0);
+			mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
+			mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[std::to_string(i)].IndexCount, 1,
+				(UINT)mBoxGeo->DrawArgs[std::to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[std::to_string(i)].BaseVertexLocation, 0);
+		}
 	}
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -139,52 +153,12 @@ void AppDraw::Draw(const GameTimer& gt)
 	FlushCommandQueue();
 }
 
-//void AppDraw::OnMouseDown(WPARAM btnState, int x, int y)
-//{
-//	mLastMousePos.x = x;
-//	mLastMousePos.y = y;
-//	SetCapture(mhMainWnd);
-//}
-//
-//void AppDraw::OnMouseMove(WPARAM btnState, int x, int y)
-//{
-//	if ((btnState & MK_LBUTTON) != 0) {
-//		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-//		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-//		//mTheta += dx;
-//		//mPhi += dy;
-//		//mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
-//		
-//		camera->RotateY(dx);
-//		camera->Pitch(dy);
-//	}
-//	else if ((btnState & MK_RBUTTON) != 0) {
-//		//相机旋转
-//		/*	float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
-//			float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
-//			camera.RotateLook(dx);*/
-//		//相机移动
-//		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-//		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
-//		camera->RotateY(dx);
-//		camera->Pitch(dy);
-//	}
-//	mLastMousePos.x = x;
-//	mLastMousePos.y = y;
-//}
-//
-//void AppDraw::OnMouseUp(WPARAM btnState, int x, int y)
-//{
-//	ReleaseCapture();
-//}
-
-
-void AppDraw::BuildStaticMeshStruct(StaticMeshData& meshData)
+AssetManager* Engine::GetAssetManager()
 {
-	myStruct.push_back(std::move(meshData)) ;
+	return mAssetManager.get();
 }
 
-void AppDraw::BulidDescriptorHeaps(int index)
+void Engine::BulidDescriptorHeaps(int index)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc;
 	cbvHeapDesc.NumDescriptors = 1;
@@ -194,7 +168,7 @@ void AppDraw::BulidDescriptorHeaps(int index)
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&mCbvHeap[index])));
 }
 
-void AppDraw::BulidConstantBuffers(int index)
+void Engine::BulidConstantBuffers(int index)
 {
 	mObjectCB[index] =std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 	UINT objecBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
@@ -210,7 +184,7 @@ void AppDraw::BulidConstantBuffers(int index)
 
 }
 
-void AppDraw::BulidRootSignature()
+void Engine::BulidRootSignature()
 {
 	CD3DX12_ROOT_PARAMETER slotRootParameter[1];
 
@@ -230,7 +204,7 @@ void AppDraw::BulidRootSignature()
 	ThrowIfFailed(md3dDevice->CreateRootSignature(0, serializedRootSig->GetBufferPointer(), serializedRootSig->GetBufferSize(), IID_PPV_ARGS(&mRootSigmature)));
 }
 
-void AppDraw::BulidShadersAndInputLayout()
+void Engine::BulidShadersAndInputLayout()
 {
 	HRESULT hr = S_OK;
 
@@ -245,13 +219,13 @@ void AppDraw::BulidShadersAndInputLayout()
 	};
 }
 
-void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
+void Engine::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 {
     //将模型数据数组里的数据合并为一个大数据
 	size_t totalVertexSize = 0;
 	size_t totalIndexSize = 0;
-	std::vector<size_t> vertexOffset(myStruct.size());
-	std::vector<size_t> indexOffset(myStruct.size());
+	std::vector<size_t> vertexOffset(meshData.size());
+	std::vector<size_t> indexOffset(meshData.size());
 	for (size_t i = 0; i < meshData.size(); i++) {
 		if (i == 0) {
 			vertexOffset[i] = 0;
@@ -288,7 +262,7 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(uint32_t);
 
 	mBoxGeo = std::make_unique<MeshGeometry>();
-	mBoxGeo->Name = "AppDraw";
+	mBoxGeo->Name = "Engine";
 	ThrowIfFailed(D3DCreateBlob(vbByteSize, &mBoxGeo->VertexBufferCPU));
 	CopyMemory(mBoxGeo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
 
@@ -318,22 +292,22 @@ void AppDraw::BuildStaticMeshGeometry(std::vector<MeshData> meshData)
 
 }
 
-void AppDraw::BuildStaticMeshData(StaticMeshData* myStruct, int index)
+void Engine::BuildStaticMeshData(StaticMeshInfo* myStruct)
 {
 	MeshData meshData;
-	meshData.indices = myStruct->StaticMeshStruct.Indices;
+	meshData.indices = myStruct->Indices;
 
-	meshData.indices.resize(myStruct->StaticMeshStruct.Indices.size());
-	size_t VerticesLen = myStruct->StaticMeshStruct.Vertices.size();
+	meshData.indices.resize(myStruct->Indices.size());
+	size_t VerticesLen = myStruct->Vertices.size();
 	meshData.vertices.resize(VerticesLen);
 	for (int i = 0; i < VerticesLen; i++) {
-		meshData.vertices[i].Pos.x = myStruct->StaticMeshStruct.Vertices[i].x ;
-		meshData.vertices[i].Pos.y = myStruct->StaticMeshStruct.Vertices[i].y ;
-		meshData.vertices[i].Pos.z = myStruct->StaticMeshStruct.Vertices[i].z ;
+		meshData.vertices[i].Pos.x = myStruct->Vertices[i].x ;
+		meshData.vertices[i].Pos.y = myStruct->Vertices[i].y ;
+		meshData.vertices[i].Pos.z = myStruct->Vertices[i].z ;
 
 	}
 
-	for (size_t i = 0; i < (myStruct->StaticMeshStruct.Indices.size()) / 3; i++) {
+	for (size_t i = 0; i < (myStruct->Indices.size()) / 3; i++) {
 		UINT i0 = meshData.indices[i * 3 + 0];
 		UINT i1 = meshData.indices[i * 3 + 1];
 		UINT i2 = meshData.indices[i * 3 + 2];
@@ -358,7 +332,7 @@ void AppDraw::BuildStaticMeshData(StaticMeshData* myStruct, int index)
 	meshDataVector.push_back(std::move(meshData));
 }
 
-void AppDraw::BuildPSO()
+void Engine::BuildPSO()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));

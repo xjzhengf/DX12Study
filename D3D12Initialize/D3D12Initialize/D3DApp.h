@@ -7,7 +7,8 @@
 #include "D3DUtil.h"
 #include "GameTimer.h"
 #include"camera.h"
-
+#include "AssetManager.h"
+#include "SceneManager.h"
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -30,12 +31,9 @@ public:
 	void SetWindow(HWND mhMainWnd);
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
-	void SetCameraInput(Camera* camera
-	
-	);
+	void SetCameraInput(Camera* camera);
 
 	virtual bool Initialize();
-
 
 protected:
 	virtual void CreateRtvAndDsvDescriptorHeaps();
@@ -109,6 +107,8 @@ protected:
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	int mClientWidht = 800;
 	int mClientHeight = 600;
+
+
 public:
 	Camera* camera;
 };

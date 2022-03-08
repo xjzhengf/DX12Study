@@ -33,7 +33,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AppDraw.h">
+    <ClInclude Include="Engine.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -69,7 +69,7 @@
     <ClInclude Include="FirstPersonCamera.h">
       <Filter>Game\Header</Filter>
     </ClInclude>
-    <ClInclude Include="SenceManager.h">
+    <ClInclude Include="AssetManager.h">
       <Filter>Game\Header</Filter>
     </ClInclude>
     <ClInclude Include="MeshProperty.h">
@@ -90,9 +90,12 @@
     <ClInclude Include="TaskManager.h">
       <Filter>Engine\Header</Filter>
     </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Game\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AppDraw.cpp">
+    <ClCompile Include="Engine.cpp">
       <Filter>Engine\Source</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
@@ -128,7 +131,7 @@
     <ClCompile Include="FirstPersonCamera.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
-    <ClCompile Include="SenceManager.cpp">
+    <ClCompile Include="AssetManager.cpp">
       <Filter>Game\Source</Filter>
     </ClCompile>
     <ClCompile Include="WindowsInput.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="TaskManager.cpp">
       <Filter>Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Game\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

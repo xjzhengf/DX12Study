@@ -45,8 +45,3 @@ struct ActorStruct {
 	std::vector <std::string> StaticMeshAssetName;
 };
 
-struct StaticMeshData
-{
-	ActorStruct actorStruct;
-	StaticMeshInfo StaticMeshStruct;
-};
