@@ -32,7 +32,7 @@ public:
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
 	void SetCameraInput(Camera* camera);
-
+	virtual std::shared_ptr<AssetManager> GetAssetManager() = 0;
 	virtual bool Initialize();
 
 protected:
@@ -108,7 +108,8 @@ protected:
 	int mClientWidht = 800;
 	int mClientHeight = 600;
 
-
+	std::shared_ptr<AssetManager> mAssetManager = std::make_shared<AssetManager>();
+	std::unique_ptr<SceneManager> mSceneManager = std::make_unique<SceneManager>();
 public:
 	Camera* camera;
 };

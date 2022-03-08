@@ -141,6 +141,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameInstance.h" />
+    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FirstPersonCamera.h" />
@@ -163,6 +165,8 @@
     <ClInclude Include="WindowsInputBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />

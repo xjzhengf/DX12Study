@@ -23,10 +23,9 @@ bool Engine::Initialize()
 
 		ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 		//将actor放入场景
-		mAssetManager = std::make_unique<AssetManager>();
-	
+
 		mAssetManager->LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
-		mSceneManager = std::make_unique<SceneManager>();
+		
 		mSceneManager->SetMapActors(mAssetManager->GetActors());
 		size_t SceneSize = mSceneManager->GetAllActor().size();
 		
@@ -36,7 +35,7 @@ bool Engine::Initialize()
 		mObjectCB.resize(SceneSize);
 		int i = 0;
 		for (auto&& ActorPair: mSceneManager->GetAllActor()) {
-			StaticMeshInfo* MeshInfo =mAssetManager->FindAssetByActor(ActorPair.second);
+			StaticMeshInfo* MeshInfo =mAssetManager->FindAssetByActor(*ActorPair.second);
 			BuildStaticMeshData(MeshInfo);
 			BulidDescriptorHeaps(i);
 			BulidConstantBuffers(i);
@@ -92,53 +91,54 @@ void Engine::Draw(const GameTimer& gt)
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 	
 	Time = gt.TotalTime();
-	for (size_t i = 0; i < mSceneManager->GetAllActor().size(); i++) {
-		for (auto&& ActorPair : mSceneManager->GetAllActor()) {
-			camera->UpdateViewMat();
-			ObjectConstants objConstants;
-			glm::qua<float> q = glm::qua<float>(
-				ActorPair.second->Transform[0].Rotation.w,
-				ActorPair.second->Transform[0].Rotation.x,
-				ActorPair.second->Transform[0].Rotation.y,
-				ActorPair.second->Transform[0].Rotation.z
-				);
-
-			glm::vec3 location = glm::vec3(
-				ActorPair.second->Transform[0].Location.x,
-				ActorPair.second->Transform[0].Location.y,
-				ActorPair.second->Transform[0].Location.z
+	int i=0;
+	for (auto&& ActorPair : mSceneManager->GetAllActor()) {
+		camera->UpdateViewMat();
+		ObjectConstants objConstants;
+		glm::qua<float> q = glm::qua<float>(
+			ActorPair.second->Transform[0].Rotation.w,
+			ActorPair.second->Transform[0].Rotation.x,
+			ActorPair.second->Transform[0].Rotation.y,
+			ActorPair.second->Transform[0].Rotation.z
 			);
-			glm::vec3 Scale = glm::vec3(
-				ActorPair.second->Transform[0].Scale3D.x,
-				ActorPair.second->Transform[0].Scale3D.y,
-				ActorPair.second->Transform[0].Scale3D.z
-			);
-			objConstants.Rotation = glm::mat4_cast(q);
-			objConstants.Translate = glm::translate(objConstants.Translate, location);
-			objConstants.Scale = glm::scale(objConstants.Scale, Scale);
 
-			objConstants.Time = Time;
-			glm::mat4x4 proj = camera->GetProj4x4();
-			glm::mat4x4 view = camera->GetView4x4();
+		glm::vec3 location = glm::vec3(
+			ActorPair.second->Transform[0].Location.x,
+			ActorPair.second->Transform[0].Location.y,
+			ActorPair.second->Transform[0].Location.z
+		);
+		glm::vec3 Scale = glm::vec3(
+			ActorPair.second->Transform[0].Scale3D.x,
+			ActorPair.second->Transform[0].Scale3D.y,
+			ActorPair.second->Transform[0].Scale3D.z
+		);
+		objConstants.Rotation = glm::mat4_cast(q);
+		objConstants.Translate = glm::translate(objConstants.Translate, location);
+		objConstants.Scale = glm::scale(objConstants.Scale, Scale);
 
-			glm::mat4x4 W = objConstants.Translate * objConstants.Rotation * objConstants.Scale;
-			glm::mat4x4 worldViewProj = proj * view * W * mWorld;
-			objConstants.WorldViewProj = glm::transpose(worldViewProj);
-			mObjectCB[i]->CopyData(0, objConstants);
+		objConstants.Time = Time;
+		glm::mat4x4 proj = camera->GetProj4x4();
+		glm::mat4x4 view = camera->GetView4x4();
 
-			ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
-			mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-			mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
+		glm::mat4x4 W = objConstants.Translate * objConstants.Rotation * objConstants.Scale;
+		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
+		objConstants.WorldViewProj = glm::transpose(worldViewProj);
+		mObjectCB[i]->CopyData(0, objConstants);
 
-			mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
-			mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
-			mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		ID3D12DescriptorHeap* descriptorHeaps[] = { mCbvHeap[i].Get() };
+		mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+		mCommandList->SetGraphicsRootSignature(mRootSigmature.Get());
 
-			mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
-			mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[std::to_string(i)].IndexCount, 1,
-				(UINT)mBoxGeo->DrawArgs[std::to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[std::to_string(i)].BaseVertexLocation, 0);
-		}
+		mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
+		mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
+		mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap[i]->GetGPUDescriptorHandleForHeapStart());
+		mCommandList->DrawIndexedInstanced(mBoxGeo->DrawArgs[std::to_string(i)].IndexCount, 1,
+			(UINT)mBoxGeo->DrawArgs[std::to_string(i)].StartIndexLocation, (UINT)mBoxGeo->DrawArgs[std::to_string(i)].BaseVertexLocation, 0);
+		i++;
 	}
+	
 
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	ThrowIfFailed(mCommandList->Close());
@@ -153,9 +153,9 @@ void Engine::Draw(const GameTimer& gt)
 	FlushCommandQueue();
 }
 
-AssetManager* Engine::GetAssetManager()
+std::shared_ptr<AssetManager> Engine::GetAssetManager()
 {
-	return mAssetManager.get();
+	return mAssetManager;
 }
 
 void Engine::BulidDescriptorHeaps(int index)

@@ -93,6 +93,12 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Game\Header</Filter>
     </ClInclude>
+    <ClInclude Include="GameLogic.h">
+      <Filter>Game\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInstance.h">
+      <Filter>Engine\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -145,6 +151,12 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
+      <Filter>Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInstance.cpp">
+      <Filter>Engine\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

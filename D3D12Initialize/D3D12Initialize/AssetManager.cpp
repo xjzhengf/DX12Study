@@ -105,23 +105,15 @@ void AssetManager::ReadBinaryFileToActorStruct(const char* TextPathName)
 	Actors.insert({ actor->ActorName,actor });
 }
 
-StaticMeshInfo* AssetManager::FindAssetByActor(ActorStruct* actor)
+StaticMeshInfo* AssetManager::FindAssetByActor(ActorStruct& actor)
 {
-	//auto iter = MeshAsset.find("1M_Cube");
-	
-	for (auto iter : MeshAsset) {
-		std::string s1 = iter.first;
-		std::string s2 = "1M_Cube";
-		std::stringstream ss;
-		ss << std::hash<std::string>{}(s1) << " " << std::hash<std::string>{}(s2) << "\n";
+	std::string str(actor.StaticMeshAssetName[0].c_str());
+	str.resize(str.size() + 1);
+	auto iter = MeshAsset.find(str);
 
-		OutputDebugStringA(iter.first.c_str());
-		OutputDebugStringA("\n");
-		OutputDebugStringA(ss.str().c_str());
-	}
-	/*if (iter != MeshAsset.end()) {
+	if (iter != MeshAsset.end()) {
 		return iter->second;
-	}*/
+	}
 	return nullptr;
 }
 

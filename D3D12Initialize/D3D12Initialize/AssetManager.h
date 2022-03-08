@@ -8,7 +8,7 @@ public:
 	void LoadMap(const char* MapPath);
 	void ReadBinaryFileToStaticMeshStruct(const char* TextPath);
 	void ReadBinaryFileToActorStruct(const char* TextPathName);
-	StaticMeshInfo* FindAssetByActor(ActorStruct* actor);
+	StaticMeshInfo* FindAssetByActor(ActorStruct& actor);
 
 	void SelectFile();
 	std::unordered_map<std::string, StaticMeshInfo*>& GetMeshAsset();

@@ -20,7 +20,7 @@ WindowsInputBase* PCWindows::mWindowsInput = nullptr;
 bool PCWindows::InitWindows()
 {
 	WNDCLASS wc;
-	wc.hInstance = mhAppInst;
+	wc.hInstance = theApp->GetAppInst();
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = MainWndProc;
 	wc.cbClsExtra = 0;

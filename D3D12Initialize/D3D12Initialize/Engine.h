@@ -43,7 +43,7 @@ public:
 
 	virtual bool Initialize() override;
 	
-private:
+
 	virtual void OnResize() override;
 	virtual void Update(const GameTimer& gt) override;
 	virtual void Draw(const GameTimer& gt) override;
@@ -51,8 +51,8 @@ private:
 	//virtual void OnMouseDown(WPARAM btnState, int x, int y) override;
 	//virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 	//virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
-
-	AssetManager* GetAssetManager() ;
+private:
+	std::shared_ptr<AssetManager> GetAssetManager() override;
 	void BulidDescriptorHeaps(int index);
 	void BulidConstantBuffers(int index);
 	void BulidRootSignature();
@@ -81,6 +81,5 @@ private:
 
 	float Time;
 	std::unique_ptr<TaskManager> mTaskManager;
-	std::unique_ptr<AssetManager> mAssetManager ;
-	std::unique_ptr<SceneManager> mSceneManager;
+
 };
