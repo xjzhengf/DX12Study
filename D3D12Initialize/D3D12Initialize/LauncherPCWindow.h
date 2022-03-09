@@ -10,9 +10,9 @@ public:
 	static PCWindows* GetPcWindows();
 	static std::shared_ptr<WindowsInputBase> GetWindowsInput();
 
-	virtual int Run( GameTimer& gt) override;
+	virtual bool Run() override;
 
-	void CalculateFrameStats(const GameTimer& gt);
+	void CalculateFrameStats(const GameTimer& gt) override;
 protected:
 	GameTimer mTimer;
 	static std::shared_ptr<WindowsInputBase> mWindowsInput;

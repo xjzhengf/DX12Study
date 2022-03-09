@@ -18,10 +18,23 @@ void GameLogic::Init()
 	LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
 }
 
+void GameLogic::Update()
+{
+}
+
+void GameLogic::Destroy()
+{
+	if (mGameLogic != nullptr) {
+		delete mGameLogic;
+	}
+}
+
 void GameLogic::LoadMap(const std::string& PathName)
 {
-	std::shared_ptr<AssetManager> assetManager = Engine::GetApp()->GetAssetManager();
+	std::shared_ptr<AssetManager> assetManager = Engine::GetEngine()->GetAssetManager();
 	assetManager->LoadMap(PathName.c_str());
+	//¸üÐÂ»æÖÆ×´Ì¬
+	Engine::GetEngine()->UpdateDrawState(true);
 }
 
 GameLogic* GameLogic::GetG0ameLogic()

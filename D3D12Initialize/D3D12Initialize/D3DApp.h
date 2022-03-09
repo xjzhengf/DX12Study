@@ -26,6 +26,7 @@ public:
 	HWND MainWnd() const;
 	float AspectRatio() const;
 	bool Get4xMsaaState() const;
+	bool GetAppPause()const;
 	bool IsHaveDevice() const;
 	void Set4xMsaaState(bool value);
 	void SetWindow(HWND mhMainWnd);
@@ -34,7 +35,7 @@ public:
 	void SetCameraInput(const std::shared_ptr<Camera>& camera);
 	virtual std::shared_ptr<AssetManager> GetAssetManager() = 0;
 	virtual bool Initialize();
-
+	virtual void DrawPrepare(){};
 protected:
 	virtual void CreateRtvAndDsvDescriptorHeaps();
 public:
@@ -112,4 +113,6 @@ protected:
 	std::unique_ptr<SceneManager> mSceneManager = std::make_unique<SceneManager>();
 public:
 	std::shared_ptr<Camera> camera;
+
+	bool isUpdateDraw = true;
 };

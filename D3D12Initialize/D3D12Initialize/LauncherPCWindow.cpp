@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Engine.h"
+#include "DX12Render.h"
 #include "LauncherPCWindow.h"
 #include "WindowsInputBase.h"
 
@@ -151,17 +151,20 @@ std::shared_ptr<WindowsInputBase> PCWindows::GetWindowsInput()
 //	return DefWindowProc(hwd, msg, wParam, lParam);
 //}
 
-int PCWindows::Run(GameTimer& gt)
+bool PCWindows::Run()
 {
+	bool Quit = false;
 	MSG msg = { 0 };
 
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+
+		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			if (msg.message == WM_QUIT) {
+				Quit = true;
+			}
 		}
-		else
+		/*else
 		{
 			gt.Tick();
 			if (!mAppPause) {
@@ -173,10 +176,9 @@ int PCWindows::Run(GameTimer& gt)
 			{
 				Sleep(100);
 			}
-		}
-	}
-	IsWindowRuning = false;
-	return (int)msg.wParam;
+		}*/
+	
+	return !Quit;
 }
 
 void PCWindows::CalculateFrameStats(const GameTimer& gt)

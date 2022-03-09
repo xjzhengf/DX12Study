@@ -49,6 +49,11 @@ bool D3DApp::Get4xMsaaState() const
 	return m4xMsaaState;
 }
 
+bool D3DApp::GetAppPause() const
+{
+	return mAppPause;
+}
+
 bool D3DApp::IsHaveDevice() const
 {
 	if (md3dDevice) {
