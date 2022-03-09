@@ -147,7 +147,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FirstPersonCamera.h" />
-    <ClInclude Include="D3DApp.h" />
+    <ClInclude Include="D3DInit.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader.h" />
@@ -172,7 +172,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
-    <ClCompile Include="D3DApp.cpp" />
+    <ClCompile Include="D3DInit.cpp" />
     <ClCompile Include="D3DUtil.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

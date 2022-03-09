@@ -1,5 +1,16 @@
 #include "stdafx.h"
 #include "SceneManager.h"
+SceneManager* SceneManager::mSceneManager = nullptr;
+SceneManager* SceneManager::GetSceneManager()
+{
+	return mSceneManager;
+}
+
+SceneManager::SceneManager()
+{
+	assert(mSceneManager == nullptr);
+	mSceneManager = this;
+}
 
 void SceneManager::SetMapActors(const std::unordered_map<std::string, ActorStruct*>& ActorMap)
 {

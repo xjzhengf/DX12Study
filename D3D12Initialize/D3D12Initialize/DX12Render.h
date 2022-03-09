@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "D3DUtil.h"
-#include "D3DApp.h"
+#include "D3DInit.h"
 #include "UploadBuffer.h"
 #include "MathHelper.h"
 #include "MeshProperty.h"
@@ -34,15 +34,14 @@ struct ObjectConstants {
 	float Time = 0.0f;
 };
 
-class DX12Render : public D3DApp {
+class DX12Render : public D3DInit {
 public:
-	DX12Render(HINSTANCE hInstance);
+	DX12Render();
 	DX12Render(const DX12Render& sm) = delete;
 	DX12Render& operator=(const DX12Render& sm) = delete;
 	~DX12Render();
 
 	virtual bool Initialize() override;
-	std::shared_ptr<AssetManager> GetAssetManager() override;
 	virtual void OnResize() override;
 	virtual void Update(const GameTimer& gt) override;
 	virtual void Draw(const GameTimer& gt) override;
@@ -78,6 +77,6 @@ private:
 	std::vector<MeshData> meshDataVector;
 
 	float Time;
-	std::unique_ptr<TaskManager> mTaskManager;
+
 
 };

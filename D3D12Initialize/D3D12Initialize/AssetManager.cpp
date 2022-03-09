@@ -2,9 +2,16 @@
 #include "AssetManager.h"
 #include "fstream"
 
+AssetManager* AssetManager::mAssetManager = nullptr;
+AssetManager* AssetManager::GetAssetManager()
+{
+	return mAssetManager;
+}
 
 AssetManager::AssetManager()
 {
+	assert(mAssetManager == nullptr);
+	mAssetManager = this;
 }
 
 AssetManager::~AssetManager()

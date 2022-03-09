@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
-
+#include "Engine.h"
 
 
  glm::vec3 Camera::Transform(glm::mat4x4 m,glm::vec3 v) {
@@ -72,6 +72,7 @@ void Camera::UpdateViewMat()
 
 Camera::Camera()
 {
+	mhMainWnd = Engine::GetEngine()->GetWindow()->GetHWnd();
 	SetLens(0.25f * glm::pi<float>(), 1.0f, 1.0f, 1000.0f);
 }
 

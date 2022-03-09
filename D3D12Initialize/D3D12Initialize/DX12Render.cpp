@@ -3,7 +3,7 @@
 
 
 
-DX12Render::DX12Render(HINSTANCE hInstance) :D3DApp(hInstance)
+DX12Render::DX12Render() :D3DInit()
 {
 }
 
@@ -15,18 +15,17 @@ bool DX12Render::Initialize()
 {
 
 
-	if (!D3DApp::Initialize())
+	if (!D3DInit::Initialize())
 		return false;
 
-	//创建任务管理系统
-	mTaskManager = std::make_unique<TaskManager>(GetAppInst());
-	mAssetManager = std::make_shared<AssetManager>();
+	
+
 	return true;
 }
 
 void DX12Render::OnResize()
 {
-	D3DApp::OnResize();
+	D3DInit::OnResize();
 	camera->SetCameraPos(1000.0f, 1000.0f, 1000.0f);
 	camera->SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
 	camera->LookAt(camera->GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f), camera->GetUp());
@@ -34,18 +33,6 @@ void DX12Render::OnResize()
 
 void DX12Render::Update(const GameTimer& gt)
 {
-	if (!mTaskManager->PrepareKey.empty()) {
-		for (auto& Key : mTaskManager->PrepareKey) {
-			camera->CameraMove(Key, NULL);
-		}
-		mTaskManager->PrepareKey.clear();
-	}
-	if (!mTaskManager->EventMapInMouse.empty()) {
-		for (auto&& MouseKey : mTaskManager->EventMapInMouse) {
-			camera->CameraMove(MouseKey.first, MouseKey.second);
-		}
-		mTaskManager->EventMapInMouse.clear();
-	}
 
 }
 
@@ -68,7 +55,7 @@ void DX12Render::Draw(const GameTimer& gt)
 
 	Time = gt.TotalTime();
 	int i = 0;
-	for (auto&& ActorPair : mSceneManager->GetAllActor()) {
+	for (auto&& ActorPair : SceneManager::GetSceneManager()->GetAllActor()) {
 		camera->UpdateViewMat();
 		ObjectConstants objConstants;
 		glm::qua<float> q = glm::qua<float>(
@@ -131,19 +118,17 @@ void DX12Render::Draw(const GameTimer& gt)
 
 void DX12Render::DrawPrepare()
 {
-	//将actor放入场景
-	//mAssetManager->LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-	mSceneManager->SetMapActors(mAssetManager->GetActors());
-	size_t SceneSize = mSceneManager->GetAllActor().size();
+	SceneManager::GetSceneManager()->SetMapActors(AssetManager::GetAssetManager()->GetActors());
+	size_t SceneSize = SceneManager::GetSceneManager()->GetAllActor().size();
 
 	BulidRootSignature();
 	BulidShadersAndInputLayout();
 	mCbvHeap.resize(SceneSize);
 	mObjectCB.resize(SceneSize);
 	int i = 0;
-	for (auto&& ActorPair : mSceneManager->GetAllActor()) {
-		StaticMeshInfo* MeshInfo = mAssetManager->FindAssetByActor(*ActorPair.second);
+	for (auto&& ActorPair : SceneManager::GetSceneManager()->GetAllActor()) {
+		StaticMeshInfo* MeshInfo = AssetManager::GetAssetManager()->FindAssetByActor(*ActorPair.second);
 		BuildStaticMeshData(MeshInfo);
 		BulidDescriptorHeaps(i);
 		BulidConstantBuffers(i);
@@ -158,12 +143,6 @@ void DX12Render::DrawPrepare()
 	isUpdateDraw = false;
 }
 
-
-
-std::shared_ptr<AssetManager> DX12Render::GetAssetManager()
-{
-	return mAssetManager;
-}
 
 void DX12Render::BulidDescriptorHeaps(int index)
 {

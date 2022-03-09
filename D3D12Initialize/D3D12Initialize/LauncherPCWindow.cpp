@@ -10,9 +10,8 @@ MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 PCWindows* PCWindows::pcWindows = nullptr;
 //初始化塞入app和input
-PCWindows::PCWindows(D3DApp* theApp, const std::shared_ptr<WindowsInputBase>& windowsInput)
+PCWindows::PCWindows(const std::shared_ptr<WindowsInputBase>& windowsInput)
 {
-	this->theApp = theApp->GetApp();
 	assert(pcWindows == nullptr);
 	pcWindows = this;
 	mWindowsInput = windowsInput;
@@ -21,7 +20,7 @@ std::shared_ptr<WindowsInputBase> PCWindows::mWindowsInput = nullptr;
 bool PCWindows::InitWindows()
 {
 	WNDCLASS wc;
-	wc.hInstance = theApp->GetAppInst();
+	wc.hInstance = GetModuleHandle(0); ;
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = MainWndProc;
 	wc.cbClsExtra = 0;
@@ -46,12 +45,24 @@ bool PCWindows::InitWindows()
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
 		return false;
 	}
-	theApp->SetWindow(mhMainWnd);
-	theApp->SetClientHeight(mClientHeight);
-	theApp->SetClientWidht(mClientWidht);
 	ShowWindow(mhMainWnd, SW_SHOW);
 	UpdateWindow(mhMainWnd);
 	return true;
+}
+
+HWND PCWindows::GetHWnd()
+{
+	return mhMainWnd;
+}
+
+int PCWindows::GetClientWidht()
+{
+	return mClientWidht;
+}
+
+int PCWindows::GetClientHeight()
+{
+	return mClientHeight;
 }
 
 
@@ -66,97 +77,11 @@ std::shared_ptr<WindowsInputBase> PCWindows::GetWindowsInput()
 }
 
 
-//LRESULT PCWindows::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
-//{
-//	switch (msg)
-//	{
-//	case WM_ACTIVATE:
-//		if (LOWORD(wParam) == WA_INACTIVE) {
-//			mAppPause = true;
-//			mTimer.Stop();
-//		}
-//		else
-//		{
-//			mAppPause = false;
-//			mTimer.Start();
-//		}
-//		return 0;
-//	
-//	case WM_DESTROY:
-//		PostQuitMessage(0);
-//		return 0;
-//
-//	case WM_MENUCHAR:
-//		// Don't beep when we alt-enter.
-//		return MAKELRESULT(0, MNC_CLOSE);
-//		//捕获消息，设置最小窗口大小
-//	case WM_GETMINMAXINFO:
-//		((MINMAXINFO*)lParam)->ptMinTrackSize.x = 200;
-//		((MINMAXINFO*)lParam)->ptMinTrackSize.y = 200;
-//		return 0;
-//	case WM_LBUTTONDOWN:
-//	case WM_MBUTTONDOWN:
-//	case WM_RBUTTONDOWN:
-//		theApp->OnMouseDown(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-//		return 0;
-//	case WM_LBUTTONUP:
-//	case WM_MBUTTONUP:
-//	case WM_RBUTTONUP:
-//		theApp->OnMouseUp(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-//		return 0;
-//	case WM_MOUSEMOVE:
-//		theApp->OnMouseMove(wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-//		return 0;
-//	case WM_MOUSEWHEEL:
-//		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-//			theApp->camera.AddCameraSpeed(10);
-//		 }
-//		else
-//		{
-//			theApp->camera.AddCameraSpeed(-10);
-//		}
-//		return 0;
-//	case WM_KEYDOWN:
-//		 if ((int)wParam == VK_F2) {
-//			theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
-//		}
-//		else if (wParam == 'A') {
-//			 theApp->camera.Strafe(-1.0f* (theApp->camera.GetCameraSpeed()));
-//		}
-//		else if (wParam == 'S') {
-//			 theApp->camera.Walk(-1.0f * (theApp->camera.GetCameraSpeed()));
-//		}
-//		else if (wParam == 'D') {
-//			 theApp->camera.Strafe(1.0f * (theApp->camera.GetCameraSpeed()));
-//		}
-//		else if (wParam == 'W') {
-//			 theApp->camera.Walk(1.0f * (theApp->camera.GetCameraSpeed()));
-//		 }
-//		else if (wParam == 'E') {
-//			 theApp->camera.UpDown(1.0f * (theApp->camera.GetCameraSpeed()));
-//		 }
-//		else if (wParam == 'Q') {
-//			 theApp->camera.UpDown(-1.0f * (theApp->camera.GetCameraSpeed()));
-//		 }
-//		return 0;
-//	case WM_KEYUP:
-//		if (wParam == VK_ESCAPE)
-//		{
-//			PostQuitMessage(0);
-//		}
-//
-//		return 0;
-//	}
-//
-//	return DefWindowProc(hwd, msg, wParam, lParam);
-//}
 
 bool PCWindows::Run()
 {
 	bool Quit = false;
 	MSG msg = { 0 };
-
-
 		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -164,20 +89,6 @@ bool PCWindows::Run()
 				Quit = true;
 			}
 		}
-		/*else
-		{
-			gt.Tick();
-			if (!mAppPause) {
-				CalculateFrameStats(gt);
-				theApp->Update(gt);
-				theApp->Draw(gt);
-			}
-			else
-			{
-				Sleep(100);
-			}
-		}*/
-	
 	return !Quit;
 }
 

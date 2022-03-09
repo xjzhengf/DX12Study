@@ -1,60 +1,55 @@
 #include "stdafx.h"
-#include "D3DApp.h"
-
+#include "D3DInit.h"
+#include "Engine.h"
 using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
-//LRESULT CALLBACK
-//MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-//	return D3DApp::GetApp()->MsgProc(hwnd, msg, wParam, lParam);
-//}
-//
 
-D3DApp* D3DApp::mApp = nullptr;
-D3DApp::D3DApp(HINSTANCE hInstance):mhAppInst(hInstance)
+
+D3DInit* D3DInit::mApp = nullptr;
+D3DInit::D3DInit()
 {
 	assert(mApp == nullptr);
 	mApp = this;
+	SetClientHeight(Engine::GetEngine()->GetWindow()->GetClientHeight());
+	SetClientWidht(Engine::GetEngine()->GetWindow()->GetClientWidht());
+	SetWindow(Engine::GetEngine()->GetWindow()->GetHWnd());
 }
 
-D3DApp::~D3DApp()
+D3DInit::~D3DInit()
 {
 	if (md3dDevice != nullptr) {
 		FlushCommandQueue();
 	}
 }
 
-D3DApp* D3DApp::GetApp()
+D3DInit* D3DInit::GetApp()
 {
 	return mApp;
 }
 
-HINSTANCE D3DApp::GetAppInst() const
-{
-	return mhAppInst;
-}
 
-HWND D3DApp::MainWnd() const
+HWND D3DInit::MainWnd() const
 {
 	return mhMainWnd;
 }
 
-float D3DApp::AspectRatio() const
+float D3DInit::AspectRatio() const
 {
 	return static_cast<float>(mClientWidht)/mClientHeight;
 }
 
-bool D3DApp::Get4xMsaaState() const
+bool D3DInit::Get4xMsaaState() const
 {
 	return m4xMsaaState;
 }
 
-bool D3DApp::GetAppPause() const
+bool D3DInit::GetAppPause() const
 {
 	return mAppPause;
 }
 
-bool D3DApp::IsHaveDevice() const
+bool D3DInit::IsHaveDevice() const
 {
 	if (md3dDevice) {
 		return true;
@@ -62,7 +57,7 @@ bool D3DApp::IsHaveDevice() const
 	return false;
 }
 
-void D3DApp::Set4xMsaaState(bool value)
+void D3DInit::Set4xMsaaState(bool value)
 {
 	if (m4xMsaaState != value) {
 		m4xMsaaState = value;
@@ -72,29 +67,29 @@ void D3DApp::Set4xMsaaState(bool value)
 	}
 }
 
-void D3DApp::SetWindow(HWND mhMainWnd)
+void D3DInit::SetWindow(HWND mhMainWnd)
 {
 	this->mhMainWnd = mhMainWnd;
 }
 
-void D3DApp::SetClientWidht(int Width)
+void D3DInit::SetClientWidht(int Width)
 {
 	this->mClientWidht = Width;
 }
 
-void D3DApp::SetClientHeight(int Height)
+void D3DInit::SetClientHeight(int Height)
 {
 	this->mClientHeight = Height;
 }
 
-void D3DApp::SetCameraInput(const std::shared_ptr<Camera>& camera)
+void D3DInit::SetCameraInput(const std::shared_ptr<Camera>& camera)
 {
 	this->camera = camera;
 }
 
 
 
-bool D3DApp::Initialize()
+bool D3DInit::Initialize()
 {
 
 	if (!InitDirect3D()) {
@@ -106,7 +101,7 @@ bool D3DApp::Initialize()
 }
 
 
-void D3DApp::CreateRtvAndDsvDescriptorHeaps()
+void D3DInit::CreateRtvAndDsvDescriptorHeaps()
 {
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
 	rtvHeapDesc.NumDescriptors = SwapChainBufferCount;
@@ -122,7 +117,7 @@ void D3DApp::CreateRtvAndDsvDescriptorHeaps()
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
 }
 
-void D3DApp::OnResize()
+void D3DInit::OnResize()
 {
 	assert(md3dDevice);
 	assert(mSwapChain);
@@ -208,7 +203,7 @@ void D3DApp::OnResize()
 }
 
 
-bool D3DApp::InitDirect3D()
+bool D3DInit::InitDirect3D()
 {
 #if defined(DEBUG) || defined(_DEBUG)
 	{
@@ -253,7 +248,7 @@ bool D3DApp::InitDirect3D()
 	return true;
 }
 
-void D3DApp::CreateCommandObjects()
+void D3DInit::CreateCommandObjects()
 {
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -264,7 +259,7 @@ void D3DApp::CreateCommandObjects()
 	mCommandList->Close();
 }
 
-void D3DApp::CreateSpawChain()
+void D3DInit::CreateSpawChain()
 {
 	mSwapChain.Reset();
 
@@ -289,7 +284,7 @@ void D3DApp::CreateSpawChain()
 
 }
 
-void D3DApp::FlushCommandQueue()
+void D3DInit::FlushCommandQueue()
 {
 	mCurrentFence++;
 	//设置一个栅栏点，如果gpu上任务未完成则栏点设置失败
@@ -307,23 +302,23 @@ void D3DApp::FlushCommandQueue()
     
 }
 
-ID3D12Resource* D3DApp::CurrentBackBuffer() const
+ID3D12Resource* D3DInit::CurrentBackBuffer() const
 {
 	return mSwapChainBuffer[mCurrBackBuffer].Get();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE D3DApp::CurrentBackBufferView() const
+D3D12_CPU_DESCRIPTOR_HANDLE D3DInit::CurrentBackBufferView() const
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(mRtvHeap->GetCPUDescriptorHandleForHeapStart(),mCurrBackBuffer,mRtvDescriptorSize);
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE D3DApp::DepthStencilView() const
+D3D12_CPU_DESCRIPTOR_HANDLE D3DInit::DepthStencilView() const
 {
 	return mDsvHeap->GetCPUDescriptorHandleForHeapStart();
 }
 
 
-void D3DApp::LogAdapters()
+void D3DInit::LogAdapters()
 {
 	UINT i = 0;
 	IDXGIAdapter* adapter = nullptr;
@@ -348,7 +343,7 @@ void D3DApp::LogAdapters()
 	}
 }
 
-void D3DApp::LogAdapterOutputs(IDXGIAdapter* adapter)
+void D3DInit::LogAdapterOutputs(IDXGIAdapter* adapter)
 {
 	UINT i = 0;
 	IDXGIOutput* output = nullptr;
@@ -368,7 +363,7 @@ void D3DApp::LogAdapterOutputs(IDXGIAdapter* adapter)
 	}
 }
 
-void D3DApp::LogOutputDisplayerModes(IDXGIOutput* output, DXGI_FORMAT format)
+void D3DInit::LogOutputDisplayerModes(IDXGIOutput* output, DXGI_FORMAT format)
 {
 	UINT count = 0;
 	UINT flags = 0;

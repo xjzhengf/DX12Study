@@ -4,8 +4,12 @@
 #include "WindowsInputBase.h"
 class PCWindows :public WindowBase{
 public:
-	PCWindows(D3DApp* theApp, const std::shared_ptr<WindowsInputBase>& windowsInput);
+	PCWindows(const std::shared_ptr<WindowsInputBase>& windowsInput);
 	virtual bool InitWindows() override;
+
+	HWND GetHWnd()override;
+	int GetClientWidht()override;
+	int GetClientHeight()override;
 
 	static PCWindows* GetPcWindows();
 	static std::shared_ptr<WindowsInputBase> GetWindowsInput();
@@ -28,6 +32,4 @@ private:
 	   std::wstring mMainWndCaption = L"My Windows App";
 	   int mClientWidht = 800;
 	   int mClientHeight = 600;
-	   D3DApp* theApp;
-	
 };

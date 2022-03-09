@@ -14,15 +14,14 @@
 #pragma comment(lib, "dxgi.lib")
 
 
-class D3DApp {
+class D3DInit {
 protected:
-	D3DApp(HINSTANCE hInstance);
-	D3DApp(const D3DApp& d3d) = delete;
-	D3DApp& operator=(const D3DApp& d3d) = delete;
-	virtual ~D3DApp();
+	D3DInit();
+	D3DInit(const D3DInit& d3d) = delete;
+	D3DInit& operator=(const D3DInit& d3d) = delete;
+	virtual ~D3DInit();
 public:
-	static D3DApp* GetApp();
-	HINSTANCE GetAppInst() const;
+	static D3DInit* GetApp();
 	HWND MainWnd() const;
 	float AspectRatio() const;
 	bool Get4xMsaaState() const;
@@ -33,7 +32,6 @@ public:
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
 	void SetCameraInput(const std::shared_ptr<Camera>& camera);
-	virtual std::shared_ptr<AssetManager> GetAssetManager() = 0;
 	virtual bool Initialize();
 	virtual void DrawPrepare(){};
 protected:
@@ -61,7 +59,7 @@ protected:
 	void LogAdapterOutputs(IDXGIAdapter* adapter);
 	void LogOutputDisplayerModes(IDXGIOutput* output, DXGI_FORMAT format);
 protected:
-	static D3DApp* mApp;
+	static D3DInit* mApp;
 
 	HINSTANCE mhAppInst = nullptr;
 	HWND mhMainWnd = nullptr;
@@ -109,8 +107,7 @@ protected:
 	int mClientWidht = 800;
 	int mClientHeight = 600;
 
-	std::shared_ptr<AssetManager> mAssetManager = std::make_shared<AssetManager>();
-	std::unique_ptr<SceneManager> mSceneManager = std::make_unique<SceneManager>();
+
 public:
 	std::shared_ptr<Camera> camera;
 

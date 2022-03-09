@@ -9,18 +9,23 @@ public:
 	~Engine();
 	void Init(HINSTANCE hInstance);
 	void Run(GameTimer& gt);
-	void Tick(GameTimer& gt);
+	void RenderTick(GameTimer& gt);
+	void TaskTick(GameTimer& gt);
 	void Destroy();
 	static Engine* GetEngine();
 	std::shared_ptr<AssetManager> GetAssetManager();
 	void UpdateDrawState(bool state);
+	std::shared_ptr<WindowBase> GetWindow();
+
 protected:
 
 	static Engine* mEngine;
 private:
 	std::unique_ptr<DX12Render> mRender;
-	std::unique_ptr<WindowBase> mWindows;
-
+	std::shared_ptr<WindowBase> mWindows;
+	std::shared_ptr<AssetManager> mAssetManager;
+	std::unique_ptr<SceneManager> mSceneManager;
+	std::unique_ptr<TaskManager> mTaskManager;
 	bool isRuning;
 };
 
