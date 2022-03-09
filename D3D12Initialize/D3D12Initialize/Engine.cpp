@@ -20,10 +20,8 @@ void Engine::Init(HINSTANCE hInstance)
 {
 	//初始化窗口
 	std::unique_ptr<WindowsFactory> fa = std::make_unique<WindowsFactory>();
-	//创建windowsinput
-	std::shared_ptr<WindowsInputBase> windowInput = std::make_shared<WindowsInput>();
 	//获取PCWindows
-	mWindows = fa->GetPCWindow(windowInput);
+	mWindows = fa->GetWindows();
 	mWindows->InitWindows();
 	//初始化Render
 	mRender = std::make_unique<DX12Render>();
@@ -32,6 +30,7 @@ void Engine::Init(HINSTANCE hInstance)
 	//设置引擎内部相机输入类型
 	mRender->SetCameraInput(cameraInput);
 
+	//初始化资源管理和场景管理
 	mAssetManager = std::make_shared<AssetManager>();
 	mSceneManager = std::make_unique<SceneManager>();
 

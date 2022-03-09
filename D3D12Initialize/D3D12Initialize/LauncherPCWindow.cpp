@@ -40,7 +40,7 @@ bool PCWindows::InitWindows()
 
 	int width = R.right - R.left;
 	int heigth = R.bottom - R.top;
-	mhMainWnd = CreateWindow(L"MainWnd", mMainWndCaption.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, heigth, 0, 0, mhAppInst, 0);
+	mhMainWnd = CreateWindow(L"MainWnd", mMainWndCaption.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, heigth, 0, 0, GetModuleHandle(0), 0);
 	if (!mhMainWnd) {
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
 		return false;
