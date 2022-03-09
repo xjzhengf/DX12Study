@@ -6,7 +6,7 @@ class WindowsFactory
 {
 public:
 
-	std::unique_ptr<WindowBase> GetPCWindow(D3DApp* theApp, WindowsInputBase* windowsInput);
+	std::unique_ptr<WindowBase> GetPCWindow(D3DApp* theApp, const std::shared_ptr<WindowsInputBase>& windowsInput);
 private:
 
 };

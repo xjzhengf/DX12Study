@@ -9,14 +9,15 @@ MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 PCWindows* PCWindows::pcWindows = nullptr;
-PCWindows::PCWindows(D3DApp* theApp,WindowsInputBase* windowsInput)
+//初始化塞入app和input
+PCWindows::PCWindows(D3DApp* theApp, const std::shared_ptr<WindowsInputBase>& windowsInput)
 {
 	this->theApp = theApp->GetApp();
 	assert(pcWindows == nullptr);
 	pcWindows = this;
 	mWindowsInput = windowsInput;
 }
-WindowsInputBase* PCWindows::mWindowsInput = nullptr;
+std::shared_ptr<WindowsInputBase> PCWindows::mWindowsInput = nullptr;
 bool PCWindows::InitWindows()
 {
 	WNDCLASS wc;
@@ -59,7 +60,7 @@ PCWindows* PCWindows::GetPcWindows()
 	return pcWindows;
 }
 
-WindowsInputBase* PCWindows::GetWindowsInput()
+std::shared_ptr<WindowsInputBase> PCWindows::GetWindowsInput()
 {
 	return mWindowsInput;
 }
@@ -150,10 +151,9 @@ WindowsInputBase* PCWindows::GetWindowsInput()
 //	return DefWindowProc(hwd, msg, wParam, lParam);
 //}
 
-int PCWindows::Run()
+int PCWindows::Run(GameTimer& gt)
 {
 	MSG msg = { 0 };
-	mTimer.Reset();
 
 	while (msg.message != WM_QUIT)
 	{
@@ -163,11 +163,11 @@ int PCWindows::Run()
 		}
 		else
 		{
-			mTimer.Tick();
+			gt.Tick();
 			if (!mAppPause) {
-				CalculateFrameStats();
-				theApp->Update(mTimer);
-				theApp->Draw(mTimer);
+				CalculateFrameStats(gt);
+				theApp->Update(gt);
+				theApp->Draw(gt);
 			}
 			else
 			{
@@ -175,23 +175,24 @@ int PCWindows::Run()
 			}
 		}
 	}
+	IsWindowRuning = false;
 	return (int)msg.wParam;
 }
 
-void PCWindows::CalculateFrameStats()
+void PCWindows::CalculateFrameStats(const GameTimer& gt)
 {
 	static int frameCnt = 0;
 	static float timeElapsed = 0.0f;
 
 	frameCnt++;
-	if ((mTimer.TotalTime() - timeElapsed) >= 1.0f)
+	if ((gt.TotalTime() - timeElapsed) >= 1.0f)
 	{
 		float fps = (float)frameCnt; // fps = frameCnt / 1
 		float mspf = 1000.0f / fps;
 
 		std::wstring fpsStr = std::to_wstring(fps);
 		std::wstring mspfStr = std::to_wstring(mspf);
-		std::wstring timeStr = std::to_wstring(mTimer.TotalTime());
+		std::wstring timeStr = std::to_wstring(gt.TotalTime());
 
 		std::wstring windowText = mMainWndCaption +
 			L"    fps: " + fpsStr +

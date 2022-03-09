@@ -1,22 +1,21 @@
 #pragma once
 #include "stdafx.h"
 #include "WindowBase.h"
+#include "WindowsInputBase.h"
 class PCWindows :public WindowBase{
 public:
-	PCWindows(D3DApp* theApp, WindowsInputBase* windowsInput);
+	PCWindows(D3DApp* theApp, const std::shared_ptr<WindowsInputBase>& windowsInput);
 	virtual bool InitWindows() override;
 
 	static PCWindows* GetPcWindows();
-	static WindowsInputBase* GetWindowsInput();
-	
-	//virtual LRESULT MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static std::shared_ptr<WindowsInputBase> GetWindowsInput();
 
-	virtual int Run() override;
+	virtual int Run( GameTimer& gt) override;
 
-	void CalculateFrameStats();
+	void CalculateFrameStats(const GameTimer& gt);
 protected:
 	GameTimer mTimer;
-	static WindowsInputBase* mWindowsInput;
+	static std::shared_ptr<WindowsInputBase> mWindowsInput;
 	static PCWindows* pcWindows;
 private:	
 	   HINSTANCE mhAppInst = nullptr;

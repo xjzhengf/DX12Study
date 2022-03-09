@@ -31,7 +31,7 @@ public:
 	void SetWindow(HWND mhMainWnd);
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
-	void SetCameraInput(Camera* camera);
+	void SetCameraInput(const std::shared_ptr<Camera>& camera);
 	virtual std::shared_ptr<AssetManager> GetAssetManager() = 0;
 	virtual bool Initialize();
 
@@ -111,5 +111,5 @@ protected:
 	std::shared_ptr<AssetManager> mAssetManager = std::make_shared<AssetManager>();
 	std::unique_ptr<SceneManager> mSceneManager = std::make_unique<SceneManager>();
 public:
-	Camera* camera;
+	std::shared_ptr<Camera> camera;
 };

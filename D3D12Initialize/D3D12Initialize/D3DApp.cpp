@@ -82,7 +82,7 @@ void D3DApp::SetClientHeight(int Height)
 	this->mClientHeight = Height;
 }
 
-void D3DApp::SetCameraInput(Camera* camera)
+void D3DApp::SetCameraInput(const std::shared_ptr<Camera>& camera)
 {
 	this->camera = camera;
 }

@@ -107,6 +107,7 @@ void AssetManager::ReadBinaryFileToActorStruct(const char* TextPathName)
 
 StaticMeshInfo* AssetManager::FindAssetByActor(ActorStruct& actor)
 {
+	//虚幻导出的资源字符串后缀'/0'
 	std::string str(actor.StaticMeshAssetName[0].c_str());
 	str.resize(str.size() + 1);
 	auto iter = MeshAsset.find(str);
