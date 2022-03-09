@@ -25,8 +25,6 @@ void Engine::Init(HINSTANCE hInstance)
 	//获取PCWindows
 	mWindows = fa->GetPCWindow(windowInput);
 	mWindows->InitWindows();
-
-
 	//初始化Render
 	mRender = std::make_unique<DX12Render>();
 	//创建相机输入类型
@@ -50,15 +48,15 @@ void Engine::Run(GameTimer& gt)
 //开始主循环
 	while (isRuning && mWindows->Run())
 	{
-		mWindows->CalculateFrameStats(gt);
 		RenderTick(gt);
-		TaskTick(gt);
 	}
 }
 
 void Engine::RenderTick(GameTimer& gt)
 {
+	mWindows->CalculateFrameStats(gt);
 	gt.Tick();
+	TaskTick(gt);
 	if (!mRender->GetAppPause()) {
 		mRender->Update(gt);
 		mRender->Draw(gt);
@@ -94,9 +92,18 @@ void Engine::Destroy()
 		mWindows = nullptr;
 	}
 	if (mEngine != nullptr) {
-		//delete mEngine;
 		 mEngine=nullptr;
 	}
+	if (mTaskManager != nullptr) {
+		mTaskManager = nullptr;
+	}
+	if (mSceneManager != nullptr) {
+		mSceneManager = nullptr;
+	}
+	if (mAssetManager != nullptr) {
+		mAssetManager = nullptr;
+	}
+	
 }
 
 std::shared_ptr<AssetManager> Engine::GetAssetManager()
