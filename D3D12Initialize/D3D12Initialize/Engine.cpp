@@ -72,7 +72,8 @@ void Engine::Destroy()
 		mWindows = nullptr;
 	}
 	if (mEngine != nullptr) {
-		delete mEngine;
+		//delete mEngine;
+		 mEngine=nullptr;
 	}
 }
 

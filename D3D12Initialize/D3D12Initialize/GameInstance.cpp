@@ -16,6 +16,7 @@ void GameInstance::UpDate()
 
 void GameInstance::Destroy()
 {
-	mEngine->Destroy();
+
 	mGameLogic->Destroy();
+	mEngine->Destroy();
 }

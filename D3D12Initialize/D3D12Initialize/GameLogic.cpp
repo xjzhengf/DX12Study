@@ -25,7 +25,7 @@ void GameLogic::Update()
 void GameLogic::Destroy()
 {
 	if (mGameLogic != nullptr) {
-		delete mGameLogic;
+		 mGameLogic = nullptr;
 	}
 }
 
