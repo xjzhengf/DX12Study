@@ -16,28 +16,18 @@ AssetManager::AssetManager()
 
 AssetManager::~AssetManager()
 {
-}
-
-bool AssetManager::LoadMap(const char* MapPath)
-{
-	Actors.clear();
-	std::ifstream inFile(MapPath, std::ios::in);
-	std::string buf;
-	std::vector<std::string> ActorsPath;
-	if (inFile.is_open()) {
-		while (getline(inFile,buf))
-		{
-			ActorsPath.push_back(buf);
+	for (auto&& data : MeshAsset)
+	{
+		if (data.second != nullptr) {
+			delete data.second;
 		}
 	}
-	else {
-		return false;
+
+	if (mAssetManager != nullptr) {
+		 mAssetManager = nullptr;
 	}
-	for (std::string& ActorPath : ActorsPath) {
-		ReadBinaryFileToActorStruct(ActorPath.c_str());
-	}
-	return true;
 }
+
 
 
 
@@ -76,46 +66,10 @@ void AssetManager::ReadBinaryFileToStaticMeshStruct(const char* TextPath)
 	}
 	inFile.close();
 	this->MeshAsset.insert({ meshAsset->StaticMeshName,meshAsset });
+	AssetVector.insert(meshAsset->StaticMeshName);
 }
 
-void AssetManager::ReadBinaryFileToActorStruct(const char* TextPathName)
-{
 
-	int ComponentLen = 0;
-	int Meshlen = 0;
-	ActorStruct* actor = new ActorStruct;
-	std::ifstream inFile(TextPathName, std::ios::binary);
-	if (inFile.is_open()) {
-		int flag = 0;
-		inFile.read((char*)&flag, sizeof(int));
-		int len = 0;
-		inFile.read((char*)&len, sizeof(int32_t));
-		actor->ActorName.resize(actor->ActorName.size() + len * sizeof(char));
-		inFile.read((char*)actor->ActorName.data(), len);
-
-		inFile.read((char*)&ComponentLen, sizeof(int32_t));
-		actor->Transform.resize(ComponentLen);
-		inFile.read((char*)actor->Transform.data(), ComponentLen * sizeof(FTransform));
-
-
-		inFile.read((char*)&Meshlen, sizeof(int32_t));
-		actor->StaticMeshAssetName.resize(Meshlen);
-		for (size_t i = 0; i < Meshlen; i++)
-		{
-			int strlen = 0;
-			inFile.read((char*)&strlen, sizeof(int32_t));
-			inFile.read((char*)actor->StaticMeshAssetName[i].data(), strlen);
-		}
-
-	}
-	inFile.close();
-	for (int i = 0; i < actor->StaticMeshAssetName.size(); i++) {
-		std::string assetPath;
-		assetPath = std::string("StaticMeshInfo\\").append(actor->StaticMeshAssetName[0].c_str()).append(".dat");
-		ReadBinaryFileToStaticMeshStruct(assetPath.c_str());
-	}
-	Actors.insert({ actor->ActorName,actor });
-}
 
 StaticMeshInfo* AssetManager::FindAssetByActor(ActorStruct& actor)
 {
@@ -165,6 +119,7 @@ void AssetManager::SelectFile()
 			}
 		}
 	}
+	delete TextPathName;
 }
 
 std::unordered_map<std::string, StaticMeshInfo*>& AssetManager::GetMeshAsset()
@@ -172,8 +127,5 @@ std::unordered_map<std::string, StaticMeshInfo*>& AssetManager::GetMeshAsset()
 	return MeshAsset;
 }
 
-std::unordered_map<std::string, ActorStruct*>& AssetManager::GetActors()
-{
-	return Actors;
-}
+
 

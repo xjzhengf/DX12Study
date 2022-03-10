@@ -5,7 +5,7 @@
 #include "UploadBuffer.h"
 #include "MathHelper.h"
 #include "MeshProperty.h"
-#include "TaskManager.h"
+
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;

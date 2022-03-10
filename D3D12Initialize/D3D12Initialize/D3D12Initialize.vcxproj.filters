@@ -19,150 +19,231 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{39504686-8a5c-4884-b37b-97d4611661db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Header">
-      <UniqueIdentifier>{7ffc1cad-70a8-4b11-b5b4-2c5fce9541fc}</UniqueIdentifier>
+    <Filter Include="Engine\D3D">
+      <UniqueIdentifier>{46872edd-f4aa-4094-99a8-f951ed45f9f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Source">
-      <UniqueIdentifier>{2ae94406-24d0-4f40-bd59-95ab96f0587a}</UniqueIdentifier>
+    <Filter Include="Engine\D3D\Header">
+      <UniqueIdentifier>{a8120f74-80c0-48ea-9ee5-fd2f3fd36fa2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Header">
+    <Filter Include="Engine\D3D\Source">
+      <UniqueIdentifier>{78356963-9def-4b25-ba2b-e5a5caca782a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Input">
+      <UniqueIdentifier>{aac05478-3921-4759-883f-0d56a5f7b900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Input\Header">
+      <UniqueIdentifier>{6400fa6b-ebe1-4936-ae4d-37c951d8ae68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Input\Source">
+      <UniqueIdentifier>{c1f75378-e946-4a9e-8a20-fb0c7f6be5da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Camera">
+      <UniqueIdentifier>{4e0f4c53-ce9a-42ca-ba90-c19fdaf84574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Camera\Header">
+      <UniqueIdentifier>{224b2107-541e-4e37-835a-bb524d3468ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Camera\Source">
+      <UniqueIdentifier>{c7976447-df9f-42e3-877b-0ddc801b2af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Logic">
+      <UniqueIdentifier>{af563191-2f1a-419f-a8e4-e7ba79a254f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Logic\Header">
+      <UniqueIdentifier>{d78db522-c248-4ce7-bdd2-29cdc2022d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Logic\Source">
+      <UniqueIdentifier>{470f2282-be70-4287-86d2-1334a08cbaa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows">
+      <UniqueIdentifier>{9f53a52b-c368-4d95-bec4-8c412165fa07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\Input">
+      <UniqueIdentifier>{ba4939f8-268c-46b2-b28a-e04bc46e5167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\Input\Header">
+      <UniqueIdentifier>{d07cea51-1ee4-46dd-983b-ce7c1ef31b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\Input\Source">
+      <UniqueIdentifier>{cde62fe5-3c99-4faf-a83e-c7f0661be16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\LauncherWindow">
+      <UniqueIdentifier>{3fafbe72-e7c4-4a20-b0c0-c723bafabdd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\LauncherWindow\Header">
+      <UniqueIdentifier>{b50d0469-fc03-4b9c-9147-ce5de00a2490}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Windows\LauncherWindow\Source">
+      <UniqueIdentifier>{01a4c700-2126-4a37-9846-8a826e0edfc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager">
+      <UniqueIdentifier>{5a59f732-2619-441b-bc68-54f7261fb39d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Header">
+      <UniqueIdentifier>{95136a9c-3460-46c3-8609-eac14f1aa302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager\Source">
+      <UniqueIdentifier>{cee001d5-64b8-45e4-8f37-05441688a7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{5d9dc8b7-7707-4fe5-bcac-735489147efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera\Header">
+      <UniqueIdentifier>{de155137-2e00-41c2-b2c0-f726624bcb24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera\Source">
+      <UniqueIdentifier>{18cd1972-884d-444b-a3a8-d7626b35e009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game">
+      <UniqueIdentifier>{3aea1b62-c9fd-45d4-883d-6387e255c936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game\Header">
+      <UniqueIdentifier>{fb81f159-c171-4ccd-967e-6c6187a213ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game\Source">
+      <UniqueIdentifier>{5ce4a2b2-6a93-4ce4-bb76-8080fe6faa59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine">
       <UniqueIdentifier>{25ef0907-e5b0-4fc8-8334-d9bf2c77418d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Source">
-      <UniqueIdentifier>{6574504f-9b5b-4372-9a5f-f979e19c5850}</UniqueIdentifier>
+    <Filter Include="Engine\Engine\Header">
+      <UniqueIdentifier>{13cdb06f-3399-4e4f-a117-ed79de1e5c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Source">
+      <UniqueIdentifier>{2441d945-4dfd-40db-bb8e-96f32a406cf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DX12Render.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="D3DInit.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="D3DUtil.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="DDSTextureLoader.h">
+      <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
-      <Filter>Engine\Header</Filter>
+      <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
-    <ClInclude Include="DDSTextureLoader.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="D3DUtil.h">
+      <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="MathHelper.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="D3DInit.h">
+      <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
     <ClInclude Include="UploadBuffer.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowBase.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>Game\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshProperty.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="LauncherPCWindow.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsFactory.h">
-      <Filter>Engine\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsInputBase.h">
-      <Filter>Engine\Header</Filter>
+      <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
     <ClInclude Include="WindowsInput.h">
-      <Filter>Game\Header</Filter>
+      <Filter>Game\Input\Header</Filter>
     </ClInclude>
-    <ClInclude Include="TaskManager.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>Game\Camera\Header</Filter>
     </ClInclude>
     <ClInclude Include="GameLogic.h">
-      <Filter>Game\Header</Filter>
+      <Filter>Game\Logic\Header</Filter>
     </ClInclude>
-    <ClInclude Include="GameInstance.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="WindowBase.h">
+      <Filter>Engine\Windows\LauncherWindow\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="WindowsFactory.h">
+      <Filter>Engine\Windows\LauncherWindow\Header</Filter>
     </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="LauncherPCWindow.h">
+      <Filter>Engine\Windows\LauncherWindow\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsInputBase.h">
+      <Filter>Engine\Windows\Input\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>Engine\D3D\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DX12Render.h">
+      <Filter>Engine\D3D\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine\Camera\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>Engine\Manager\Header</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Engine\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Engine\D3D\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshProperty.h">
+      <Filter>Engine\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInstance.h">
+      <Filter>Engine\Game\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Engine\Game\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine\Engine\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
     <ClCompile Include="D3DInit.cpp">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\D3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="D3DUtil.cpp">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\D3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="DDSTextureLoader.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="MathHelper.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowsFactory.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="LauncherPCWindow.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>Game\Source</Filter>
+      <Filter>Engine\D3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="WindowsInput.cpp">
-      <Filter>Game\Source</Filter>
+      <Filter>Game\Input\Source</Filter>
     </ClCompile>
-    <ClCompile Include="WindowsInputBase.cpp">
-      <Filter>Engine\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskManager.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Game\Camera\Source</Filter>
     </ClCompile>
     <ClCompile Include="GameLogic.cpp">
-      <Filter>Game\Source</Filter>
+      <Filter>Game\Logic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="GameInstance.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="LauncherPCWindow.cpp">
+      <Filter>Engine\Windows\LauncherWindow\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsFactory.cpp">
+      <Filter>Engine\Windows\LauncherWindow\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>Engine\D3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Engine\D3D\Source</Filter>
     </ClCompile>
     <ClCompile Include="DX12Render.cpp">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\D3D\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Engine\Camera\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsInputBase.cpp">
+      <Filter>Engine\Windows\Input\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine\Windows\LauncherWindow\Source</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\Manager\Source</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
-      <Filter>Engine\Source</Filter>
+      <Filter>Engine\Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>Engine\Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInstance.cpp">
+      <Filter>Engine\Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Engine\Game\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine\Engine\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

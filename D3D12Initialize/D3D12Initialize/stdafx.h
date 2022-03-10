@@ -38,5 +38,5 @@
 #include "MathHelper.h"
 #include"iostream"
 #include "vector"
-
+#define _CRTDBG_MAP_ALLOC
 using CallBackInString = std::function<void(std::string)>;

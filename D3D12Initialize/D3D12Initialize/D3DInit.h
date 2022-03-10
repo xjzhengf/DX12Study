@@ -7,8 +7,6 @@
 #include "D3DUtil.h"
 #include "GameTimer.h"
 #include"camera.h"
-#include "AssetManager.h"
-#include "SceneManager.h"
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -61,7 +59,6 @@ protected:
 protected:
 	static D3DInit* mApp;
 
-	HINSTANCE mhAppInst = nullptr;
 	HWND mhMainWnd = nullptr;
 	bool mAppPause = false;         //是否暂停
 	bool mMinimized = false;        //最小化
@@ -111,5 +108,5 @@ protected:
 public:
 	std::shared_ptr<Camera> camera;
 
-	bool isUpdateDraw = true;
+	bool isUpdateDraw = false;
 };

@@ -16,6 +16,13 @@ PCWindows::PCWindows(const std::shared_ptr<WindowsInputBase>& windowsInput)
 	pcWindows = this;
 	mWindowsInput = windowsInput;
 }
+PCWindows::~PCWindows()
+{
+	if (pcWindows!= nullptr)
+	{
+		pcWindows = nullptr;
+	}
+}
 std::shared_ptr<WindowsInputBase> PCWindows::mWindowsInput = nullptr;
 bool PCWindows::InitWindows()
 {

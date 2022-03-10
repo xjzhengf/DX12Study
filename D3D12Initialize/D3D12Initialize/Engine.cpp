@@ -2,7 +2,6 @@
 #include "Engine.h"
 #include "WindowsFactory.h"
 #include "LauncherPCWindow.h"
-#include "AssetManager.h"
 #include "FirstPersonCamera.h"
 #include "GameLogic.h"
 #include "WindowsInput.h"
@@ -15,7 +14,9 @@ Engine::Engine()
 }
 Engine::~Engine()
 {
-	
+	if (mEngine != nullptr) {
+		mEngine = nullptr;
+	}
 }
 void Engine::Init(HINSTANCE hInstance)
 {
@@ -33,7 +34,7 @@ void Engine::Init(HINSTANCE hInstance)
 
 	//初始化资源管理和场景管理
 	mAssetManager = std::make_shared<AssetManager>();
-	mSceneManager = std::make_unique<SceneManager>();
+	mSceneManager = std::make_shared<SceneManager>();
 
 	//初始化Render
 	mRender->Initialize();
@@ -79,9 +80,7 @@ void Engine::Destroy()
 	if (mWindows != nullptr) {
 		mWindows = nullptr;
 	}
-	if (mEngine != nullptr) {
-		 mEngine=nullptr;
-	}
+
 	if (mTaskManager != nullptr) {
 		mTaskManager = nullptr;
 	}
@@ -102,6 +101,11 @@ std::shared_ptr<Camera> Engine::GetCamera()
 std::shared_ptr<AssetManager> Engine::GetAssetManager()
 {
 	return mAssetManager;
+}
+
+std::shared_ptr<SceneManager> Engine::GetSceneManager()
+{
+	return mSceneManager;
 }
 
 void Engine::UpdateDrawState(bool state)

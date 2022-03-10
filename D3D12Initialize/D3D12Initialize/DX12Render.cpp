@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DX12Render.h"
-
-
+#include "SceneManager.h"
+#include "AssetManager.h"
 
 DX12Render::DX12Render() :D3DInit()
 {
@@ -119,7 +119,6 @@ void DX12Render::Draw(const GameTimer& gt)
 void DX12Render::DrawPrepare()
 {
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-	SceneManager::GetSceneManager()->SetMapActors(AssetManager::GetAssetManager()->GetActors());
 	size_t SceneSize = SceneManager::GetSceneManager()->GetAllActor().size();
 
 	BulidRootSignature();

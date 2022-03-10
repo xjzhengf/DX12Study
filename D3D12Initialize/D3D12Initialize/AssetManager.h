@@ -9,20 +9,19 @@ public:
 	AssetManager(const AssetManager& am) = delete;
 	AssetManager& operator=(const AssetManager& am) = delete;
 	~AssetManager();
-	bool LoadMap(const char* MapPath);
 	void ReadBinaryFileToStaticMeshStruct(const char* TextPath);
-	void ReadBinaryFileToActorStruct(const char* TextPathName);
+
 	StaticMeshInfo* FindAssetByActor(ActorStruct& actor);
 
 	void SelectFile();
 	std::unordered_map<std::string, StaticMeshInfo*>& GetMeshAsset();
-	std::unordered_map<std::string, ActorStruct*>& GetActors();
+
+	std::set<std::string> AssetVector;
 protected:
 	static AssetManager* mAssetManager;
 private:
-	std::unordered_map<std::string, ActorStruct*> Actors;
 	std::unordered_map<std::string, StaticMeshInfo*> MeshAsset;
-	
+
 };
 
 

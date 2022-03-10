@@ -12,7 +12,9 @@ GameLogic::GameLogic()
 
 GameLogic::~GameLogic()
 {
-
+	if (mGameLogic != nullptr) {
+		mGameLogic = nullptr;
+	}
 }
 
 void GameLogic::Init()
@@ -37,10 +39,11 @@ GameLogic* GameLogic::GetGameLogic()
 
 bool GameLogic::LoadMap(const std::string& PathName)
 {
-	std::shared_ptr<AssetManager> assetManager = Engine::GetEngine()->GetAssetManager();
-	if (assetManager->LoadMap(PathName.c_str())) {
+	std::shared_ptr<SceneManager> sceneManager = Engine::GetEngine()->GetSceneManager();
+	if (sceneManager->LoadMap(PathName.c_str())) {
 		//更新绘制模型
-		SceneManager::GetSceneManager()->SetMapActors(AssetManager::GetAssetManager()->GetActors());
+		Engine::GetEngine()->UpdateDrawState(true);
+		return true;
 	}
 	return false;
 }
@@ -57,11 +60,12 @@ void GameLogic::ProcessKey()
 			if (Key == VK_ESCAPE) {
 				Engine::GetEngine()->SetRuningState(false);
 			}
-			if (Key == VK_TAB)
+			//暂时有bug
+			/*if (Key == VK_TAB)
 			{
 				if (LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap2.txt"))
 					TaskManager::GetTaskManager()->UnRegisterKey(Key);
-			}
+			}*/
 #else
 			
 #endif

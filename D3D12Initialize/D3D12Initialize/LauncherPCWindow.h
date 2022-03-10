@@ -5,6 +5,7 @@
 class PCWindows :public WindowBase{
 public:
 	PCWindows(const std::shared_ptr<WindowsInputBase>& windowsInput);
+	~PCWindows();
 	virtual bool InitWindows() override;
 
 	HWND GetHWnd()override;
