@@ -25,6 +25,7 @@ void Engine::Init(HINSTANCE hInstance)
 	//获取PCWindows
 	mWindows = fa->GetWindows();
 	mWindows->InitWindows();
+
 	//初始化Render
 	mRender = std::make_unique<DX12Render>();
 	//创建相机输入类型

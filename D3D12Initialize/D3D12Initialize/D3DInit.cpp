@@ -29,11 +29,6 @@ D3DInit* D3DInit::GetApp()
 }
 
 
-HWND D3DInit::MainWnd() const
-{
-	return mhMainWnd;
-}
-
 float D3DInit::AspectRatio() const
 {
 	return static_cast<float>(mClientWidht)/mClientHeight;

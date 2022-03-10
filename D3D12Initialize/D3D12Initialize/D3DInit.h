@@ -20,7 +20,6 @@ protected:
 	virtual ~D3DInit();
 public:
 	static D3DInit* GetApp();
-	HWND MainWnd() const;
 	float AspectRatio() const;
 	bool Get4xMsaaState() const;
 	bool GetAppPause()const;
