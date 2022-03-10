@@ -3,8 +3,11 @@
 #include "AssetManager.h"
 #include "TaskManager.h"
 
+GameLogic* GameLogic::mGameLogic = nullptr;
 GameLogic::GameLogic()
 {
+	assert(mGameLogic == nullptr);
+	mGameLogic=this;
 }
 
 GameLogic::~GameLogic()
@@ -17,31 +20,19 @@ void GameLogic::Init()
 	LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
 }
 
-bool GameLogic::Update()
+void GameLogic::Update()
 {
-	if (!TaskManager::GetTaskManager()->EventKey.empty()) {
-		for (auto&& Key : TaskManager::GetTaskManager()->EventKey) {
-#ifdef _WIN32 
-			if (Key == VK_ESCAPE) {
-				return false;
-			}
-			if (Key == VK_TAB)
-			{
-				if (LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap2.txt"))
-				TaskManager::GetTaskManager()->UnRegisterKey(Key);
-			}
-			TaskManager::GetTaskManager()->ClearImplKey();
-#else
-			return true;
-#endif
-		}
-	}
-	Engine::GetEngine()->SetRuningState(true);
-	return true;
+	ProcessMouse();
+	ProcessKey();
 }
 
 void GameLogic::Destroy()
 {
+}
+
+GameLogic* GameLogic::GetGameLogic()
+{
+	return mGameLogic;
 }
 
 bool GameLogic::LoadMap(const std::string& PathName)
@@ -52,4 +43,41 @@ bool GameLogic::LoadMap(const std::string& PathName)
 		SceneManager::GetSceneManager()->SetMapActors(AssetManager::GetAssetManager()->GetActors());
 	}
 	return false;
+}
+
+void GameLogic::ProcessKey()
+{
+	if (!TaskManager::GetTaskManager()->EventKey.empty()) {
+		for (auto&& Key : TaskManager::GetTaskManager()->EventKey) {
+
+			if (Engine::GetEngine()->GetCamera()->CameraMove("", Key, 0)) {
+				TaskManager::GetTaskManager()->UnRegisterKey(Key);
+			}
+#ifdef _WIN32 
+			if (Key == VK_ESCAPE) {
+				Engine::GetEngine()->SetRuningState(false);
+			}
+			if (Key == VK_TAB)
+			{
+				if (LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap2.txt"))
+					TaskManager::GetTaskManager()->UnRegisterKey(Key);
+			}
+#else
+			
+#endif
+		}
+		TaskManager::GetTaskManager()->ClearImplKey();
+	}
+}
+
+void GameLogic::ProcessMouse()
+{
+	if (!TaskManager::GetTaskManager()->EventMouseKeyMap.empty())
+	{
+		for (auto&& MouseKey : TaskManager::GetTaskManager()->EventMouseKeyMap) {
+			Engine::GetEngine()->GetCamera()->CameraMove(MouseKey.first, NULL, MouseKey.second);
+		}
+		TaskManager::GetTaskManager()->EventMouseKeyMap.clear();
+
+	}
 }

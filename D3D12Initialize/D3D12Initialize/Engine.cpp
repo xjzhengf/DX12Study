@@ -4,6 +4,7 @@
 #include "LauncherPCWindow.h"
 #include "AssetManager.h"
 #include "FirstPersonCamera.h"
+#include "GameLogic.h"
 #include "WindowsInput.h"
 #include <thread>
 Engine* Engine::mEngine = nullptr;
@@ -42,12 +43,15 @@ void Engine::Init(HINSTANCE hInstance)
 
 void Engine::Run(GameTimer& gt)
 {
-
+	gt.Reset();
+	isRuning = true;
 //开始主循环
 	while (isRuning && mWindows->Run())
 	{
+		//GameTick
+		GameLogic::GetGameLogic()->Update();
+		//RenderTick
 		RenderTick(gt);
-		isRuning = false;
 	}
 }
 
@@ -55,7 +59,6 @@ void Engine::RenderTick(GameTimer& gt)
 {
 	mWindows->CalculateFrameStats(gt);
 	gt.Tick();
-	TaskTick(gt);
 	if (!mRender->GetAppPause()) {
 		mRender->Update(gt);
 		mRender->Draw(gt);
@@ -66,25 +69,7 @@ void Engine::RenderTick(GameTimer& gt)
 	}
 }
 
-void Engine::TaskTick(GameTimer& gt)
-{
 
-	if (!mTaskManager->EventKey.empty()) {
-		for (auto&& Key : mTaskManager->EventKey) {
-			if (mRender->camera->CameraMove("", Key, 0))
-				mTaskManager->UnRegisterKey(Key);
-		}
-		mTaskManager->ClearImplKey();
-	}
-	if (!mTaskManager->EventMouseKeyMap.empty())
-	{
-		for (auto&& MouseKey : mTaskManager->EventMouseKeyMap) {
-			mRender->camera->CameraMove(MouseKey.first, NULL, MouseKey.second);
-		}
-		mTaskManager->EventMouseKeyMap.clear();
-
-	}
-}
 
 void Engine::Destroy()
 {
@@ -109,6 +94,11 @@ void Engine::Destroy()
 	
 }
 
+std::shared_ptr<Camera> Engine::GetCamera()
+{
+	return mRender->camera;
+}
+
 std::shared_ptr<AssetManager> Engine::GetAssetManager()
 {
 	return mAssetManager;
@@ -123,6 +113,7 @@ std::shared_ptr<WindowBase> Engine::GetWindow()
 {
 	return mWindows;
 }
+
 
 bool Engine::GetRuningState()
 {

@@ -10,8 +10,8 @@ public:
 	void Init(HINSTANCE hInstance);
 	void Run(GameTimer& gt);
 	void RenderTick(GameTimer& gt);
-	void TaskTick(GameTimer& gt);
 	void Destroy();
+	std::shared_ptr<Camera> GetCamera();
 	static Engine* GetEngine();
 	std::shared_ptr<AssetManager> GetAssetManager();
 	void UpdateDrawState(bool state);
