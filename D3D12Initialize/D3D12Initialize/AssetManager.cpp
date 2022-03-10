@@ -18,8 +18,9 @@ AssetManager::~AssetManager()
 {
 }
 
-void AssetManager::LoadMap(const char* MapPath)
+bool AssetManager::LoadMap(const char* MapPath)
 {
+	Actors.clear();
 	std::ifstream inFile(MapPath, std::ios::in);
 	std::string buf;
 	std::vector<std::string> ActorsPath;
@@ -29,9 +30,13 @@ void AssetManager::LoadMap(const char* MapPath)
 			ActorsPath.push_back(buf);
 		}
 	}
+	else {
+		return false;
+	}
 	for (std::string& ActorPath : ActorsPath) {
 		ReadBinaryFileToActorStruct(ActorPath.c_str());
 	}
+	return true;
 }
 
 

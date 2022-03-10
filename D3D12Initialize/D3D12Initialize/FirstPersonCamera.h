@@ -18,7 +18,7 @@ public:
 	 void OnMouseUp(int x, int y) ;
 
 
-	 void CameraMove(const std::string& inputKey, LPARAM lParam) override;
+	 bool CameraMove(const std::string& MouseKey, const WPARAM& wParam, LPARAM lParam) override;
 private:
 	POINT mLastMousePos;
 

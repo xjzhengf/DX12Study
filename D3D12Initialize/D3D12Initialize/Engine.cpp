@@ -42,12 +42,12 @@ void Engine::Init(HINSTANCE hInstance)
 
 void Engine::Run(GameTimer& gt)
 {
-	isRuning = true;
-	gt.Reset();
+
 //开始主循环
 	while (isRuning && mWindows->Run())
 	{
 		RenderTick(gt);
+		isRuning = false;
 	}
 }
 
@@ -68,17 +68,21 @@ void Engine::RenderTick(GameTimer& gt)
 
 void Engine::TaskTick(GameTimer& gt)
 {
-	if (!mTaskManager->PrepareKey.empty()) {
-		for (auto& Key : mTaskManager->PrepareKey) {
-			mRender->camera->CameraMove(Key, NULL);
+
+	if (!mTaskManager->EventKey.empty()) {
+		for (auto&& Key : mTaskManager->EventKey) {
+			if (mRender->camera->CameraMove("", Key, 0))
+				mTaskManager->UnRegisterKey(Key);
 		}
-		mTaskManager->PrepareKey.clear();
+		mTaskManager->ClearImplKey();
 	}
-	if (!mTaskManager->EventMapInMouse.empty()) {
-		for (auto&& MouseKey : mTaskManager->EventMapInMouse) {
-			mRender->camera->CameraMove(MouseKey.first, MouseKey.second);
+	if (!mTaskManager->EventMouseKeyMap.empty())
+	{
+		for (auto&& MouseKey : mTaskManager->EventMouseKeyMap) {
+			mRender->camera->CameraMove(MouseKey.first, NULL, MouseKey.second);
 		}
-		mTaskManager->EventMapInMouse.clear();
+		mTaskManager->EventMouseKeyMap.clear();
+
 	}
 }
 
@@ -118,6 +122,16 @@ void Engine::UpdateDrawState(bool state)
 std::shared_ptr<WindowBase> Engine::GetWindow()
 {
 	return mWindows;
+}
+
+bool Engine::GetRuningState()
+{
+	return isRuning;
+}
+
+void Engine::SetRuningState(bool state)
+{
+	isRuning = state;
 }
 
 Engine* Engine::GetEngine()

@@ -14,6 +14,7 @@ SceneManager::SceneManager()
 
 void SceneManager::SetMapActors(const std::unordered_map<std::string, ActorStruct*>& ActorMap)
 {
+	mActors.clear();
 	for (auto&& Actor : ActorMap) {
 		mActors.insert({ Actor.first,Actor.second });
 	}

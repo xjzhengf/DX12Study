@@ -16,7 +16,8 @@ public:
 	std::shared_ptr<AssetManager> GetAssetManager();
 	void UpdateDrawState(bool state);
 	std::shared_ptr<WindowBase> GetWindow();
-
+	bool GetRuningState();
+	void SetRuningState(bool state);
 protected:
 
 	static Engine* mEngine;

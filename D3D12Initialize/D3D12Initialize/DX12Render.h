@@ -78,5 +78,5 @@ private:
 
 	float Time;
 
-
+	bool DoOnce = true;
 };

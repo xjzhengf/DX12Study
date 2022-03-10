@@ -26,20 +26,20 @@ bool DX12Render::Initialize()
 void DX12Render::OnResize()
 {
 	D3DInit::OnResize();
-	camera->SetCameraPos(1000.0f, 1000.0f, 1000.0f);
+	camera->SetCameraPos(2000.0f, 2000.0f, 2000.0f);
 	camera->SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
 	camera->LookAt(camera->GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f), camera->GetUp());
 }
 
 void DX12Render::Update(const GameTimer& gt)
 {
-
 }
 
 void DX12Render::Draw(const GameTimer& gt)
 {
-	if (isUpdateDraw) {
+	if (DoOnce) {
 		DrawPrepare();
+		DoOnce = false;
 	}
 	ThrowIfFailed(mDirectCmdListAlloc->Reset());
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), mPSO.Get()));

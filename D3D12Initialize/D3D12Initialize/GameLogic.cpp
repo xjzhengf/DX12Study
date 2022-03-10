@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "GameLogic.h"
 #include "AssetManager.h"
-GameLogic* GameLogic::mGameLogic = nullptr;
+#include "TaskManager.h"
+
 GameLogic::GameLogic()
 {
-	assert(mGameLogic == nullptr);
-	mGameLogic = this;
 }
 
 GameLogic::~GameLogic()
@@ -18,26 +17,39 @@ void GameLogic::Init()
 	LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap.txt");
 }
 
-void GameLogic::Update()
+bool GameLogic::Update()
 {
+	if (!TaskManager::GetTaskManager()->EventKey.empty()) {
+		for (auto&& Key : TaskManager::GetTaskManager()->EventKey) {
+#ifdef _WIN32 
+			if (Key == VK_ESCAPE) {
+				return false;
+			}
+			if (Key == VK_TAB)
+			{
+				if (LoadMap("StaticMeshInfo\\Map\\ThirdPersonMap2.txt"))
+				TaskManager::GetTaskManager()->UnRegisterKey(Key);
+			}
+			TaskManager::GetTaskManager()->ClearImplKey();
+#else
+			return true;
+#endif
+		}
+	}
+	Engine::GetEngine()->SetRuningState(true);
+	return true;
 }
 
 void GameLogic::Destroy()
 {
-	if (mGameLogic != nullptr) {
-		 mGameLogic = nullptr;
-	}
 }
 
-void GameLogic::LoadMap(const std::string& PathName)
+bool GameLogic::LoadMap(const std::string& PathName)
 {
 	std::shared_ptr<AssetManager> assetManager = Engine::GetEngine()->GetAssetManager();
-	assetManager->LoadMap(PathName.c_str());
-	//更新绘制状态
-	Engine::GetEngine()->UpdateDrawState(true);
-}
-
-GameLogic* GameLogic::GetG0ameLogic()
-{
-	return mGameLogic;
+	if (assetManager->LoadMap(PathName.c_str())) {
+		//更新绘制模型
+		SceneManager::GetSceneManager()->SetMapActors(AssetManager::GetAssetManager()->GetActors());
+	}
+	return false;
 }

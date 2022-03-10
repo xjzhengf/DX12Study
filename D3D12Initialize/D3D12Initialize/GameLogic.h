@@ -8,11 +8,7 @@ public:
 	GameLogic& operator=(const GameLogic& GL) = delete;
 	~GameLogic();
 	void Init();
-	void Update();
+	bool Update();
 	void Destroy();
-	void LoadMap(const std::string& PathName);
-	static GameLogic* GetG0ameLogic();
-	
-protected:
-	static GameLogic* mGameLogic;
+	bool LoadMap(const std::string& PathName);
 };

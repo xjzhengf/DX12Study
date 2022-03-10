@@ -11,7 +11,12 @@ void GameInstance::Init(HINSTANCE hInstance)
 
 void GameInstance::UpDate()
 {
-	mEngine->Run(mTimer);
+	mTimer.Reset();
+	while (mGameLogic->Update())
+	{
+		mEngine->Run(mTimer);
+	}
+
 }
 
 void GameInstance::Destroy()

@@ -12,12 +12,12 @@ void FirstPersonCamera::Strafe(float d)
 
 void FirstPersonCamera::Walk(float d)
 {
-	glm::vec3 s = { d,d,d };
-	glm::vec3 l = GetLook();
-	glm::vec3 p = GetCameraPos3f();
+glm::vec3 s = { d,d,d };
+glm::vec3 l = GetLook();
+glm::vec3 p = GetCameraPos3f();
 
-	SetCameraPos(VectorMultiplyAdd(s, l, p));
-	SetViewDirty(true);
+SetCameraPos(VectorMultiplyAdd(s, l, p));
+SetViewDirty(true);
 }
 
 void FirstPersonCamera::UpDown(float d)
@@ -33,7 +33,7 @@ void FirstPersonCamera::Pitch(float angle)
 {
 	glm::mat4x4 R = glm::mat4x4(1.0f);
 	R = glm::rotate(R, angle, GetRight());
-	SetUp(glm::normalize(Transform(R, GetUp()))) ;
+	SetUp(glm::normalize(Transform(R, GetUp())));
 	SetLook(glm::normalize(Transform(R, GetLook())));
 	SetRight(glm::normalize(Transform(R, GetRight())));
 	SetViewDirty(true);
@@ -54,8 +54,8 @@ void FirstPersonCamera::RotateLook(float angle)
 {
 	glm::mat4x4 R = glm::mat4x4(1.0f);
 	R = glm::rotate(R, angle, GetLook());
-	SetUp(glm::normalize(Transform(R, GetUp()))) ;
-	SetRight(glm::normalize(Transform(R, GetRight()))) ;
+	SetUp(glm::normalize(Transform(R, GetUp())));
+	SetRight(glm::normalize(Transform(R, GetRight())));
 	SetViewDirty(true);
 }
 
@@ -74,52 +74,57 @@ void FirstPersonCamera::OnMouseMove(int x, int y)
 
 	RotateY(dx);
 	Pitch(dy);
-	
+
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 }
 
-void FirstPersonCamera::OnMouseUp( int x, int y)
+void FirstPersonCamera::OnMouseUp(int x, int y)
 {
 	ReleaseCapture();
 }
 
-void FirstPersonCamera::CameraMove(const std::string& inputKey, LPARAM lParam)
+bool FirstPersonCamera::CameraMove(const std::string& MouseKey,const WPARAM& wParam, LPARAM lParam)
 {
-	if (inputKey == "KEYDOWN_A") {
+	if (wParam == 'A') {
 		Strafe(-1.0f * (GetCameraSpeed()));
-		return ;
+		return true;
 	}
-	if (inputKey == "KEYDOWN_S") {
+	if (wParam == 'S') {
 		Walk(-1.0f * (GetCameraSpeed()));
-		return;
+		return true;
 	}
-	if (inputKey == "KEYDOWN_D") {
+	if (wParam == 'D') {
 		Strafe(1.0f * (GetCameraSpeed()));
-		return;
+		return true;
 	}
-	if (inputKey == "KEYDOWN_W") {
+	if (wParam == 'W') {
 		Walk(1.0f * (GetCameraSpeed()));
-		return;
+		return true;
 	}
-	if (inputKey == "KEYDOWN_E") {
+	if (wParam == 'E') {
 		UpDown(1.0f * (GetCameraSpeed()));
-		return;
+		return true;
 	}
-	if (inputKey == "KEYDOWN_Q") {
+	if (wParam == 'Q') {
 		UpDown(-1.0f * (GetCameraSpeed()));
-		return;
+		return true;
 	}
-	if (inputKey == "RBUTTONDOWN") {
-		OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		return;
-	}
-	if (inputKey == "RBUTTONUP") {
-		OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		return;
-	}
-	if (inputKey == "LBUTMOUSEMOVE"|| inputKey == "RBUTMOUSEMOVE") {
+	if (MouseKey == "MouseMove") {
 		OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		return;
+		return true;
 	}
+	
+	if (MouseKey == "MouseUp") {
+		OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return true;
+	}
+	if (MouseKey == "MouseDown") {
+		OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		return true;
+	}
+	if (MouseKey == "MouseWheel") {
+		return true;
+	}
+	return false;
 }

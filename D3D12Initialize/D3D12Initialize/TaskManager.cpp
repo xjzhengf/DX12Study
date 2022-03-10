@@ -34,20 +34,29 @@ void TaskManager::Register(const std::string& Name, CallBackInString Callback)
 	EventMapInString.insert({Name,Callback});
 }
 
-void TaskManager::RegisterMouse(const std::string& Name, LPARAM lParam)
+void TaskManager::RegisterKey(const WPARAM& wParam)
 {
-	EventMapInMouse.insert({ Name,lParam });
+	EventKey.insert(wParam);
 }
 
-
-
-
-void TaskManager::RegisterKey(const std::string& Name)
+void TaskManager::UnRegisterKey(const WPARAM& wParam)
 {
-	PrepareKey.insert(Name);
+	PrepareRemoveKey.insert(wParam);
 }
 
+void TaskManager::ClearImplKey()
+{
+	for (auto RemoveKey : PrepareRemoveKey)
+	{
+		EventKey.erase(RemoveKey);
+	}
+	PrepareRemoveKey.clear();
+}
 
+void TaskManager::RegisterMouse(const std::string& MouseKey, LPARAM lParam)
+{
+	EventMouseKeyMap.insert({ MouseKey, lParam });
+}
 
 void TaskManager::UnRegister(const std::string& Name)
 {

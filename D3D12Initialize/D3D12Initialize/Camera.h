@@ -53,7 +53,7 @@ public:
 
 
 	//Ïà»úÒÆ¶¯
-	virtual void CameraMove(const std::string& Name,LPARAM lParam) =0;
+	virtual bool CameraMove(const std::string& MouseKey, const WPARAM& wParam, LPARAM lParam) =0;
 	HWND mhMainWnd;
 	glm::vec3 VectorMultiplyAdd(glm::vec3 MultiplyV1, glm::vec3 MultiplyV2, glm::vec3 addV);
 	glm::vec3 Transform(glm::mat4x4 m, glm::vec3 v);
