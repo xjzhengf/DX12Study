@@ -14,7 +14,6 @@ public:
 	void Run(GameTimer& gt);
 	void RenderTick(GameTimer& gt);
 	void Destroy();
-	std::shared_ptr<Camera> GetCamera();
 	static Engine* GetEngine();
 	std::shared_ptr<AssetManager> GetAssetManager();
 	std::shared_ptr<SceneManager> GetSceneManager();

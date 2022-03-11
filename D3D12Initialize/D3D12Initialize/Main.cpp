@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "GameInstance.h"
+
+#ifdef _WIN32
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd) {
 
 #if defined(DEBUG) | defined(_DEBUG)
@@ -20,3 +22,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return 0;
 	}
 }
+#else
+
+int main() {
+	std::cout << "其他平台" << std::endl;
+	return 0;
+}
+#endif

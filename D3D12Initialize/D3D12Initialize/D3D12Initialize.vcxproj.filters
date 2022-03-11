@@ -37,15 +37,6 @@
     <Filter Include="Game\Input\Source">
       <UniqueIdentifier>{c1f75378-e946-4a9e-8a20-fb0c7f6be5da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Camera">
-      <UniqueIdentifier>{4e0f4c53-ce9a-42ca-ba90-c19fdaf84574}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Camera\Header">
-      <UniqueIdentifier>{224b2107-541e-4e37-835a-bb524d3468ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Camera\Source">
-      <UniqueIdentifier>{c7976447-df9f-42e3-877b-0ddc801b2af8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Logic">
       <UniqueIdentifier>{af563191-2f1a-419f-a8e4-e7ba79a254f1}</UniqueIdentifier>
     </Filter>
@@ -120,9 +111,6 @@
     <ClInclude Include="d3dx12.h">
       <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
-    <ClInclude Include="D3DUtil.h">
-      <Filter>Engine\D3D\Header</Filter>
-    </ClInclude>
     <ClInclude Include="D3DInit.h">
       <Filter>Engine\D3D\Header</Filter>
     </ClInclude>
@@ -131,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="WindowsInput.h">
       <Filter>Game\Input\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>Game\Camera\Header</Filter>
     </ClInclude>
     <ClInclude Include="GameLogic.h">
       <Filter>Game\Logic\Header</Filter>
@@ -183,6 +168,12 @@
     <ClInclude Include="Engine.h">
       <Filter>Engine\Engine\Header</Filter>
     </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>Engine\Camera\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DUtil.h">
+      <Filter>Engine\D3D\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DInit.cpp">
@@ -196,9 +187,6 @@
     </ClCompile>
     <ClCompile Include="WindowsInput.cpp">
       <Filter>Game\Input\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>Game\Camera\Source</Filter>
     </ClCompile>
     <ClCompile Include="GameLogic.cpp">
       <Filter>Game\Logic\Source</Filter>
@@ -244,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Engine\Engine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Engine\Camera\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

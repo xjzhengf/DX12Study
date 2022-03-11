@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneManager.h"
 #include "AssetManager.h"
+#include"FirstPersonCamera.h"
 SceneManager* SceneManager::mSceneManager = nullptr;
 SceneManager* SceneManager::GetSceneManager()
 {
@@ -11,6 +12,7 @@ SceneManager::SceneManager()
 {
 	assert(mSceneManager == nullptr);
 	mSceneManager = this;
+	camera = std::make_shared<FirstPersonCamera>();
 }
 
 SceneManager::~SceneManager()
@@ -62,6 +64,11 @@ void SceneManager::RemoveActor(const std::string& Name)
 void SceneManager::AddActor(ActorStruct* Actor)
 {
 	Actors.insert({ Actor->ActorName,Actor });
+}
+
+std::shared_ptr<Camera> SceneManager::GetCamera()
+{
+	return camera;
 }
 
 std::unordered_map<std::string, ActorStruct*>& SceneManager::GetAllActor()

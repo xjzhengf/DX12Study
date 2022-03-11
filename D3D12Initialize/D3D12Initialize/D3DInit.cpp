@@ -77,10 +77,7 @@ void D3DInit::SetClientHeight(int Height)
 	this->mClientHeight = Height;
 }
 
-void D3DInit::SetCameraInput(const std::shared_ptr<Camera>& camera)
-{
-	this->camera = camera;
-}
+
 
 
 

@@ -28,10 +28,6 @@ void Engine::Init(HINSTANCE hInstance)
 
 	//初始化Render
 	mRender = std::make_unique<DX12Render>();
-	//创建相机输入类型
-	std::shared_ptr<Camera> cameraInput = std::make_shared<FirstPersonCamera>();
-	//设置引擎内部相机输入类型
-	mRender->SetCameraInput(cameraInput);
 
 	//初始化资源管理和场景管理
 	mAssetManager = std::make_shared<AssetManager>();
@@ -92,11 +88,6 @@ void Engine::Destroy()
 		mAssetManager = nullptr;
 	}
 	
-}
-
-std::shared_ptr<Camera> Engine::GetCamera()
-{
-	return mRender->camera;
 }
 
 std::shared_ptr<AssetManager> Engine::GetAssetManager()

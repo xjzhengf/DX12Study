@@ -53,7 +53,7 @@ void GameLogic::ProcessKey()
 	if (!TaskManager::GetTaskManager()->EventKey.empty()) {
 		for (auto&& Key : TaskManager::GetTaskManager()->EventKey) {
 
-			if (Engine::GetEngine()->GetCamera()->CameraMove("", Key, 0)) {
+			if (SceneManager::GetSceneManager()->GetCamera()->CameraMove("", Key, 0)) {
 				TaskManager::GetTaskManager()->UnRegisterKey(Key);
 			}
 #ifdef _WIN32 
@@ -79,7 +79,7 @@ void GameLogic::ProcessMouse()
 	if (!TaskManager::GetTaskManager()->EventMouseKeyMap.empty())
 	{
 		for (auto&& MouseKey : TaskManager::GetTaskManager()->EventMouseKeyMap) {
-			Engine::GetEngine()->GetCamera()->CameraMove(MouseKey.first, NULL, MouseKey.second);
+			SceneManager::GetSceneManager()->GetCamera()->CameraMove(MouseKey.first, NULL, MouseKey.second);
 		}
 		TaskManager::GetTaskManager()->EventMouseKeyMap.clear();
 

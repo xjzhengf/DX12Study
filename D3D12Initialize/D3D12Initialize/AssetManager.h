@@ -1,5 +1,6 @@
 #pragma once
 #include "MeshProperty.h"
+
 class AssetManager
 {
 public:
@@ -21,7 +22,6 @@ protected:
 	static AssetManager* mAssetManager;
 private:
 	std::unordered_map<std::string, StaticMeshInfo*> MeshAsset;
-
 };
 
 

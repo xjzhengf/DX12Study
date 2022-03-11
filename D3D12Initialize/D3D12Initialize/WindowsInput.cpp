@@ -53,11 +53,6 @@ LRESULT WindowsInput::MsgProc(HWND hwd, UINT msg, WPARAM wParam, LPARAM lParam)
 		TaskManager::GetTaskManager()->RegisterMouse("MouseWheel", lParam);
 		return 0;
 	case WM_KEYDOWN:
-	
-		//if ((int)wParam == VK_F2) {
-		//	theApp->Set4xMsaaState(!theApp->Get4xMsaaState());
-		//}
-		
 		TaskManager::GetTaskManager()->RegisterKey(wParam);
 		
 		return 0;

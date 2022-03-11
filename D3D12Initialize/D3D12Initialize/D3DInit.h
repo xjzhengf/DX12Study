@@ -6,7 +6,6 @@
 #endif
 #include "D3DUtil.h"
 #include "GameTimer.h"
-#include"camera.h"
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -28,7 +27,6 @@ public:
 	void SetWindow(HWND mhMainWnd);
 	void SetClientWidht(int Width);
 	void SetClientHeight(int Height);
-	void SetCameraInput(const std::shared_ptr<Camera>& camera);
 	virtual bool Initialize();
 	virtual void DrawPrepare(){};
 protected:
@@ -50,7 +48,6 @@ protected:
 	ID3D12Resource* CurrentBackBuffer()const;
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
-
 
 	void LogAdapters();
 	void LogAdapterOutputs(IDXGIAdapter* adapter);
@@ -103,7 +100,7 @@ protected:
 
 
 public:
-	std::shared_ptr<Camera> camera;
+
 
 	bool isUpdateDraw = false;
 };

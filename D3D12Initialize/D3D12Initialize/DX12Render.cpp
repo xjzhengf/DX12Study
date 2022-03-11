@@ -26,9 +26,10 @@ bool DX12Render::Initialize()
 void DX12Render::OnResize()
 {
 	D3DInit::OnResize();
-	camera->SetCameraPos(2000.0f, 2000.0f, 2000.0f);
-	camera->SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
-	camera->LookAt(camera->GetCameraPos3f(), glm::vec3(0.0f, 0.0f, 0.0f), camera->GetUp());
+	SceneManager::GetSceneManager()->GetCamera()->SetCameraPos(2000.0f, 2000.0f, 2000.0f);
+	SceneManager::GetSceneManager()->GetCamera()->SetLens(0.25f * glm::pi<float>(), AspectRatio(), 1.0f, 10000.0f);
+	SceneManager::GetSceneManager()->GetCamera()->LookAt(SceneManager::GetSceneManager()->GetCamera()->GetCameraPos3f(), 
+		glm::vec3(0.0f, 0.0f, 0.0f), SceneManager::GetSceneManager()->GetCamera()->GetUp());
 }
 
 void DX12Render::Update(const GameTimer& gt)
@@ -56,7 +57,7 @@ void DX12Render::Draw(const GameTimer& gt)
 	Time = gt.TotalTime();
 	int i = 0;
 	for (auto&& ActorPair : SceneManager::GetSceneManager()->GetAllActor()) {
-		camera->UpdateViewMat();
+		SceneManager::GetSceneManager()->GetCamera()->UpdateViewMat();
 		ObjectConstants objConstants;
 		glm::qua<float> q = glm::qua<float>(
 			ActorPair.second->Transform[0].Rotation.w,
@@ -80,8 +81,8 @@ void DX12Render::Draw(const GameTimer& gt)
 		objConstants.Scale = glm::scale(objConstants.Scale, Scale);
 
 		objConstants.Time = Time;
-		glm::mat4x4 proj = camera->GetProj4x4();
-		glm::mat4x4 view = camera->GetView4x4();
+		glm::mat4x4 proj = SceneManager::GetSceneManager()->GetCamera()->GetProj4x4();
+		glm::mat4x4 view = SceneManager::GetSceneManager()->GetCamera()->GetView4x4();
 
 		glm::mat4x4 W = objConstants.Translate * objConstants.Rotation * objConstants.Scale;
 		glm::mat4x4 worldViewProj = proj * view * W * mWorld;
